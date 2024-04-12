@@ -25,21 +25,42 @@ const FindAndConnectOpportunities = () => {
   ]
 
   const styles = StyleSheet.create({
+    outerContainer: {
+      // Apply padding to all sides except the top
+      paddingTop: 10, // Smaller padding at the top to move title up
+      paddingBottom: 20, // Padding at the bottom
+      paddingHorizontal: 20, // Horizontal padding
+      alignItems: 'center', // Center children horizontally
+      justifyContent: 'center', // Center children vertically, if needed
+    },
+    title: {
+      fontSize: 32, // Set the size of your title text
+      fontWeight: 'bold', // Makes the title text bold
+      marginBottom: 30, // Space between the title and the category buttons
+      textAlign: 'center', // Ensures that the title is centered
+      // You can add additional styling for the title text if needed
+    },
     container: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      padding: 20, // Adjust padding as needed
+      flexDirection: 'row', // Aligns children (categories) in a row
+      justifyContent: 'space-around', // Evenly distributes children along the horizontal axis
+      alignItems: 'center', // Aligns children along the vertical axis
+      // The padding here may no longer be necessary if you have padding in outerContainer
+      // padding: 20, // You can adjust this padding or remove it as per your design needs
     },
     category: {
-      alignItems: 'center',
-      flex: 1, // Equally divide space among items
+      alignItems: 'center', // Centers the icon and text within each category button
+      flex: 1, // Distributes space equally among category buttons
+      // You may want to add some vertical padding if the buttons are too close to each other
+      paddingVertical: 10, // Adjust as needed
     },
     icon: {
-      marginBottom: 8, // Space between icon and text
+      marginBottom: 20, // Space between icon and category name text
     },
     text: {
       textAlign: 'center',
+      fontSize: 24,
+      fontWeight: 'bold', // Ensures text is centered below the icon
+      // Add any specific text styles you need, like font size or color
     },
   })
 
@@ -48,13 +69,22 @@ const FindAndConnectOpportunities = () => {
   }
 
   return (
-    <View style={styles.container}>
-      {categories.map((category) => (
-        <TouchableOpacity key={category.name} style={styles.category} onPress={() => navigateToScreen(category.screen)}>
-          <Icon name={category.icon} size={30} style={styles.icon} />
-          <Text style={styles.text}>{category.name}</Text>
-        </TouchableOpacity>
-      ))}
+    <View style={styles.outerContainer}>
+      {/* Title text for the opportunities section */}
+      <Text style={styles.title}>Find & Connect Opportunities</Text>
+      <View style={styles.container}>
+        {/* Mapping through categories to create buttons for each */}
+        {categories.map((category) => (
+          <TouchableOpacity
+            key={category.name}
+            style={styles.category}
+            onPress={() => navigateToScreen(category.screen)}
+          >
+            <Icon name={category.icon} size={60} style={styles.icon} />
+            <Text style={styles.text}>{category.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   )
 }

@@ -7,7 +7,7 @@ import { FlatList, View, StyleSheet } from 'react-native'
 import NotificationListItem, { NotificationType } from '../components/listItems/NotificationListItem'
 import NoNewUpdates from '../components/misc/NoNewUpdates'
 import AppGuideModal from '../components/modals/AppGuideModal'
-import HomeFooterView from '../components/views/HomeFooterView'
+//import HomeFooterView from '../components/views/HomeFooterView'
 import { useConfiguration } from '../contexts/configuration'
 import { DispatchAction } from '../contexts/reducers/store'
 import { useStore } from '../contexts/store'
@@ -20,20 +20,11 @@ import FindAndConnectOpportunities from './FindAndConnectOpportunities'
 
 type HomeProps = StackScreenProps<HomeStackParams, Screens.Home>
 
-const CustomFooterView = () => {
-  return (
-    <View>
-      <FindAndConnectOpportunities />
-      <HomeFooterView />
-    </View>
-  )
-}
-
 const Home: React.FC<HomeProps> = () => {
   const {
     useCustomNotifications,
     enableTours: enableToursConfig,
-    //homeFooterView: FooterView,
+    homeFooterView: HomeFooterView,
     homeHeaderView: HomeHeaderView,
   } = useConfiguration()
   const { notifications } = useCustomNotifications()
@@ -128,7 +119,7 @@ const Home: React.FC<HomeProps> = () => {
           </View>
         )}
         ListHeaderComponent={() => <HomeHeaderView />}
-        ListFooterComponent={CustomFooterView} // Updated this line
+        ListFooterComponent={() => <HomeFooterView />}
         data={notifications}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
@@ -144,7 +135,7 @@ const Home: React.FC<HomeProps> = () => {
           </View>
         )}
       />
-
+      <FindAndConnectOpportunities />
       {showTourPopup && (
         <AppGuideModal
           title={t('Tour.GuideTitle')}
