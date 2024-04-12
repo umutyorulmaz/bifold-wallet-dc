@@ -166,12 +166,13 @@ export type DeliveryStackParams = {
   [Screens.Chat]: { connectionId: string }
 }
 
-//opportunity card
+//opportunities
 export type RootStackParamList = {
   EducationScreen: undefined
   MilitaryScreen: undefined
   EmployersScreen: undefined
   StateGovernmentScreen: undefined
+  InstitutionDetail: { institutionId: string }
 }
 
 export type ScreenOptionsType = Partial<Record<Screens, StackNavigationOptions>>

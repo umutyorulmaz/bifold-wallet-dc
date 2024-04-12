@@ -19,6 +19,7 @@ import { useTheme } from '../contexts/theme'
 import { useDeepLinks } from '../hooks/deep-links'
 import AttemptLockout from '../screens/AttemptLockout'
 import Chat from '../screens/Chat'
+import EducationScreen from '../screens/EducationList'
 import PINEnter from '../screens/PINEnter'
 import { BifoldError } from '../types/error'
 import { AuthenticateStackParams, Screens, Stacks, TabStacks } from '../types/navigators'
@@ -277,6 +278,11 @@ const RootStack: React.FC = () => {
         <Stack.Screen name={Stacks.NotificationStack} component={NotificationStack} />
         <Stack.Screen name={Stacks.ConnectionStack} component={DeliveryStack} options={{ gestureEnabled: false }} />
         <Stack.Screen name={Stacks.ProofRequestsStack} component={ProofRequestStack} />
+        <Stack.Screen
+          name="EducationScreen"
+          component={EducationScreen}
+          options={{ title: 'Education Opportunities' }}
+        />
       </Stack.Navigator>
     )
   }
