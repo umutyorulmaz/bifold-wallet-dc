@@ -11,16 +11,19 @@ type EducationScreenProps = {
 }
 
 const EducationScreen: React.FC<EducationScreenProps> = ({ navigation }) => {
-  // Filter out only education institutions
+  const categoryType = InstitutionCategoryType.Education
+
   const educationInstitutions =
-    InstitutionRegistry.find((category) => category.type === InstitutionCategoryType.Education)?.institutions || []
+    InstitutionRegistry.find((category) => category.type === categoryType)?.institutions || []
 
   const renderInstitution = ({ item }: { item: InstitutionDetail }) => (
     <InstitutionCard
       institution={item}
       onPress={() => {
-        // Handle the press event, navigate to a detail screen
-        navigation.navigate('InstitutionDetail', { institutionId: item.id })
+        navigation.navigate('InstitutionDetail', {
+          institutionId: item.id,
+          categoryType: categoryType,
+        })
       }}
     />
   )

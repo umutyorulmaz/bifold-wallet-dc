@@ -10,10 +10,10 @@ type InstitutionDetailRouteProp = RouteProp<RootStackParamList, 'InstitutionDeta
 
 const InstitutionDetailScreen = () => {
   const route = useRoute<InstitutionDetailRouteProp>()
-  const { institutionId } = route.params
+  const { institutionId, categoryType } = route.params
 
   // Find the institution data by ID
-  const institution = InstitutionRegistry.flatMap((category) => category.institutions).find(
+  const institution = InstitutionRegistry.find((category) => category.type === categoryType)?.institutions.find(
     (inst) => inst.id === institutionId
   )
 

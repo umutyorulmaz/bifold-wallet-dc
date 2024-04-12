@@ -11,16 +11,19 @@ type MilitaryScreenProps = {
 }
 
 const MilitaryScreen: React.FC<MilitaryScreenProps> = ({ navigation }) => {
-  // Filter out only military institutions
+  const categoryType = InstitutionCategoryType.Military
+
   const militaryInstitutions =
-    InstitutionRegistry.find((category) => category.type === InstitutionCategoryType.Military)?.institutions || []
+    InstitutionRegistry.find((category) => category.type === categoryType)?.institutions || []
 
   const renderInstitution = ({ item }: { item: InstitutionDetail }) => (
     <InstitutionCard
       institution={item}
       onPress={() => {
-        // Handle the press event, maybe navigate to a detail screen
-        navigation.navigate('InstitutionDetail', { institutionId: item.id })
+        navigation.navigate('InstitutionDetail', {
+          institutionId: item.id,
+          categoryType: categoryType,
+        })
       }}
     />
   )

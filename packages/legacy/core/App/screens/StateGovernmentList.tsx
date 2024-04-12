@@ -11,17 +11,19 @@ type StateGovernmentScreenProps = {
 }
 
 const StateGovernmentScreen: React.FC<StateGovernmentScreenProps> = ({ navigation }) => {
-  // Filter out only government institutions
+  const categoryType = InstitutionCategoryType.StateGovernment
+
   const stateGovernmentInstitutions =
-    InstitutionRegistry.find((category) => category.type === InstitutionCategoryType.StateGovernment)?.institutions ||
-    []
+    InstitutionRegistry.find((category) => category.type === categoryType)?.institutions || []
 
   const renderInstitution = ({ item }: { item: InstitutionDetail }) => (
     <InstitutionCard
       institution={item}
       onPress={() => {
-        // Handle the press event, maybe navigate to a detail screen
-        navigation.navigate('InstitutionDetail', { institutionId: item.id })
+        navigation.navigate('InstitutionDetail', {
+          institutionId: item.id,
+          categoryType: categoryType,
+        })
       }}
     />
   )

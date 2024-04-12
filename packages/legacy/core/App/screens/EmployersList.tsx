@@ -11,16 +11,19 @@ type EmployersScreenProps = {
 }
 
 const EmployersScreen: React.FC<EmployersScreenProps> = ({ navigation }) => {
-  // Filter out only employers
+  const categoryType = InstitutionCategoryType.Employers
+
   const employersInstitutions =
-    InstitutionRegistry.find((category) => category.type === InstitutionCategoryType.Employers)?.institutions || []
+    InstitutionRegistry.find((category) => category.type === categoryType)?.institutions || []
 
   const renderInstitution = ({ item }: { item: InstitutionDetail }) => (
     <InstitutionCard
       institution={item}
       onPress={() => {
-        // Handle the press event, maybe navigate to a detail screen
-        navigation.navigate('InstitutionDetail', { institutionId: item.id })
+        navigation.navigate('InstitutionDetail', {
+          institutionId: item.id,
+          categoryType: categoryType,
+        })
       }}
     />
   )

@@ -311,6 +311,7 @@ const RootStack: React.FC = () => {
           options={{ title: 'Institution Details' }}
         />
         <Stack.Screen name="MilitaryScreen" component={MilitaryScreen} options={{ title: 'Military Opportunities' }} />
+
         <Stack.Screen
           name="EmployersScreen"
           component={EmployersScreen}

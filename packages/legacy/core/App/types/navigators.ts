@@ -2,6 +2,8 @@ import { CredentialExchangeRecord } from '@aries-framework/core'
 import { NavigatorScreenParams } from '@react-navigation/core'
 import { StackNavigationOptions } from '@react-navigation/stack'
 
+import { InstitutionCategoryType } from '../data/institutions-data'
+
 export enum Screens {
   AttemptLockout = 'Temporarily Locked',
   Splash = 'Splash',
@@ -172,7 +174,10 @@ export type RootStackParamList = {
   MilitaryScreen: undefined
   EmployersScreen: undefined
   StateGovernmentScreen: undefined
-  InstitutionDetail: { institutionId: string }
+  InstitutionDetail: {
+    institutionId: string
+    categoryType: InstitutionCategoryType
+  }
 }
 
 export type ScreenOptionsType = Partial<Record<Screens, StackNavigationOptions>>
