@@ -19,7 +19,7 @@ const EducationScreen: React.FC<EducationScreenProps> = ({ navigation }) => {
     <InstitutionCard
       institution={item}
       onPress={() => {
-        // Handle the press event, maybe navigate to a detail screen
+        // Handle the press event, navigate to a detail screen
         navigation.navigate('InstitutionDetail', { institutionId: item.id })
       }}
     />
