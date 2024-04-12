@@ -180,5 +180,5 @@ app/android/app/src/main/assets/app.bundle
 packages/legacy/app/vendor/bundle/**
 
 #data
-packages/legacy/core/App/data/
+
 

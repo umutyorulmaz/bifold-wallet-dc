@@ -20,8 +20,10 @@ import { useDeepLinks } from '../hooks/deep-links'
 import AttemptLockout from '../screens/AttemptLockout'
 import Chat from '../screens/Chat'
 import EducationScreen from '../screens/EducationList'
+import EmployersScreen from '../screens/EmployersList'
 import MilitaryScreen from '../screens/MilitaryList'
 import PINEnter from '../screens/PINEnter'
+import StateGovernmentScreen from '../screens/StateGovernmentList'
 import { BifoldError } from '../types/error'
 import { AuthenticateStackParams, Screens, Stacks, TabStacks } from '../types/navigators'
 import { connectFromInvitation, getOobDeepLink } from '../utils/helpers'
@@ -285,6 +287,16 @@ const RootStack: React.FC = () => {
           options={{ title: 'Education Opportunities' }}
         />
         <Stack.Screen name="MilitaryScreen" component={MilitaryScreen} options={{ title: 'Military Opportunities' }} />
+        <Stack.Screen
+          name="EmployersScreen"
+          component={EmployersScreen}
+          options={{ title: 'Employers Opportunities' }}
+        />
+        <Stack.Screen
+          name="StateGovernmentScreen"
+          component={StateGovernmentScreen}
+          options={{ title: 'State Government Opportunities' }}
+        />
       </Stack.Navigator>
     )
   }
