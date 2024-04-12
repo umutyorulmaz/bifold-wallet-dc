@@ -20,6 +20,7 @@ import { useDeepLinks } from '../hooks/deep-links'
 import AttemptLockout from '../screens/AttemptLockout'
 import Chat from '../screens/Chat'
 import EducationScreen from '../screens/EducationList'
+import MilitaryScreen from '../screens/MilitaryList'
 import PINEnter from '../screens/PINEnter'
 import { BifoldError } from '../types/error'
 import { AuthenticateStackParams, Screens, Stacks, TabStacks } from '../types/navigators'
@@ -283,6 +284,7 @@ const RootStack: React.FC = () => {
           component={EducationScreen}
           options={{ title: 'Education Opportunities' }}
         />
+        <Stack.Screen name="MilitaryScreen" component={MilitaryScreen} options={{ title: 'Military Opportunities' }} />
       </Stack.Navigator>
     )
   }
