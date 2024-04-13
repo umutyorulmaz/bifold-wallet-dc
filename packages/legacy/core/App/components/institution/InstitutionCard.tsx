@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
+    color: '#212121',
   },
   description: {
     color: '#666',
@@ -47,8 +48,8 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, onPress 
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image source={{ uri: institution.iconUrl }} style={styles.image} />
       <View style={styles.infoContainer}>
-        <Text style={styles.name}>{institution.name}</Text>
-        <Text style={styles.description}>{institution.description}</Text>
+        <Text style={styles.name}>{institution.name.substring(3)}</Text>
+
         <Text style={styles.learnMore}>Learn More</Text>
       </View>
     </TouchableOpacity>
