@@ -1,9 +1,15 @@
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React from 'react'
+import React, { FC } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons' // Make sure this library is installed
+//import Icon from 'react-native-vector-icons/MaterialCommunityIcons' // Make sure this library is installed
+import { SvgProps } from 'react-native-svg'
 
+import BuildingOutline from '../assets/icons/building-outline.svg'
+import CapitolOutline from '../assets/icons/capitol-outline.svg'
+import GraduationOutline from '../assets/icons/graduation-outline.svg'
+import ShieldOutline from '../assets/icons/shield-outline.svg'
+//import { Icon } from '../assets/icons/icons'
 import { RootStackParamList } from '../types/navigators'
 
 type NavigationProp = StackNavigationProp<RootStackParamList>
@@ -13,15 +19,15 @@ const FindAndConnectOpportunities = () => {
 
   interface Category {
     name: string
-    icon: string
+    icon: FC<SvgProps> // Expect a React component instead of a string
     screen: keyof RootStackParamList
   }
 
   const categories: Category[] = [
-    { name: 'Education', icon: 'school', screen: 'EducationScreen' },
-    { name: 'Military', icon: 'shield-cross', screen: 'MilitaryScreen' },
-    { name: 'Employers', icon: 'briefcase-check', screen: 'EmployersScreen' },
-    { name: 'State Government', icon: 'city', screen: 'StateGovernmentScreen' },
+    { name: 'Education', icon: GraduationOutline, screen: 'EducationScreen' },
+    { name: 'Military', icon: ShieldOutline, screen: 'MilitaryScreen' },
+    { name: 'Employers', icon: BuildingOutline, screen: 'EmployersScreen' }, // Assuming JobsFlatIcon is for Employers
+    { name: 'State Government', icon: CapitolOutline, screen: 'StateGovernmentScreen' }, // Assuming GovernmentFlatIcon is for State Government
   ]
 
   const styles = StyleSheet.create({
@@ -80,7 +86,7 @@ const FindAndConnectOpportunities = () => {
             style={styles.category}
             onPress={() => navigateToScreen(category.screen)}
           >
-            <Icon name={category.icon} size={60} style={styles.icon} />
+            <category.icon width={90} height={90} />
             <Text style={styles.text}>{category.name}</Text>
           </TouchableOpacity>
         ))}
