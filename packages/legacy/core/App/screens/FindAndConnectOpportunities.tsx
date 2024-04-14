@@ -2,14 +2,12 @@ import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { FC } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-//import Icon from 'react-native-vector-icons/MaterialCommunityIcons' // Make sure this library is installed
 import { SvgProps } from 'react-native-svg'
 
 import BuildingOutline from '../assets/icons/building-outline.svg'
 import CapitolOutline from '../assets/icons/capitol-outline.svg'
 import GraduationOutline from '../assets/icons/graduation-outline.svg'
 import ShieldOutline from '../assets/icons/shield-outline.svg'
-//import { Icon } from '../assets/icons/icons'
 import { RootStackParamList } from '../types/navigators'
 
 type NavigationProp = StackNavigationProp<RootStackParamList>

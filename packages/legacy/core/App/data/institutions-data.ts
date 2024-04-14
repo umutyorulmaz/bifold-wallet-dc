@@ -1,3 +1,6 @@
+import { FC } from 'react'
+import { SvgProps } from 'react-native-svg'
+
 import { Icon } from '../assets/icons/icons'
 import { Image } from '../assets/img/images'
 
@@ -11,7 +14,7 @@ export enum InstitutionCategoryType {
 interface InstitutionCategory {
   type: InstitutionCategoryType
   displayName: string
-  icon: string
+  icon: FC<SvgProps>
   institutions: InstitutionDetail[]
 }
 
@@ -20,7 +23,7 @@ export interface InstitutionDetail {
   name: string
   iconUrl: string
   bannerImage?: string
-  cardImage?: string
+  cardImage?: any
   description: string
   address?: string
 }
@@ -519,9 +522,9 @@ export const InstitutionRegistry: InstitutionCategory[] = [
       {
         id: '01HDQ51H434EGGMW809SJX4G55',
         name: 'XX|DigiCred University',
-        iconUrl: Image.DigiCredLogoBlue,
+        iconUrl: '',
         description: ``,
-        bannerImage: Image.GenericPerson,
+        bannerImage: '',
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
@@ -612,7 +615,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         name: 'LA|Northrop Grumman Corp',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Northrop_Grumman_logo_blue-on-clear_2020.svg/440px-Northrop_Grumman_logo_blue-on-clear_2020.svg.png',
-        description: `Northrop Grumman Corporation is an American multinational aerospace and defense technology company. With 95,000 employees and an annual revenue in excess of $30 billion, it is one of the world's largest weapons manufacturers and military technology providers. The firm ranked No. 101 on the 2022 Fortune 500 list of America's largest corporations.`,
+        description: `Northrop Grumman Corporation is an American multinational aerospace and defense technology company. With 95,000 employees and an annual revenue in excess of $30 billion, it is one of the world's largest weapons manufacturers and military technology providers. The firm ranked No.101 on the 2022 Fortune 500 list of America's largest corporations.`,
         address: '1 Space Park Dr, Redondo Beach, CA',
         bannerImage:
           'https://cdn.prd.ngc.agencyq.site/-/jssmedia/wp-content/uploads/Northrop-Grumman-and-the-US-Air-Force-Introduce-the-B-21-Raider-the-Worlds-First-Sixth-Generation-Ai.jpg?mw=3840&rev=d9261fac54784b64958b8aa1acb64180',
