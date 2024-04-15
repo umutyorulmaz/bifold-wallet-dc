@@ -36,16 +36,18 @@ const InstitutionDetailScreen = () => {
     institutionName: {
       fontSize: 30,
       fontWeight: 'bold',
+      color: 'black',
     },
     institutionAddress: {
       fontSize: 20,
-      color: 'grey',
+      color: 'black',
       marginTop: 4,
       marginBottom: 16,
     },
     institutionDescription: {
       fontSize: 20,
       marginTop: 8,
+      color: 'black',
     },
   })
 

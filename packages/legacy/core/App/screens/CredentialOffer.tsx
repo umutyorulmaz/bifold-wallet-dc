@@ -214,7 +214,7 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
           paddingHorizontal: 25,
           paddingVertical: 16,
           paddingBottom: 26,
-          backgroundColor: ColorPallet.brand.secondaryBackground,
+          backgroundColor: ColorPallet.brand.primaryLight,
         }}
       >
         {loading ? <RecordLoading /> : null}
