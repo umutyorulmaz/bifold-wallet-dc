@@ -1,6 +1,6 @@
 import { useRoute, RouteProp } from '@react-navigation/native'
 import React from 'react'
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 import { InstitutionRegistry } from '../data/institutions-data'
 import { RootStackParamList } from '../types/navigators'
@@ -16,6 +16,9 @@ const InstitutionDetailScreen = () => {
   const institution = InstitutionRegistry.find((category) => category.type === categoryType)?.institutions.find(
     (inst) => inst.id === institutionId
   )
+  const onApplyPress = () => {
+    // Logic to handle the apply action (connection creation)
+  }
 
   if (!institution) {
     return (
@@ -49,6 +52,20 @@ const InstitutionDetailScreen = () => {
       marginTop: 8,
       color: 'black',
     },
+    applyButton: {
+      backgroundColor: '#007AFF', // iOS system blue color
+      paddingVertical: 12,
+      paddingHorizontal: 20,
+      borderRadius: 40,
+      alignSelf: 'center', // Center button horizontally
+      marginTop: 80, // Increase space from the last text element to move it lower
+      width: '100%', // Set width to a percentage of the screen width // Space from the last text element
+    },
+    applyButtonText: {
+      fontSize: 25,
+      color: '#fff', // White text color
+      textAlign: 'center',
+    },
   })
 
   return (
@@ -59,6 +76,9 @@ const InstitutionDetailScreen = () => {
         <Text style={styles.institutionAddress}>{institution.address}</Text>
         <Text style={styles.institutionDescription}>{institution.description}</Text>
         {/* Render additional institution details here */}
+        <TouchableOpacity style={styles.applyButton} onPress={onApplyPress}>
+          <Text style={styles.applyButtonText}>Apply</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   )
