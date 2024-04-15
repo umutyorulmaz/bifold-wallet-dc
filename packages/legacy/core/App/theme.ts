@@ -16,7 +16,7 @@ import IconInfoSentDark from './assets/img/icon-info-sent-dark.svg'
 import IconInfoSentLight from './assets/img/icon-info-sent-light.svg'
 import IconProofRequestDark from './assets/img/icon-proof-request-dark.svg'
 import IconProofRequestLight from './assets/img/icon-proof-request-light.svg'
-import Logo from './assets/img/logo.svg'
+import Logo from './assets/img/digi-cred-logo.svg'
 import NoInfoShared from './assets/img/no_information_shared.svg'
 import Preface from './assets/img/preface.svg'
 import ProofRequestDeclined from './assets/img/proof-declined.svg'
@@ -188,23 +188,23 @@ const GrayscaleColors: IGrayscaleColors = {
 }
 
 const BrandColors: IBrandColors = {
-  primary: '#42803E',
-  primaryDisabled: `rgba(53, 130, 63, ${lightOpacity})`,
-  secondary: '#FFFFFFFF',
+  primary: '#062c80', // *ACS* changed to DigiCred blue from: primary: '#42803E', Bifold green
+  primaryDisabled: `rgba(27, 56, 100, ${lightOpacity})`, // *ACS* changed from: primaryDisabled: `rgba(53, 130, 63, ${lightOpacity})`
+  secondary: '#b8b8b8', // *ACS* light grey - color of the bottom toolbar
   secondaryDisabled: `rgba(53, 130, 63, ${heavyOpacity})`,
-  primaryLight: `rgba(53, 130, 63, ${lightOpacity})`,
-  highlight: '#FCBA19',
-  primaryBackground: '#000000',
-  secondaryBackground: '#313132',
-  modalPrimary: '#42803E',
-  modalSecondary: '#FFFFFFFF',
-  modalPrimaryBackground: '#000000',
-  modalSecondaryBackground: '#313132',
+  primaryLight: `rgba(30, 64, 175, ${lightOpacity})`, // *ACS*
+  highlight: '#d3f689', // *ACS* changed from Bifold's gold highlight
+  primaryBackground: '#f5f5f5', // *ACS* changed from '#000000'
+  secondaryBackground: '#D3D3D3', // *ACS* 
+  modalPrimary: '#191970', // *ACS* changed to DigiCred blue from: primary: '#42803E' Bifold green
+  modalSecondary: '#e5e7eb',
+  modalPrimaryBackground: '#D3D3D3', // *ACS* changed from '#000000'
+  modalSecondaryBackground: '#D3D3D3', // *ACS*
   modalIcon: GrayscaleColors.white,
   unorderedList: GrayscaleColors.white,
   unorderedListModal: GrayscaleColors.white,
-  link: GrayscaleColors.white,
-  text: GrayscaleColors.white,
+  link: GrayscaleColors.darkGrey, // *ACS* changed from: GrayscaleColors.white
+  text: GrayscaleColors.darkGrey, // *ACS* changed from: GrayscaleColors.white
   icon: GrayscaleColors.white,
   headerIcon: GrayscaleColors.white,
   headerText: GrayscaleColors.white,
@@ -315,22 +315,22 @@ export const TextTheme: ITextTheme = {
   modalNormal: {
     fontSize: 18,
     fontWeight: 'normal',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.darkGrey, // *ACS*
   },
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.darkGrey, // *ACS*
   },
   modalHeadingOne: {
     fontSize: 38,
     fontWeight: 'bold',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.darkGrey, // *ACS*
   },
   modalHeadingThree: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.darkGrey, // *ACS*
   },
   popupModalText: {
     fontSize: 18,
@@ -353,7 +353,8 @@ export const Inputs: IInputs = StyleSheet.create({
     borderRadius,
     fontSize: 16,
     backgroundColor: ColorPallet.brand.primaryBackground,
-    color: ColorPallet.notification.infoText,
+    // color: ColorPallet.notification.infoText, // *ACS*
+    color: ColorPallet.brand.primary, // *ACS*
     borderWidth: 2,
     borderColor: ColorPallet.brand.secondary,
   },
@@ -438,6 +439,7 @@ export const Buttons = StyleSheet.create({
   },
   modalPrimaryText: {
     ...TextTheme.bold,
+    color: ColorPallet.grayscale.white, // *ACS*
     textAlign: 'center',
   },
   modalSecondary: {
@@ -464,7 +466,8 @@ export const ListItems = StyleSheet.create({
     ...TextTheme.caption,
   },
   credentialOfferBackground: {
-    backgroundColor: ColorPallet.brand.modalPrimaryBackground,
+    // backgroundColor: ColorPallet.brand.modalPrimaryBackground,
+    backgroundColor: ColorPallet.grayscale.white, // *ACS*
   },
   credentialOfferTitle: {
     ...TextTheme.modalHeadingThree,
@@ -565,6 +568,7 @@ export const TabTheme = {
     shadowOpacity: 0.1,
     borderTopWidth: 0,
     paddingBottom: 0,
+
   },
   tabBarContainerStyle: {
     flex: 1,
@@ -648,54 +652,54 @@ export const ChatTheme = {
     alignSelf: 'flex-end',
   },
   leftBubble: {
-    backgroundColor: ColorPallet.brand.secondaryBackground,
-    borderRadius: 4,
+    backgroundColor: '#03a89e', // *ACS* changed from secondaryBackground,
+    borderRadius: 20,
     padding: 16,
     marginLeft: 16,
   },
   rightBubble: {
-    backgroundColor: ColorPallet.brand.primaryLight,
-    borderRadius: 4,
+    backgroundColor: '#00688b', // *ACS* - changed from primaryLight
+    borderRadius: 20,
     padding: 16,
     marginRight: 16,
   },
   timeStyleLeft: {
-    color: ColorPallet.grayscale.lightGrey,
+    color: ColorPallet.grayscale.white, // *ACS*
     fontSize: 12,
     marginTop: 8,
   },
   timeStyleRight: {
-    color: ColorPallet.grayscale.lightGrey,
+    color: ColorPallet.grayscale.white, // *ACS*
     fontSize: 12,
     marginTop: 8,
   },
   leftText: {
-    color: ColorPallet.brand.secondary,
+    color: ColorPallet.grayscale.white, // *ACS*
     fontSize: TextTheme.normal.fontSize,
   },
   leftTextHighlighted: {
     ...TextTheme.bold,
-    color: ColorPallet.brand.secondary,
+    color: ColorPallet.grayscale.white, // *ACS*
   },
   rightText: {
-    color: ColorPallet.brand.secondary,
+    color: ColorPallet.grayscale.white, // *ACS*
     fontSize: TextTheme.normal.fontSize,
   },
   rightTextHighlighted: {
     ...TextTheme.bold,
-    color: ColorPallet.brand.secondary,
+    color: ColorPallet.grayscale.white, // *ACS*
   },
   inputToolbar: {
     backgroundColor: ColorPallet.brand.secondary,
     shadowColor: ColorPallet.brand.primaryDisabled,
-    borderRadius: 10,
+    borderRadius: 0, // *ACS *
   },
   inputText: {
     lineHeight: undefined,
     fontWeight: '500',
     fontSize: TextTheme.normal.fontSize,
   },
-  placeholderText: ColorPallet.grayscale.lightGrey,
+  placeholderText: ColorPallet.grayscale.white, // *ACS*
   sendContainer: {
     marginBottom: 4,
     paddingHorizontal: 4,
@@ -707,7 +711,7 @@ export const ChatTheme = {
   optionsText: ColorPallet.grayscale.black,
   openButtonStyle: {
     borderRadius: 32,
-    backgroundColor: ColorPallet.brand.primary,
+    backgroundColor: ColorPallet.brand.secondary, // *ACS*
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 16,
@@ -804,10 +808,10 @@ const PINInputTheme = {
     borderColor: ColorPallet.brand.headerIcon,
   },
   cellText: {
-    color: ColorPallet.brand.text,
+    color: ColorPallet.brand.text, // *ACS* changed the PIN input text to white, on a dark grey cell bkg
   },
   icon: {
-    color: ColorPallet.brand.headerIcon,
+    color: ColorPallet.brand.text, // *ACS* changed the hide icon to dark grey
   },
 }
 

@@ -68,7 +68,7 @@ const TabStack: React.FC = () => {
             tabBarIcon: ({ color, focused }) => (
               <AttachTourStep tourID={TourID.HomeTour} index={1}>
                 <View style={{ ...TabTheme.tabBarContainerStyle, justifyContent: showLabels ? 'flex-end' : 'center' }}>
-                  <Icon name={focused ? 'message-text' : 'message-text-outline'} color={color} size={30} />
+                  <Icon name={focused ? 'home' : 'home-outline'} color={color} size={30} />
 
                   {showLabels && (
                     <Text
@@ -104,6 +104,7 @@ const TabStack: React.FC = () => {
                   position: 'relative',
                   flex: 1,
                   width: 90,
+
                 }}
               >
                 <AttachTourStep tourID={TourID.HomeTour} index={0} fill>
@@ -129,7 +130,7 @@ const TabStack: React.FC = () => {
                           accessible={true}
                           accessibilityRole={'button'}
                           accessibilityLabel={t('TabStack.Scan')}
-                          style={{ ...TabTheme.focusTabIconStyle }}
+                          style={{ ...TabTheme.focusTabIconStyle, borderRadius: 45, borderWidth: 2, borderColor: '#000000', }}
                         >
                           <Icon
                             accessible={false}

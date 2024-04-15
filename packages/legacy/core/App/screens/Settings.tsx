@@ -42,7 +42,8 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
       width: '100%',
     },
     section: {
-      backgroundColor: SettingsTheme.groupBackground,
+      // backgroundColor: SettingsTheme.groupBackground,
+      backgroundColor: SettingsTheme.modalSecondary, // *ACS* white bkg
       paddingVertical: 24,
       flexGrow: 1,
     },
@@ -55,6 +56,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
     },
     sectionSeparator: {
       marginBottom: 10,
+
     },
     sectionRow: {
       flexDirection: 'row',
@@ -64,8 +66,8 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
       paddingHorizontal: 25,
     },
     itemSeparator: {
-      borderBottomWidth: 1,
-      borderBottomColor: ColorPallet.brand.primaryBackground,
+      borderBottomWidth: 2, // *ACS* changed from 1
+      borderBottomColor: ColorPallet.brand.secondaryBackground,
       marginHorizontal: 25,
     },
     footer: {
@@ -92,7 +94,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   const settingsSections: SettingSection[] = [
     {
       header: {
-        icon: { name: store.preferences.useConnectionInviterCapability ? 'person' : 'apartment', size: 30 },
+        icon: { name: store.preferences.useConnectionInviterCapability ? 'person' : 'contacts', size: 30 }, // *ACS* changed icon to contacts
         title: store.preferences.useConnectionInviterCapability ? store.preferences.walletName : t('Screens.Contacts'),
         iconRight: {
           name: 'edit',
@@ -115,13 +117,14 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
               .getParent()
               ?.navigate(Stacks.ContactStack, { screen: Screens.Contacts, params: { navigation: navigation } }),
         },
-        {
-          title: t('Settings.WhatAreContacts'),
-          accessibilityLabel: t('Settings.WhatAreContacts'),
-          testID: testIdWithKey('WhatAreContacts'),
-          onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.WhatAreContacts }),
-          value: undefined,
-        },
+        // *ACS* - not displaying 'What are Contacts?' information screen for now
+        // {
+        //   title: t('Settings.WhatAreContacts'),
+        //   accessibilityLabel: t('Settings.WhatAreContacts'),
+        //   testID: testIdWithKey('WhatAreContacts'),
+        //   onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.WhatAreContacts }),
+        //   value: undefined,
+        // },
       ],
     },
     {
@@ -260,51 +263,51 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
     title: string
     titleTestID?: string
   }> = ({ icon, iconRight, title, titleTestID }) =>
-    // gate keep behind developer mode
-    store.preferences.useConnectionInviterCapability ? (
-      <View style={[styles.section, styles.sectionHeader, { justifyContent: iconRight ? 'space-between' : undefined }]}>
-        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <Icon
-            importantForAccessibility={'no-hide-descendants'}
-            accessible={false}
-            name={icon.name}
-            size={icon.size ?? defaultIconSize}
-            style={[{ marginRight: 10, color: SettingsTheme.iconColor }, icon.style]}
-          />
-          <Text
-            testID={titleTestID}
-            numberOfLines={1}
-            accessibilityRole={'header'}
-            style={[TextTheme.headingThree, { flexShrink: 1 }]}
-          >
-            {title}
-          </Text>
+      // gate keep behind developer mode
+      store.preferences.useConnectionInviterCapability ? (
+        <View style={[styles.section, styles.sectionHeader, { justifyContent: iconRight ? 'space-between' : undefined }]}>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Icon
+              importantForAccessibility={'no-hide-descendants'}
+              accessible={false}
+              name={icon.name}
+              size={icon.size ?? defaultIconSize}
+              style={[{ marginRight: 10, color: SettingsTheme.iconColor }, icon.style]}
+            />
+            <Text
+              testID={titleTestID}
+              numberOfLines={1}
+              accessibilityRole={'header'}
+              style={[TextTheme.headingThree, { flexShrink: 1 }]}
+            >
+              {title}
+            </Text>
+          </View>
+          {iconRight && (
+            <HeaderButton
+              buttonLocation={ButtonLocation.Right}
+              accessibilityLabel={iconRight.accessibilityLabel!}
+              testID={iconRight.testID!}
+              onPress={iconRight.action!}
+              icon={'pencil'}
+              iconTintColor={TextTheme.headingThree.color}
+            />
+          )}
         </View>
-        {iconRight && (
-          <HeaderButton
-            buttonLocation={ButtonLocation.Right}
-            accessibilityLabel={iconRight.accessibilityLabel!}
-            testID={iconRight.testID!}
-            onPress={iconRight.action!}
-            icon={'pencil'}
-            iconTintColor={TextTheme.headingThree.color}
-          />
-        )}
-      </View>
-    ) : (
-      <View style={[styles.section, styles.sectionHeader]}>
-        <Icon
-          importantForAccessibility={'no-hide-descendants'}
-          accessible={false}
-          name={icon.name}
-          size={24}
-          style={{ marginRight: 10, color: SettingsTheme.iconColor }}
-        />
-        <Text accessibilityRole={'header'} style={[TextTheme.headingThree, { flexShrink: 1 }]}>
-          {title}
-        </Text>
-      </View>
-    )
+      ) : (
+          <View style={[styles.section, styles.sectionHeader]}>
+            <Icon
+              importantForAccessibility={'no-hide-descendants'}
+              accessible={false}
+              name={icon.name}
+              size={24}
+              style={{ marginRight: 10, color: SettingsTheme.iconColor }}
+            />
+            <Text accessibilityRole={'header'} style={[TextTheme.headingThree, { flexShrink: 1 }]}>
+              {title}
+            </Text>
+          </View>
+        )
 
   const SectionRow: React.FC<{
     title: string
@@ -357,10 +360,11 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
               disabled={store.preferences.developerModeEnabled}
             >
               <View>
-                <Text style={TextTheme.normal} testID={testIdWithKey('Version')}>
-                  {`${t('Settings.Version')} ${getVersion()} ${t('Settings.Build')} (${getBuildNumber()})`}
-                </Text>
+                {/* *ACS* - changed to DigiCred logo, and some formatting of text */}
                 <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} />
+                <Text style={TextTheme.normal} testID={testIdWithKey('Version')}>
+                  {`${t('Settings.Version')} ${getVersion()}  -  ${t('Settings.Build')} ${getBuildNumber()}\n`}
+                </Text>
               </View>
             </TouchableWithoutFeedback>
           </View>

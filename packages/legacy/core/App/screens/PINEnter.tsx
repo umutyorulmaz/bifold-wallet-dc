@@ -3,7 +3,6 @@ import { CommonActions } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Keyboard, StyleSheet, Text, Image, View, DeviceEventEmitter } from 'react-native'
-
 import Button, { ButtonType } from '../components/buttons/Button'
 import PINInput from '../components/inputs/PINInput'
 import { InfoBoxType } from '../components/misc/InfoBox'
@@ -298,6 +297,13 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
     <KeyboardView>
       <View style={style.screenContainer}>
         <View style={style.contentContainer}>
+          <View>
+            {/* *ACS* added the DigiCred logo at the top of the PIN Enter screen */}
+            <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} />
+            <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold' }]}>
+              DigiCred
+            </Text>
+          </View>
           <Image source={Assets.img.logoSecondary.src} style={style.image} />
           {biometricsEnrollmentChange ? (
             <>
@@ -316,8 +322,8 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
               </Text>
             </>
           ) : (
-            <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16 }]}>{t('PINEnter.EnterPIN')}</Text>
-          )}
+                <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16 }]}>{t('PINEnter.EnterPIN')}</Text>
+              )}
           <PINInput
             onPINChanged={(p: string) => {
               setPIN(p)

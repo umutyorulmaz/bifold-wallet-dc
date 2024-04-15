@@ -142,8 +142,8 @@ const translation = {
     "Attestation": "I have read, understand and accept the terms and conditions.",
   },
   "Tour": {
-    "GuideTitle": "Welcome to Aries Bifold",
-    "WouldYouLike": "Would you like some guidance on how to use Aries Bifold?",
+    "GuideTitle": "Welcome to the DigiCred Wallet", // *ACS*
+    "WouldYouLike": "Would you like some guidance on how to use the DigiCred Wallet?", // *ACS*
     "UseAppGuides": "Use app guides",
     "DoNotUseAppGuides": "Don't use app guides",
     "AddAndShare": "Add and share credentials",
@@ -163,10 +163,11 @@ const translation = {
     "Back": "Back",
     "Done": "Done",
   },
+  // *ACS* - changed to DigiCred
   "CameraDisclosure": {
     "AllowCameraUse": "Allow camera use",
     "CameraDisclosure": "The camera is used to scan QR codes that initiate a credential offer or credential request. No information about the images is stored, used for analytics, or shared.",
-    "ToContinueUsing": "To continue using the Aries Bifold scan feature, please allow camera permissions.",
+    "ToContinueUsing": "To continue using the DigiCred Wallet scan feature, please allow camera permissions.",
     "OpenSettings": "Open settings",
   },
   "PINCreate": {
@@ -340,7 +341,7 @@ const translation = {
   "Home": {
     "Welcome": "Welcome",
     "Notification": "Notification",
-    "Notifications": "Notifications",
+    "Notifications": "Home",
     "NoNewUpdates": "You have no new notifications.",
     "NoCredentials": "You have no credentials in your wallet.",
     "SeeAll": "See all",
@@ -496,7 +497,7 @@ const translation = {
   "Settings": {
     "Version": "Version",
     "VersionString": "0.0.0-0",
-    "AppSettings": "App Settings",
+    "AppSettings": "Settings", // *ACS*
     "AboutApp": "About App",
     "ChangePin": "Change PIN",
     "Language": "Language",
@@ -513,7 +514,7 @@ const translation = {
     "Notifications": "Notifications",
   },
   "TabStack": {
-    "Home": "Notifications",
+    "Home": "Home",
     "Scan": "Scan",
     "Credentials": "Credentials",
   },
@@ -541,15 +542,15 @@ const translation = {
   "Screens": {
     "Splash": "Splash",
     "Onboarding": "Onboarding",
-    "Preface": "Aries Bifold",
+    "Preface": "DigiCred Wallet", // *ACS*
     "Terms": "Terms & Conditions",
     "CreatePIN": "Create a PIN",
     "EnterPIN": "Enter PIN",
-    "Home": "Notifications",
+    "Home": "Home",
     "Scan": "Scan",
     "Credentials": "Credentials",
     "CredentialDetails": "Credential Details",
-    "Notifications": "Notifications",
+    "Notifications": "Home",
     "CredentialOffer": "Credential Offer",
     "ProofChangeCredential": "Choose a credential",
     "ProofRequest": "Proof Request",
@@ -612,11 +613,17 @@ const translation = {
     "LedgerConnectivityIssueMessage": "A firewall may be preventing you from connecting to wallet related services.",
   },
   "Onboarding": {
-    "SkipA11y": "Skip introduction to Aries Bifold",
+    "SkipA11y": "Skip introduction to the DigiCred Wallet", // *ACS*
   },
+  // *ACS* - probably don't want to ask if the potential wallet user wants to use the wallet.
+  // "Preface": {
+  //   "PrimaryHeading": "Is this app for you?",
+  //   "Paragraph1": "Most people will not have a need for Aries Bifold because very few digital credentials are currently available.",
+  //   "Confirmed": "I have confirmed that this app is for me.",
+  // },
   "Preface": {
     "PrimaryHeading": "Is this app for you?",
-    "Paragraph1": "Most people will not have a need for Aries Bifold because very few digital credentials are currently available.",
+    "Paragraph1": "Please confirm.",
     "Confirmed": "I have confirmed that this app is for me.",
   },
   "Chat": {
