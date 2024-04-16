@@ -30,7 +30,7 @@ const Language = () => {
       width: '100%',
     },
     section: {
-      backgroundColor: SettingsTheme.groupBackground,
+      backgroundColor: SettingsTheme.primaryBackground,
       paddingHorizontal: 25,
       paddingVertical: 16,
     },
@@ -40,8 +40,8 @@ const Language = () => {
       justifyContent: 'space-between',
     },
     itemSeparator: {
-      borderBottomWidth: 1,
-      borderBottomColor: ColorPallet.brand.primaryBackground,
+      borderBottomWidth: 2, // *ACS* increased
+      borderBottomColor: ColorPallet.brand.secondaryBackground,
       marginHorizontal: 25,
     },
   })

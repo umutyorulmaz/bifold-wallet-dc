@@ -59,24 +59,20 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ messageProps }) => {
     if (callbackType === CallbackType.CredentialOffer) {
       return t('Chat.ViewOffer')
     }
-
     // Receiving a proof request
     if (callbackType === CallbackType.ProofRequest) {
       return t('Chat.ViewRequest')
     }
-
     // After a presentation of a proof
     if (callbackType === CallbackType.PresentationSent) {
       return t('Chat.OpenPresentation')
     }
-
     return t('Chat.OpenItem')
   }
 
   const testIdForCallbackType = (callbackType: CallbackType) => {
     const text = textForCallbackType(callbackType)
     const textWithoutSpaces = text.replace(/\s+/g, '')
-
     return testIdWithKey(textWithoutSpaces)
   }
 

@@ -40,7 +40,7 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
   const styles = StyleSheet.create({
     contentContainer: {
       padding: 20,
-      backgroundColor: ColorPallet.brand.secondaryBackground,
+      backgroundColor: ColorPallet.brand.primaryBackground, // *ACS*
     },
   })
 
@@ -107,7 +107,7 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
     <SafeAreaView style={{ flexGrow: 1 }} edges={['bottom', 'left', 'right']}>
       <View style={styles.contentContainer}>
         <Text style={{ ...TextTheme.headingThree }}>{contactLabel}</Text>
-        <Text style={{ ...TextTheme.normal, marginTop: 20 }}>
+        <Text style={{ ...TextTheme.normal, marginTop: 5 }}>
           {t('ContactDetails.DateOfConnection', {
             date: connection?.createdAt ? formatTime(connection.createdAt, { includeHour: true }) : '',
           })}
@@ -118,7 +118,7 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
         accessibilityLabel={t('Screens.RenameContact')}
         accessibilityRole={'button'}
         testID={testIdWithKey('RenameContact')}
-        style={[styles.contentContainer, { marginTop: 10 }]}
+        style={[styles.contentContainer, { backgroundColor: '#dddddd', marginTop: 10, borderBottomWidth: 1, }]} // *ACS*
       >
         <Text style={{ ...TextTheme.normal }}>{t('Screens.RenameContact')}</Text>
       </TouchableOpacity>

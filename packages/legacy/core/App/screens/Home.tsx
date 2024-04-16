@@ -7,6 +7,7 @@ import { FlatList, View, StyleSheet } from 'react-native'
 import NotificationListItem, { NotificationType } from '../components/listItems/NotificationListItem'
 import NoNewUpdates from '../components/misc/NoNewUpdates'
 import AppGuideModal from '../components/modals/AppGuideModal'
+//import HomeFooterView from '../components/views/HomeFooterView'
 import { useConfiguration } from '../contexts/configuration'
 import { DispatchAction } from '../contexts/reducers/store'
 import { useStore } from '../contexts/store'
@@ -14,6 +15,8 @@ import { useTheme } from '../contexts/theme'
 import { useTour } from '../contexts/tour/tour-context'
 import { HomeStackParams, Screens } from '../types/navigators'
 import { TourID } from '../types/tour'
+
+import FindAndConnectOpportunities from './FindAndConnectOpportunities'
 
 type HomeProps = StackScreenProps<HomeStackParams, Screens.Home>
 
@@ -132,6 +135,7 @@ const Home: React.FC<HomeProps> = () => {
           </View>
         )}
       />
+      <FindAndConnectOpportunities />
       {showTourPopup && (
         <AppGuideModal
           title={t('Tour.GuideTitle')}
