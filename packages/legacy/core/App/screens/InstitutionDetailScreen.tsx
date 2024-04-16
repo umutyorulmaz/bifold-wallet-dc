@@ -53,17 +53,17 @@ const InstitutionDetailScreen = () => {
       color: 'black',
     },
     applyButton: {
-      backgroundColor: '#007AFF', // iOS system blue color
+      backgroundColor: '#007AFF',
       paddingVertical: 12,
       paddingHorizontal: 20,
       borderRadius: 40,
-      alignSelf: 'center', // Center button horizontally
-      marginTop: 80, // Increase space from the last text element to move it lower
-      width: '100%', // Set width to a percentage of the screen width // Space from the last text element
+      alignSelf: 'center',
+      marginTop: 80,
+      width: '100%',
     },
     applyButtonText: {
       fontSize: 25,
-      color: '#fff', // White text color
+      color: '#fff',
       textAlign: 'center',
     },
   })

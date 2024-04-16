@@ -42,7 +42,6 @@ const MilitaryScreen: React.FC<MilitaryScreenProps> = ({ navigation }) => {
         data={militaryInstitutions}
         renderItem={renderInstitution}
         keyExtractor={(item) => item.id.toString()}
-        // Add other props such as ItemSeparatorComponent if needed
       />
     </View>
   )

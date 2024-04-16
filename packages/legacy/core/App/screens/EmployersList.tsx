@@ -33,7 +33,6 @@ const EmployersScreen: React.FC<EmployersScreenProps> = ({ navigation }) => {
       flex: 1,
       marginTop: 10,
     },
-    // Other styles can be added here
   })
 
   return (
@@ -42,7 +41,6 @@ const EmployersScreen: React.FC<EmployersScreenProps> = ({ navigation }) => {
         data={employersInstitutions}
         renderItem={renderInstitution}
         keyExtractor={(item) => item.id.toString()}
-        // Add other props such as ItemSeparatorComponent if needed
       />
     </View>
   )

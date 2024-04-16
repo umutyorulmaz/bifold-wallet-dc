@@ -46,21 +46,20 @@ const FindAndConnectOpportunities = () => {
     container: {
       flexDirection: 'row', // Aligns children (categories) in a row
       justifyContent: 'space-around', // Evenly distributes children along the horizontal axis
-      alignItems: 'center', // Aligns children along the vertical axis
+      alignItems: 'center',
     },
     category: {
-      alignItems: 'center', // Centers the icon and text within each category button
+      alignItems: 'center',
       flex: 1, // Distributes space equally among category buttons
-      // You may want to add some vertical padding if the buttons are too close to each other
       paddingVertical: 10,
     },
     icon: {
-      marginBottom: 20, // Space between icon and category name text
+      marginBottom: 20,
     },
     text: {
       textAlign: 'center',
       fontSize: 24,
-      fontWeight: 'bold', // Ensures text is centered below the icon
+      fontWeight: 'bold',
       color: 'black',
     },
   })
