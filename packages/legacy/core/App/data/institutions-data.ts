@@ -26,6 +26,7 @@ export interface InstitutionDetail {
   cardImage?: any
   description: string
   address?: string
+  invitationLink?: string
 }
 
 export const InstitutionRegistry: InstitutionCategory[] = [
@@ -37,13 +38,12 @@ export const InstitutionRegistry: InstitutionCategory[] = [
       //TODO:  Region has been prepended to the name field to assist in filtering institutions by a particular geographical region.
       {
         id: '01',
-        name: 'NC|University of North Carolina, Wilmington',
-        iconUrl: 'https://pbs.twimg.com/profile_images/580848581893963776/B1nCmDVD_400x400.jpg',
-        description:
-          'From humble beginnings in 1947 as Wilmington College, UNCW has evolved into a top doctoral and research institution with nearly 18,000 students and about 2,500 employees.',
-        address: '601 S. College Road, Wilmington, NC',
-        bannerImage:
-          'https://uncw.edu/media/images/image-text-feature/seahawk-statue-night-20171101-dsc3841-hdr-image-text-feature.jpg',
+        name: 'FL|Miami Dade College',
+        iconUrl:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Miami_Dade_College_logo.svg/1200px-Miami_Dade_College_logo.svg.png',
+        description: `Miami Dade College is a public college in Miami, Florida. Founded in 1959, it has a total of eight campuses and twenty-one outreach centers throughout Miami-Dade County. It is the largest college in the Florida College System with more than 100,000 students.`,
+        address: '300 NE 2nd Ave, Miami, FL',
+        bannerImage: 'https://www.mdc.edu/padron/img/padron-at-night.jpg',
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
@@ -260,12 +260,13 @@ export const InstitutionRegistry: InstitutionCategory[] = [
       },
       {
         id: '22',
-        name: 'FL|Miami Dade College',
-        iconUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Miami_Dade_College_logo.svg/1200px-Miami_Dade_College_logo.svg.png',
-        description: `Miami Dade College is a public college in Miami, Florida. Founded in 1959, it has a total of eight campuses and twenty-one outreach centers throughout Miami-Dade County. It is the largest college in the Florida College System with more than 100,000 students.`,
-        address: '300 NE 2nd Ave, Miami, FL',
-        bannerImage: 'https://www.mdc.edu/padron/img/padron-at-night.jpg',
+        name: 'NC|University of North Carolina, Wilmington',
+        iconUrl: 'https://pbs.twimg.com/profile_images/580848581893963776/B1nCmDVD_400x400.jpg',
+        description:
+          'From humble beginnings in 1947 as Wilmington College, UNCW has evolved into a top doctoral and research institution with nearly 18,000 students and about 2,500 employees.',
+        address: '601 S. College Road, Wilmington, NC',
+        bannerImage:
+          'https://uncw.edu/media/images/image-text-feature/seahawk-statue-night-20171101-dsc3841-hdr-image-text-feature.jpg',
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
@@ -563,6 +564,52 @@ export const InstitutionRegistry: InstitutionCategory[] = [
     institutions: [
       {
         id: '01',
+        name: 'FL|CTS Engine',
+        iconUrl: 'https://mms.businesswire.com/media/20160510005142/en/334195/23/CTS_Engines_RGB_Small.jpg',
+        description: `CTS Engines is a leading provider of world-class jet engine maintenance, repair, and overhaul services. CTS specializes in the test, repair, and overhaul of the CF6-50, CF6-80A, CF6-80C2, CF6-80E1, PW2000, PW4000 and GP7200. Utilizing state-of-the-art facilities, cutting-edge technologies, and a highly skilled workforce, CTS Engines offers comprehensive solutions tailored to meet specific needs.`,
+        address: '3060 SW 2nd Ave, Fort Lauderdale, FL',
+        bannerImage: 'https://ctsengines.com/wp-content/uploads/2022/01/home1.jpg',
+        cardImage: '/src/assets/images/generic-student-id.svg',
+        invitationLink:
+          'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzNmU5OTZkZS01ODgzLTQxMDktOTFlYS05MTNkMGUwYmJlYWQiLCAibGFiZWwiOiAiQ1RTIEVuZ2luZXMiLCAicmVjaXBpZW50S2V5cyI6IFsiZzdneEd2alFleGJzcmltaU00ckZDbnNtREtmYWZmeWVSeEZGekxIcEMzViJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAifQ==',
+      },
+      {
+        id: '02',
+        name: 'FL|Boeing',
+        iconUrl: 'https://nasa-uli.utk.edu/wp-content/uploads/2019/02/boeing-logo.png',
+        description: `The Boeing Company is an American multinational corporation that designs, manufactures, and sells airplanes, rotorcraft, rockets, satellites, and missiles worldwide. The company also provides leasing and product support services. Boeing is among the largest global aerospace manufacturers; it is the fourth-largest defense contractor in the world based on 2022 revenue and is the largest exporter in the United States by dollar value. Boeing was founded by William Boeing in Seattle, Washington, on July 15, 1916.`,
+        address: '100 Boeing Way, Titusville, FL',
+        bannerImage:
+          'https://www.boeing.ca/content/theboeingcompany/ca/en/boeing-in-canada/_jcr_content/root/container_2091943792/hero_teaser.coreimg.jpeg/1709946120562/boeingcanada.jpeg',
+        cardImage: '/src/assets/images/generic-student-id.svg',
+        invitationLink:
+          'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICI1ZWM0MjFlZC03MWVlLTQ0YTktYTQzMi0yNGJkMzM0NWZjZmUiLCAibGFiZWwiOiAiQm9laW5nIiwgInJlY2lwaWVudEtleXMiOiBbIjRzZ3hrVzFlN2lXQ2VuRFpNSGR1NVV5Y3VCM3lEVjVvRXZLa0hSVGVacDl3Il0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9',
+      },
+      {
+        id: '03',
+        name: 'FL|Spirit Airlines',
+        iconUrl: 'https://e7.pngegg.com/pngimages/923/237/png-clipart-spirit-airlines-thumbnail.png',
+        description: `Spirit Airlines, Inc., stylized as spirit, is a major American ultra-low cost airline headquartered in Miramar, Florida, in the Miami metropolitan area. Spirit operates scheduled flights throughout the United States, the Caribbean and Latin America.`,
+        address: '2800 Executive Way, Miramar, FL',
+        bannerImage: 'https://www.ch-aviation.com/images/stockPhotos/36/93e6b75410dbb2520e315fda9e9137a6402a2d3a.jpg',
+        cardImage: '/src/assets/images/generic-student-id.svg',
+        invitationLink:
+          'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIyMmJjZGYxNS01NDM4LTQ3ZjctYmExYy03YjRhZGViNTkzZDAiLCAibGFiZWwiOiAiU3Bpcml0IEFpcmxpbmVzIiwgInJlY2lwaWVudEtleXMiOiBbIjhMSGYybTN1VDhoTDM0MTlNU01rNkNXQlBERWlnOVI0NENwWHZZaFVtZ0R4Il0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9',
+      },
+      {
+        id: '04',
+        name: 'FL|General Dynamics',
+        iconUrl: 'https://i.dell.com/sites/csimages/Banner_Imagery/all/general-dynamics.png',
+        description: `General Dynamics Corporation (GD) is an American publicly traded aerospace and defense corporation headquartered in Reston, Virginia. As of 2020, it was the fifth-largest defense contractor in the world by arms sales, and fifth largest in the United States by total sales.`,
+        address: '9100 NW 36th St, Miami, FL',
+        bannerImage:
+          'https://gdmissionsystems.com/-/media/general-dynamics/maritime-and-strategic-systems/images/submarine-systems/columbia-class-submarines/columbia-class-ballistic-missile-submarine-artist-rendering.ashx',
+        cardImage: '/src/assets/images/generic-student-id.svg',
+        invitationLink:
+          'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzMWNkZDNlOS02NWQ4LTRhOTUtOWRmZi02Y2VmMTdiMWVkMDMiLCAibGFiZWwiOiAiR2VuZXJhbCBEeW5hbWljcyIsICJyZWNpcGllbnRLZXlzIjogWyI5a29IZ1RXOW1pMlJ1VUpDMUQ4RWVmbVV3aWFkdmJMYkFmSlJZVzRIM3BiSiJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAifQ==',
+      },
+      {
+        id: '05',
         name: 'NC|Bayliss Boatworks',
         iconUrl:
           'https://www.baylissboatworks.com/wp-content/themes/bayliss-custom-theme/library/images/footer-logo.png',
@@ -572,7 +619,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '02',
+        id: '06',
         name: 'NC|Nordhavn Yachts',
         iconUrl:
           'https://media.licdn.com/dms/image/C4D0BAQFh1LNtmPEzGQ/company-logo_200_200/0/1674865506898/nordhavn_yachts_logo?e=1718236800&v=beta&t=Hc-G9SSUToD7c7kkuXkku2Jfc1r40JduaakzY5EYqWY',
@@ -582,7 +629,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '03',
+        id: '07',
         name: 'NC|Onslow Bay Boats',
         iconUrl: 'https://onslowbayboats.com/wp-content/uploads/2021/06/Onslow-Bay-Web-01.png',
         description: `Onslow Bay Boatworks offers a fleet of superior center console offshore and tournament edition boats designed with avid fishermen in mind.`,
@@ -591,7 +638,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '04',
+        id: '08',
         name: 'NC|Jarrett Bay',
         iconUrl: 'https://ocfishing.com/app/uploads/2022/08/jarrettbay-boatworks-logo.jpg',
         description: `Jarrett Bay Boatworks is a world-class boat builder and yacht service facility in the United States. Having delivered over 100 custom sport fishing boats and semi-production models, while servicing tens of thousands of recreational and commercial vessels, Jarrett Bay is renowned for quality craftsmanship.`,
@@ -600,7 +647,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '05',
+        id: '09',
         name: 'NC|Iconic Marine Group',
         iconUrl:
           'https://media.licdn.com/dms/image/C560BAQErqlzo7jbeqw/company-logo_200_200/0/1631336968992?e=1717632000&v=beta&t=ZOneN_DbzNu1aphPgLoDOFo_j6AapffXYNjWPfXs_p0',
@@ -611,7 +658,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '06',
+        id: '10',
         name: 'LA|Northrop Grumman Corp',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Northrop_Grumman_logo_blue-on-clear_2020.svg/440px-Northrop_Grumman_logo_blue-on-clear_2020.svg.png',
@@ -622,7 +669,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '07',
+        id: '11',
         name: 'LA|Walt Disney Co.',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/The_Walt_Disney_Company_Logo.svg/440px-The_Walt_Disney_Company_Logo.svg.png',
@@ -633,7 +680,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '08',
+        id: '12',
         name: 'LA|NBCUniversal',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/NBCUniversal_Logo.svg/530px-NBCUniversal_Logo.svg.png',
@@ -643,7 +690,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '09',
+        id: '13',
         name: 'LA|Space Exploration Technologies Corp. (SpaceX)',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/SpaceX_logo_black.svg/500px-SpaceX_logo_black.svg.png',
@@ -653,7 +700,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '10',
+        id: '14',
         name: 'LA|Raytheon Co.',
         iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Raytheon.svg/400px-Raytheon.svg.png',
         description: `RTX Corporation, formerly Raytheon Technologies Corporation, is an American multinational aerospace and defense conglomerate headquartered in Arlington, Virginia. It is one of the largest aerospace and defense manufacturers in the world by revenue and market capitalization, as well as one of the largest providers of intelligence services.`,
@@ -662,7 +709,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '11',
+        id: '15',
         name: 'LA|Amgen',
         iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/500px-Amgen.svg.png',
         description: `Amgen Inc. (formerly Applied Molecular Genetics Inc.) is an American multinational biopharmaceutical company headquartered in Thousand Oaks, California. One of the world's largest independent biotechnology companies, Amgen's Thousand Oaks staff in 2022 numbered approximately 5,000 (8.5% of total city employment) and included hundreds of scientists, making Amgen the largest employer in Ventura County. As of 2022, Amgen has approximately 24,000 staff in total.`,
@@ -672,7 +719,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '12',
+        id: '16',
         name: 'LA|Paramount Pictures Corp',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Paramount_Pictures_2022_%28Blue%29.svg/350px-Paramount_Pictures_2022_%28Blue%29.svg.png',
@@ -683,7 +730,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '13',
+        id: '17',
         name: 'NC|Corning Cable Systems',
         iconUrl: 'https://cdn.freebiesupply.com/logos/large/2x/corning-1-logo-png-transparent.png',
         description: `Corning Cable Systems offers a range of end-to-end fiber-optic and copper product solutions for various telecommunications networks. Its solutions include cables, connectors, and related hardware, and network services that include network design, project management, installation and maintenance, equipment rental, and training programs. The company offers an inventory of products, including digital subscriber line products, fiber closures, micro cabling systems, offshore and aerial cables, pedestals, plug & play systems, splice and test equipment, submarine cable systems, subscriber demarcation points, terminals, toolkits, and training equipment. It also offers public and private network solutions, original equipment manufacturer-specific products, cable assembly houses, copper solutions, and fiber-optic rentals.`,
@@ -693,7 +740,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '14',
+        id: '18',
         name: 'NC|Atrium Health',
         iconUrl: 'https://atriumhealth.org/-/media/chs/images/logo/atrium-health-logo-square-151px.png',
         description: `Atrium Health, formerly Carolinas HealthCare System, is a hospital network with more than 70,000 employees and part of Advocate Health.`,
@@ -703,7 +750,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '15',
+        id: '19',
         name: 'NC|Live Oak Bank',
         iconUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c6/Live_Oak_Bank%27s_New_Logo_released_in_June_2020.png',
         description: `Live Oak Bank, a subsidiary of Live Oak Bancshares, Inc., is an American bank. Headquartered in Wilmington, NC, it serves small business owners in all 50 states and was the leading SBA by dollar volume in 2022.`,
@@ -713,7 +760,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '16',
+        id: '20',
         name: 'NC|Novant Health',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Novant_Health_logo.svg/220px-Novant_Health_logo.svg.png',
@@ -723,7 +770,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '17',
+        id: '21',
         name: 'NC|Bank Of America',
         iconUrl:
           'https://yt3.googleusercontent.com/cNhnzp4erRv7ApITjJ5OFdIm-r-g49EivpztODKMLwWARJWhRZZo_6whxjN5n7EV6p0BvJwk1FI=s900-c-k-c0x00ffffff-no-rj',
@@ -734,7 +781,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '18',
+        id: '22',
         name: 'NC|Duke Energy',
         iconUrl: 'https://digitalinfranetwork.com/wp-content/uploads/2024/02/duke_energy_logo.jpg',
         description: `Duke Energy Corporation is an American electric power and natural gas holding company headquartered in Charlotte, North Carolina.`,
@@ -743,7 +790,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '19',
+        id: '23',
         name: 'NC|CommScope',
         iconUrl: 'https://www.ngmn.org/wp-content/uploads/Logos/Commscope_500x500.jpg',
         description: `CommScope Holding Company, Inc. is an American network infrastructure provider based in Hickory, North Carolina. CommScope employs over 30,000 employees. The company joined the Nasdaq stock exchange on October 25, 2013. CommScope designs and manufactures network infrastructure products.`,
@@ -753,7 +800,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '20',
+        id: '24',
         name: 'NC|Truist Financial',
         iconUrl: 'https://companieslogo.com/img/orig/TFC-10ef6fac.png?t=1634045116',
         description: `Truist Financial Corporation is an American bank holding company headquartered in Charlotte, North Carolina. The company was formed in December 2019 as the result of the merger of BB&T (Branch Banking and Trust Company) and SunTrust Banks. Its bank operates 2,781 branches in 15 states and Washington, D.C., offering consumer and commercial banking, securities brokerage, asset management, mortgage, and insurance products and services.`,
@@ -762,7 +809,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '21',
+        id: '25',
         name: 'NC|Honeywell',
         iconUrl: 'https://www.honeywell.com/content/dam/honeywellbt/en/images/logos/HON%20logo_200x37%202.png',
         description: `Honeywell International Inc. is an American publicly traded, multinational conglomerate corporation headquartered in Charlotte, North Carolina. It primarily operates in four areas of business: aerospace, building automation, performance materials and technologies (PMT), and safety and productivity solutions (SPS).`,
@@ -772,7 +819,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '22',
+        id: '26',
         name: 'FL|Publix',
         iconUrl: 'https://1000logos.net/wp-content/uploads/2019/06/Publix-Logo.jpg',
         description: `Publix Super Markets, Inc., commonly known as Publix, is an employee-owned American supermarket chain headquartered in Lakeland, Florida. Founded in 1930 by George W. Jenkins, Publix is a private corporation that is wholly owned by present and past employees and members of the Jenkins family.`,
@@ -781,7 +828,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '23',
+        id: '27',
         name: 'FL|AdventHealth',
         iconUrl:
           'https://www.adventhealth.com/sites/default/files/styles/fc_800x533/public/media/pr-adventhealth-logo-hero_5.jpg.webp?h=4362216e&itok=v9KL6Abn',
@@ -792,7 +839,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '24',
+        id: '28',
         name: 'FL|Medtronic',
         iconUrl: 'https://media.bizj.us/view/img/2668641/medtronic-logo*750xx428-241-2-0.jpg',
         description: `Medtronic USA, Inc. manufactures surgical devices and systems including neurosurgery imaging and neuronavigation systems. The company was incorporated in 1984 and is based in Miami, Florida. Medtronic USA, Inc. operates as a subsidiary of Medtronic plc.`,
@@ -801,7 +848,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '25',
+        id: '29',
         name: 'FL|Wyndham Vacation Ownership',
         iconUrl: 'https://photos.prnewswire.com/prnfull/20150416/199211LOGO',
         description: `Wyndham Vacation Ownership (WVO) offers vacationers a (time) share of paradise. A top supplier and marketer of timeshare vacation properties worldwide, the company operates through two primary consumer brands: Wyndham Vacation Resorts and WorldMark by Wyndham. WVO boasts about 185 vacation ownership resorts in the US, Canada, Mexico, the Caribbean, and the South Pacific, representing some 23,000 individual vacation ownership units and more than 900,000 owners of vacation ownership and other real estate interests. It has been expanding its presence in the US. WVO is a subsidiary of Wyndham Worldwide, which was spun off from Cendant (now Avis Budget Group) in 2006.`,
@@ -811,7 +858,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '26',
+        id: '30',
         name: 'FL|Norwegian Cruise Line',
         iconUrl: 'https://mma.prnewswire.com/media/612137/Norwegian_Cruise_Line_Logo.jpg?p=facebook',
         description: `Norwegian Cruise Line (NCL), also known in short as Norwegian, is an American cruise line founded in Norway in 1966, incorporated in Bermuda and headquartered in Miami. It is the fourth-largest cruise line in the world by passengers, controlling about 8.6% of the total worldwide share of the cruise market by passengers as of 2021. It is wholly owned by parent company Norwegian Cruise Line Holdings.`,
@@ -820,7 +867,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '27',
+        id: '31',
         name: 'FL|Interim HealthCare',
         iconUrl: 'https://tukuz.com/wp-content/uploads/2020/12/interim-healthcare-logo-vector.png',
         description: `Founded in 1966, Interim HealthCare is the nation’s first home care company and a trusted provider of home healthcare, personal care and support, hospice care and medical staffing services.`,
@@ -830,7 +877,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '28',
+        id: '32',
         name: 'FL|SeaWorld Orlando',
         iconUrl:
           'https://fiu-original.b-cdn.net/fontsinuse.com/use-images/168/168656/168656.png?filename=Sea%20World%20logo.png',
@@ -840,7 +887,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '29',
+        id: '33',
         name: 'FL|AdventHealth University',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/en/thumb/6/6a/AdventHealth_Uni_Seal.jpg/220px-AdventHealth_Uni_Seal.jpg',
@@ -850,7 +897,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '30',
+        id: '34',
         name: 'FL|Baptist Health South Florida',
         iconUrl:
           'https://festivalboca.org/sites/FestivalBoca/cache/file/B83662C9-9AB3-4973-81E299342F320FE3_sponsorad.jpg',
@@ -860,7 +907,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '31',
+        id: '35',
         name: 'FL|MasTec',
         iconUrl:
           'https://images.squarespace-cdn.com/content/v1/61007f0422a6616afa5f4346/4b0d557f-a62b-40c3-b3f0-44211f1c7550/mastechwebsitelogo.png',
@@ -870,7 +917,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '32',
+        id: '36',
         name: 'FL|Tech Data',
         iconUrl: 'https://1000logos.net/wp-content/uploads/2021/08/Tech-Data-Logo-1974.png',
         description: `Tech Data Corporation (commonly referred to as Tech Data) was an American multinational distribution company specializing in IT products and services headquartered in Clearwater, Florida. It merged with competitor Synnex to form TD Synnex. Synnex is to be the primary owner (55% share). Tech Data provided a broad range of product lines, logistics capabilities and value-added services that enable technology manufacturers and resellers, such as Google, Apple, Cisco, Dell, Fortinet, Hewlett Packard Enterprise, HP Inc., IBM, Lenovo, LG, Microsoft, Sony, Trend Micro, Viewsonic, TP-Link and VMware, to deploy IT solutions.`,
@@ -880,7 +927,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '33',
+        id: '37',
         name: 'FL|Jackson North Medical Center',
         iconUrl:
           'https://media.licdn.com/dms/image/C4E0BAQHL3kGTZZJQSg/company-logo_100_100/0/1631326852216?e=2147483647&v=beta&t=r9YAZEZ8tCVXkh4KyiwBcXNlnre7aGq17nohBTNdxpM',
@@ -890,7 +937,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '34',
+        id: '38',
         name: 'AZ|Banner Health',
         iconUrl: 'https://clinicalpartnerships.asu.edu/sites/default/files/inline-images/cp-banner-health-logo_2_1.jpg',
         description: `Banner Health is a non-profit health system in the United States, based in Phoenix, Arizona. It operates 30 hospitals and several specialized facilities across 6 states. The health system is the largest employer in Arizona and one of the largest in the United States with over 50,000 employees.`,
@@ -899,7 +946,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '35',
+        id: '39',
         name: 'AZ|ON Semiconductor',
         iconUrl: 'https://cdn.theorg.com/c44825e4-e1e3-4e2f-8c95-deff33cdc995_thumb.jpg',
         description: `ON Semiconductor Corporation is an American semiconductor supplier company, based in Scottsdale, Arizona. Products include power and signal management, logic, discrete, and custom devices for automotive, communications, computing, consumer, industrial, LED lighting, medical, military/aerospace and power applications. onsemi runs a network of manufacturing facilities, sales offices and design centers in North America, Europe, and the Asia Pacific regions.`,
@@ -909,7 +956,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '36',
+        id: '40',
         name: 'AZ|HonorHealth',
         iconUrl:
           'https://www.honorhealth.com/sites/default/files/styles/square_teaser/public/2020-02/HonorHealth-icon-600px.png?itok=HSOIDH_b',
@@ -920,7 +967,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '37',
+        id: '41',
         name: 'AZ|Troon',
         iconUrl: 'https://www.troon.com/troon-golf-arizona/wp-content/uploads/sites/4/2022/04/Troon-North.png',
         description: `Troon is a development consisting of a country club, golf course and housing in North Scottsdale, Arizona, United States. The golf course was designed by Jay Morrish and Tom Weiskopf.`,
@@ -930,7 +977,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '38',
+        id: '42',
         name: 'AZ|Apollo Education Group',
         iconUrl: 'https://www.sogeti.com/globalassets/common/logos/apol-apollo-logo-vertical-blue-500x478.png',
         description: `Apollo Education Group, Inc. is an American corporation based in the South Phoenix area of Phoenix, Arizona, with an additional corporate office in Chicago, Illinois. It is privately-owned by a consortium of investors including The Vistria Group, LLC and funds affiliated with Apollo Global Management, LLC.`,
@@ -939,7 +986,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '39',
+        id: '43',
         name: 'AZ|Microchip Technology',
         iconUrl:
           'https://b2310233.smushcdn.com/2310233/wp-content/uploads/2021/08/Microchip_Technology-Logo.wine_.png?lossy=1&strip=1&webp=1',
@@ -950,7 +997,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '40',
+        id: '44',
         name: 'AZ|ARRIVIA',
         iconUrl: 'https://www.arrivia.com/wp-content/uploads/2021/05/arrivia-Logo-2-768x291-1.jpeg',
         description: `Operator of a travel privileges platform intended to reward travelers. The company partners with brands including financial services and travel companies to offer customers access to travel and leisure at preferred rates, enabling businesses to uncover new revenue streams, expand core products and reward their members.`,
@@ -959,7 +1006,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '41',
+        id: '45',
         name: 'AZ|Carlisle Companies',
         iconUrl: 'https://mms.businesswire.com/media/20240206705757/en/1962969/23/Carlisle_MasterLogo_RGB.jpg',
         description: `Carlisle Companies Incorporated is an American diversified company that designs, manufactures, and markets a wide range of products that serve a broad range of niche markets to customers worldwide, including: commercial roofing, energy, agriculture, lawn and garden, mining and construction equipment, aerospace and electronics, dining and food delivery, and healthcare.`,
@@ -969,7 +1016,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '42',
+        id: '46',
         name: 'AZ|Southern Copper',
         iconUrl: 'https://www.marketbeat.com/logos/southern-copper-co-logo.png?v=20240102162501',
         description: `Southern Copper Corp is an integrated producer of copper and other minerals and operates the mining, smelting, and refining facilities in Peru and Mexico. Its production includes copper, molybdenum, zinc, and silver. The company operates through the following segments: Peruvian operations, Mexican open-pit operations, and Mexican underground mining operations. Southern Copper generates the majority of its revenue from the sale of copper and the rest from the sale of non-copper products, such as molybdenum, silver, zinc, lead, and gold. The company's geographical segments are The Americas, Europe, and Asia.`,
@@ -979,7 +1026,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '43',
+        id: '47',
         name: 'AZ|Carvana',
         iconUrl: 'https://i.pinimg.com/originals/b0/e3/44/b0e344335606f3b2ab2a47e36b482425.png',
         description: `Carvana Co. is an online used car retailer based in Tempe, Arizona. The company was the fastest growing online used car dealer in the United States and is known for its multi-story glass tower car vending machines. Carvana was named to the 2021 Fortune 500 list, one of the youngest companies to be added to the list.`,
@@ -989,7 +1036,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '44',
+        id: '48',
         name: 'AZ|Cohn Financial Group',
         iconUrl:
           'https://media.licdn.com/dms/image/C560BAQE1_4XGCTOncQ/company-logo_200_200/0/1630590675925/cfg_business_solutions_logo?e=2147483647&v=beta&t=YVPC-AdEArWKcdnrRNLQ-OhdezOUSaqsSkH77E36g6k',
@@ -1000,7 +1047,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '45',
+        id: '49',
         name: 'AZ|Magellan Health',
         iconUrl: 'https://www.magellanhealth.com/wp-content/uploads/2019/03/MH_color_r@2x.png',
         description: `Magellan Health Inc. (formerly Magellan Health Services Inc.), is an American for-profit managed health care company and subsidiary of Centene that's focused on special populations, complete pharmacy benefits and other specialty areas of healthcare. Magellan supports innovative ways of accessing better health through technology, while remaining focused on the critical personal relationships that are necessary to achieve a healthy, vibrant life.`,
@@ -1009,7 +1056,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '46',
+        id: '50',
         name: 'AZ|Shamrock Foods',
         iconUrl: 'https://cdn.phenompeople.com/CareerConnectResources/SHFOUS/social/1200x630-1641472879476.jpg',
         description: `Shamrock Foods distributes fresh and frozen foods, specialty items and gourmet foods to food service customers. The company also manufactures and distributes dairy products to supermarkets and convenience stores across the nation.`,
@@ -1019,7 +1066,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '47',
+        id: '51',
         name: 'AZ|Morenci Mine',
         iconUrl: 'https://mms.businesswire.com/media/20240123350644/en/602050/22/FM_RGB_center_biz-wire.jpg',
         description: `Freeport-McMoRan (FCX) operates large, long-lived, geographically diverse assets with significant proven and probable reserves of copper, gold and molybdenum. The Morenci Mine is a large copper mine located near Morenci, Arizona, United States. Morenci represents one of the largest copper reserves in the United States and in the world, having estimated reserves of 3.2 billion tonnes of ore grading 0.16% copper.`,
@@ -1029,7 +1076,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '48',
+        id: '52',
         name: 'LA|Adventist Health',
         iconUrl:
           'https://www.adventhealth.com/sites/default/files/styles/fc_800x533/public/media/pr-adventhealth-logo-hero_5.jpg.webp?h=4362216e&itok=v9KL6Abn',
@@ -1039,7 +1086,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '49',
+        id: '53',
         name: 'LA|Aerospace Corp',
         iconUrl:
           'https://media.licdn.com/dms/image/C560BAQF0iyB3ezgjpw/company-logo_200_200/0/1631376746621?e=2147483647&v=beta&t=kdEZqR9i4UiJ7wCeAB3BbFFJEsS4UF8OWKSTHDqPjh0',
@@ -1049,7 +1096,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '50',
+        id: '54',
         name: 'LA|Charter Communications Inc. (Spectrum)',
         iconUrl: 'https://images.forbes.com/media/lists/companies/spectrum_416x416.jpg',
         description: `Charter Communications, Inc., is an American telecommunications and mass media company with services branded as Spectrum. With over 32 million customers in 41 states, it is the largest cable operator in the United States by subscribers, just ahead of Comcast, and the largest pay TV operator ahead of Comcast and AT&T.`,
