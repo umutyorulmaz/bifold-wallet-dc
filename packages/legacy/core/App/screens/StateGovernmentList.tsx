@@ -33,7 +33,6 @@ const StateGovernmentScreen: React.FC<StateGovernmentScreenProps> = ({ navigatio
       flex: 1,
       marginTop: 10,
     },
-    // Other styles can be added here
   })
 
   return (
@@ -42,7 +41,6 @@ const StateGovernmentScreen: React.FC<StateGovernmentScreenProps> = ({ navigatio
         data={stateGovernmentInstitutions}
         renderItem={renderInstitution}
         keyExtractor={(item) => item.id.toString()}
-        // Add other props such as ItemSeparatorComponent if needed
       />
     </View>
   )
