@@ -3,14 +3,12 @@ import { useRoute, RouteProp } from '@react-navigation/native'
 import React from 'react'
 import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
+//import { useTheme } from '../contexts/theme' // *ACS*
 import { InstitutionRegistry } from '../data/institutions-data'
 import { RootStackParamList, Screens, Stacks } from '../types/navigators'
 import { connectFromInvitation } from '../utils/helpers'
 
 import { ScanProps } from './Scan'
-
-import { useTheme } from '../contexts/theme' // *ACS*
-
 
 // Type for the route parameter
 type InstitutionDetailRouteProp = RouteProp<RootStackParamList, 'InstitutionDetail'>
@@ -32,11 +30,11 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
   }
 
   const onApplyPress = async () => {
-    const defaultInvitationURL =
-      'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzNTdlYjE3YS1jZTgzLTQwMTMtOTdiNy1iYmY3ZTYzYzMyOGUiLCAibGFiZWwiOiAiRGlnaUNyZWRBIiwgInJlY2lwaWVudEtleXMiOiBbIkVIOUQ2U3V0RGlFbkoxRkNkeVdGbmhHRHZabXpWeHd2ZzljZERnd3ZCQlNBIl0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9'
+    //const defaultInvitationURL =
+    //'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzNTdlYjE3YS1jZTgzLTQwMTMtOTdiNy1iYmY3ZTYzYzMyOGUiLCAibGFiZWwiOiAiRGlnaUNyZWRBIiwgInJlY2lwaWVudEtleXMiOiBbIkVIOUQ2U3V0RGlFbkoxRkNkeVdGbmhHRHZabXpWeHd2ZzljZERnd3ZCQlNBIl0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9'
     try {
       const record = await connectFromInvitation(
-        defaultInvitationURL,
+        institution.invitationLink!,
         agent, // Make sure 'agent' is properly initialized
         false,
         false,
@@ -95,13 +93,13 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
       width: '100%', // Set width to a percentage of the screen width // Space from the last text element
       padding: 16,
       borderRadius: 4,
-      backgroundColor: '#062c80'
+      backgroundColor: '#062c80',
     },
     applyButtonText: {
       fontSize: 16, // *ACS*
       color: '#ffffff',
       textAlign: 'center',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     },
   })
 
@@ -112,10 +110,12 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
         <Text style={styles.institutionName}>{institution.name.substring(3)}</Text>
         <Text style={styles.institutionAddress}>{institution.address}</Text>
         <Text style={styles.institutionDescription}>{institution.description}</Text>
-        {/* Render additional institution details here */}
-        <TouchableOpacity style={styles.applyButton} onPress={onApplyPress}>
-          <Text style={styles.applyButtonText}>APPLY</Text>
-        </TouchableOpacity>
+        {/* Conditionally render the Apply button if there's an invitationLink */}
+        {institution.invitationLink && (
+          <TouchableOpacity style={styles.applyButton} onPress={onApplyPress}>
+            <Text style={styles.applyButtonText}>APPLY</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   )
