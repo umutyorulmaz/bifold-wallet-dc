@@ -1,31 +1,65 @@
+import { useAgent } from '@aries-framework/react-hooks'
 import { useRoute, RouteProp } from '@react-navigation/native'
 import React from 'react'
 import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 import { InstitutionRegistry } from '../data/institutions-data'
-import { RootStackParamList } from '../types/navigators'
+import { RootStackParamList, Screens, Stacks } from '../types/navigators'
+import { connectFromInvitation } from '../utils/helpers'
+
+import { ScanProps } from './Scan'
 
 // Type for the route parameter
 type InstitutionDetailRouteProp = RouteProp<RootStackParamList, 'InstitutionDetail'>
 
-const InstitutionDetailScreen = () => {
+const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
   const route = useRoute<InstitutionDetailRouteProp>()
   const { institutionId, categoryType } = route.params
-
+  const { agent } = useAgent()
   // Find the institution data by ID
   const institution = InstitutionRegistry.find((category) => category.type === categoryType)?.institutions.find(
     (inst) => inst.id === institutionId
   )
-  const onApplyPress = () => {
-    // Logic to handle the apply action (connection creation)
-  }
-
   if (!institution) {
     return (
       <View>
         <Text>Institution not found.</Text>
       </View>
     )
+  }
+
+  const onApplyPress = async () => {
+    const defaultInvitationURL =
+      'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzNTdlYjE3YS1jZTgzLTQwMTMtOTdiNy1iYmY3ZTYzYzMyOGUiLCAibGFiZWwiOiAiRGlnaUNyZWRBIiwgInJlY2lwaWVudEtleXMiOiBbIkVIOUQ2U3V0RGlFbkoxRkNkeVdGbmhHRHZabXpWeHd2ZzljZERnd3ZCQlNBIl0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9'
+    try {
+      const record = await connectFromInvitation(
+        defaultInvitationURL,
+        agent, // Make sure 'agent' is properly initialized
+        false,
+        false,
+        true //true for multi-use invitation
+      )
+
+      if (record?.connectionRecord?.id) {
+        navigation.getParent()?.navigate(Stacks.ConnectionStack, {
+          screen: Screens.Connection,
+          params: { connectionId: record.connectionRecord.id },
+        })
+      } else {
+        // Handling for connectionless scenarios
+        navigation.navigate(Stacks.ConnectionStack as any, {
+          screen: Screens.Connection,
+          params: { threadId: record?.outOfBandRecord.outOfBandInvitation.threadId },
+        })
+      } //else {
+      //   // Fallback navigation
+      //   navigation.navigate('DefaultRoute')
+      // }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error processing the invitation:', error)
+      // Handle error appropriately
+    }
   }
 
   const styles = StyleSheet.create({
