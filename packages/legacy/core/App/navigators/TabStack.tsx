@@ -32,6 +32,7 @@ const TabStack: React.FC = () => {
   const styles = StyleSheet.create({
     tabBarIcon: {
       flex: 1,
+      color: '#ff0000'
     },
   })
 

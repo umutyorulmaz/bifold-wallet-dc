@@ -1,8 +1,8 @@
 import type {
   BasicMessageRecord,
-  ConnectionRecord,
-  CredentialExchangeRecord,
-  ProofExchangeRecord,
+    ConnectionRecord,
+    CredentialExchangeRecord,
+    ProofExchangeRecord,
 } from '@aries-framework/core'
 
 import { useBasicMessagesByConnectionId } from '@aries-framework/react-hooks'
@@ -49,17 +49,19 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
     container: {
       flexDirection: 'row',
       padding: 16,
-      backgroundColor: ColorPallet.brand.secondaryBackground,
+      marginBottom: 4,
+      backgroundColor: ColorPallet.brand.modalSecondary, // *ACS*
     },
     avatarContainer: {
       alignItems: 'center',
       justifyContent: 'center',
       width: 50,
       height: 50,
-      borderRadius: 25,
+      borderRadius: 12,
       borderColor: ListItems.avatarCircle.borderColor,
       borderWidth: 1,
       marginRight: 16,
+      backgroundColor: '#f8fff0', // *ACS*
     },
     avatarPlaceholder: {
       ...TextTheme.headingFour,
@@ -160,8 +162,8 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
               <Image style={styles.avatarImage} source={{ uri: contact.imageUrl }} />
             </View>
           ) : (
-            <Text style={styles.avatarPlaceholder}>{contactLabelAbbr}</Text>
-          )}
+              <Text style={styles.avatarPlaceholder}>{contactLabelAbbr}</Text>
+            )}
         </View>
         <View style={{ flex: 1 }}>
           <View style={styles.nameAndTimeContainer}>

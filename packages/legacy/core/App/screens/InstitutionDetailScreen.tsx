@@ -9,6 +9,9 @@ import { connectFromInvitation } from '../utils/helpers'
 
 import { ScanProps } from './Scan'
 
+import { useTheme } from '../contexts/theme' // *ACS*
+
+
 // Type for the route parameter
 type InstitutionDetailRouteProp = RouteProp<RootStackParamList, 'InstitutionDetail'>
 
@@ -71,12 +74,12 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
       padding: 16,
     },
     institutionName: {
-      fontSize: 30,
+      fontSize: 24,
       fontWeight: 'bold',
       color: 'black',
     },
     institutionAddress: {
-      fontSize: 20,
+      fontSize: 16,
       color: 'black',
       marginTop: 4,
       marginBottom: 16,
@@ -87,18 +90,18 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
       color: 'black',
     },
     applyButton: {
-      backgroundColor: '#007AFF',
-      paddingVertical: 12,
-      paddingHorizontal: 20,
-      borderRadius: 40,
-      alignSelf: 'center',
-      marginTop: 80,
-      width: '100%',
+      alignSelf: 'center', // Center button horizontally
+      marginTop: 50, // Increase space from the last text element to move it lower
+      width: '100%', // Set width to a percentage of the screen width // Space from the last text element
+      padding: 16,
+      borderRadius: 4,
+      backgroundColor: '#062c80'
     },
     applyButtonText: {
-      fontSize: 25,
-      color: '#fff',
+      fontSize: 16, // *ACS*
+      color: '#ffffff',
       textAlign: 'center',
+      fontWeight: 'bold'
     },
   })
 
@@ -111,7 +114,7 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
         <Text style={styles.institutionDescription}>{institution.description}</Text>
         {/* Render additional institution details here */}
         <TouchableOpacity style={styles.applyButton} onPress={onApplyPress}>
-          <Text style={styles.applyButtonText}>Apply</Text>
+          <Text style={styles.applyButtonText}>APPLY</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

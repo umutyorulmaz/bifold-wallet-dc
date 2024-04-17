@@ -71,11 +71,13 @@ const RecordField: React.FC<RecordFieldProps> = ({
       ...ListItems.recordContainer,
       paddingHorizontal: 25,
       paddingTop: 16,
+      backgroundColor: '#f5f5f5' // *ACS*
     },
     border: {
       ...ListItems.recordBorder,
       borderBottomWidth: 2,
       paddingTop: 12,
+
     },
     link: {
       ...ListItems.recordLink,
@@ -85,6 +87,8 @@ const RecordField: React.FC<RecordFieldProps> = ({
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingTop: 5,
+
+
     },
     valueText: {
       ...ListItems.recordAttributeText,
@@ -98,10 +102,10 @@ const RecordField: React.FC<RecordFieldProps> = ({
         {fieldLabel ? (
           fieldLabel(field)
         ) : (
-          <Text style={[ListItems.recordAttributeLabel]} testID={testIdWithKey('AttributeName')}>
-            {field.label ?? startCase(field.name || '')}
-          </Text>
-        )}
+            <Text style={[ListItems.recordAttributeLabel]} testID={testIdWithKey('AttributeName')}>
+              {field.label ?? startCase(field.name || '')}
+            </Text>
+          )}
 
         {hideFieldValue ? (
           <TouchableOpacity
@@ -121,12 +125,12 @@ const RecordField: React.FC<RecordFieldProps> = ({
         {fieldValue ? (
           fieldValue(field)
         ) : (
-          <>
-            <View style={styles.valueText}>
-              <AttributeValue field={field as Attribute} shown={shown} />
-            </View>
-          </>
-        )}
+            <>
+              <View style={styles.valueText}>
+                <AttributeValue field={field as Attribute} shown={shown} />
+              </View>
+            </>
+          )}
       </View>
       {<View style={[styles.border, hideBottomBorder && { borderBottomWidth: 0 }]} />}
     </View>

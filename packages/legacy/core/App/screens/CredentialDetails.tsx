@@ -90,7 +90,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
       marginBottom: -1 * logoHeight,
       width: logoHeight,
       height: logoHeight,
-      backgroundColor: '#ffffff',
+      backgroundColor: ColorPallet.brand.icon, // *ACS*
       borderRadius: 8,
       justifyContent: 'center',
       alignItems: 'center',
@@ -248,6 +248,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
                 paddingBottom: paddingVertical,
                 lineHeight: 19,
                 opacity: 0.8,
+
               },
             ]}
             numberOfLines={1}
@@ -259,8 +260,10 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
             style={[
               TextTheme.normal,
               styles.textContainer,
+
               {
                 lineHeight: 24,
+
               },
             ]}
           >
@@ -279,6 +282,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
             source={toImageSource(overlay.brandingOverlay?.backgroundImage)}
             imageStyle={{
               resizeMode: 'cover',
+
             }}
           >
             <View testID={testIdWithKey('CredentialDetailsSecondaryHeader')} style={styles.secondaryHeaderContainer} />
