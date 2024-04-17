@@ -30,7 +30,7 @@ const HomeFooterView: React.FC<HomeFooterViewProps> = ({ children }) => {
     messageContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 35,
+      marginTop: 20, // *ACS*
       marginHorizontal: offset,
     },
   })
@@ -64,7 +64,7 @@ const HomeFooterView: React.FC<HomeFooterViewProps> = ({ children }) => {
       <>
         {notifications.total === 0 && (
           <View style={[styles.messageContainer]}>
-            <Text adjustsFontSizeToFit style={[HomeTheme.welcomeHeader, { marginTop: offset, marginBottom: 20 }]}>
+            <Text adjustsFontSizeToFit style={[HomeTheme.welcomeHeader, { marginTop: offset, marginBottom: 10 }]}>
               {t('Home.Welcome')}
             </Text>
           </View>

@@ -174,7 +174,7 @@ export interface IAssets {
 export const borderRadius = 4
 export const heavyOpacity = 0.7
 export const mediumOpacity = 0.5
-export const lightOpacity = 0.35
+export const lightOpacity = 0.3
 export const zeroOpacity = 0.0
 export const borderWidth = 2
 
@@ -209,7 +209,7 @@ const BrandColors: IBrandColors = {
   headerIcon: GrayscaleColors.white,
   headerText: GrayscaleColors.white,
   buttonText: GrayscaleColors.white,
-  tabBarInactive: GrayscaleColors.white,
+  tabBarInactive: GrayscaleColors.mediumGrey, // *ACS* changed from white
 }
 
 const SemanticColors: ISemanticColors = {
@@ -235,7 +235,7 @@ const NotificationColors: INotificationColors = {
   errorBorder: '#D8292F',
   errorIcon: '#D8292F',
   errorText: '#FFFFFF',
-  popupOverlay: `rgba(0, 0, 0, ${mediumOpacity})`,
+  popupOverlay: `rgba(0, 0, 0, ${lightOpacity})`,
 }
 
 export const ColorPallet: IColorPallet = {
@@ -611,7 +611,7 @@ export const NavigationTheme = {
 
 export const HomeTheme = StyleSheet.create({
   welcomeHeader: {
-    ...TextTheme.headingOne,
+    ...TextTheme.headingThree,
   },
   credentialMsg: {
     ...TextTheme.normal,

@@ -1,7 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
 import { FlatList, View, StyleSheet } from 'react-native'
-
 import InstitutionCard from '../components/institution/InstitutionCard'
 import { InstitutionRegistry, InstitutionCategoryType, InstitutionDetail } from '../data/institutions-data'
 import { RootStackParamList } from '../types/navigators'
@@ -41,6 +40,10 @@ const EducationScreen: React.FC<EducationScreenProps> = ({ navigation }) => {
         data={educationInstitutions}
         renderItem={renderInstitution}
         keyExtractor={(item) => item.id.toString()}
+<<<<<<< Updated upstream
+=======
+      // Add other props such as ItemSeparatorComponent if needed
+>>>>>>> Stashed changes
       />
     </View>
   )

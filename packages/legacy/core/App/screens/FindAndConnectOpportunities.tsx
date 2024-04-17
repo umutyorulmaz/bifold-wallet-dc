@@ -23,54 +23,57 @@ const FindAndConnectOpportunities = () => {
 
   const categories: Category[] = [
     { name: 'Education', icon: GraduationOutline, screen: 'EducationScreen' },
-    { name: 'Military', icon: ShieldOutline, screen: 'MilitaryScreen' },
     { name: 'Employers', icon: BuildingOutline, screen: 'EmployersScreen' },
-    { name: 'State Government', icon: CapitolOutline, screen: 'StateGovernmentScreen' },
+    { name: 'Military', icon: ShieldOutline, screen: 'MilitaryScreen' },
+    { name: 'State\nGov', icon: CapitolOutline, screen: 'StateGovernmentScreen' },
   ]
 
   const styles = StyleSheet.create({
     outerContainer: {
-      paddingTop: 10,
-      paddingBottom: 20,
-      paddingHorizontal: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    title: {
-      fontSize: 32,
-      fontWeight: 'bold',
-      marginBottom: 30,
-      textAlign: 'center',
-      color: 'black',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+      paddingBottom: 10,
+      justifyContent: 'space-between',
     },
     container: {
-      flexDirection: 'row', // Aligns children (categories) in a row
-      justifyContent: 'space-around', // Evenly distributes children along the horizontal axis
-      alignItems: 'center',
+      flexDirection: 'row',
+      marginBottom: 20,
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: '#000000',
+      marginBottom: 5,
+      marginTop: -10,
     },
     category: {
       alignItems: 'center',
-      flex: 1, // Distributes space equally among category buttons
-      paddingVertical: 10,
-    },
-    icon: {
-      marginBottom: 20,
+      flex: 1, // Distribute space equally among category buttons
+      padding: 10,
+      margin: 5,
+      borderWidth: 1,
+      borderRadius: 12,
+      borderColor: '#d1d4c9',
+      backgroundColor: '#f1f1f1',
     },
     text: {
       textAlign: 'center',
-      fontSize: 24,
+      fontSize: 12,
       fontWeight: 'bold',
-      color: 'black',
+      color: '#000000',
     },
   })
 
   const navigateToScreen = (screenName: keyof RootStackParamList) => {
-    navigation.navigate(screenName)
+    console.log(screenName)
+    if (screenName != 'StateGovernmentScreen') { // *ACS* Gov screen is currently not active
+      navigation.navigate(screenName)
+    }
   }
 
   return (
     <View style={styles.outerContainer}>
-      {/* Title text for the opportunities section */}
       <Text style={styles.title}>Find & Connect Opportunities</Text>
       <View style={styles.container}>
         {/* Mapping through categories to create buttons for each */}
@@ -80,7 +83,7 @@ const FindAndConnectOpportunities = () => {
             style={styles.category}
             onPress={() => navigateToScreen(category.screen)}
           >
-            <category.icon width={90} height={90} />
+            <category.icon width={36} height={36} />
             <Text style={styles.text}>{category.name}</Text>
           </TouchableOpacity>
         ))}

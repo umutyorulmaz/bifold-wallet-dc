@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     padding: 10,
-    marginVertical: 8,
+    marginVertical: 2, // *ACS*
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 4,
@@ -49,7 +49,6 @@ const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, onPress 
       <Image source={{ uri: institution.iconUrl }} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={styles.name}>{institution.name.substring(3)}</Text>
-
         <Text style={styles.learnMore}>Learn More</Text>
       </View>
     </TouchableOpacity>

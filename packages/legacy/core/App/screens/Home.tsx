@@ -3,7 +3,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, View, StyleSheet } from 'react-native'
-
 import NotificationListItem, { NotificationType } from '../components/listItems/NotificationListItem'
 import NoNewUpdates from '../components/misc/NoNewUpdates'
 import AppGuideModal from '../components/modals/AppGuideModal'
