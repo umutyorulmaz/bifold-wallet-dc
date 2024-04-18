@@ -48,14 +48,12 @@ export const InstitutionRegistry: InstitutionCategory[] = [
       },
       {
         id: '02',
-        name: 'NC|East Carolina University',
+        name: 'FL|Florida International University',
         iconUrl:
-          'https://upload.wikimedia.org/wikipedia/en/thumb/3/3a/East_Carolina_University_seal.svg/1200px-East_Carolina_University_seal.svg.png',
-        description:
-          'Founded as a teachers college, today ECU is the only public university in the state with a dental school, medical school, and college of engineering.',
-        address: 'E 5th Street, Greenville, NC',
-        bannerImage:
-          'https://news.ecu.edu/wp-content/pv-uploads/sites/80/2020/10/Main_Campus_Student_Center_Map_uncropped_ch_inset.jpg',
+          'https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Florida_Internation_University_seal.svg/180px-Florida_Internation_University_seal.svg.png',
+        description: `Florida International University is a public research university with its main campus in University Park, Florida. Founded in 1965 by the Florida Legislature, the school opened its doors to students in 1972.`,
+        address: '11200 SW 8th St, Miami, FL',
+        bannerImage: 'https://www.miamiandbeaches.com/getmedia/b55086c8-eff3-401b-aa1f-5919c61cecec/fiu-1440x900.jpg',
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
@@ -349,12 +347,14 @@ export const InstitutionRegistry: InstitutionCategory[] = [
       },
       {
         id: '31',
-        name: 'FL|Florida International University',
+        name: 'NC|East Carolina University',
         iconUrl:
-          'https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Florida_Internation_University_seal.svg/180px-Florida_Internation_University_seal.svg.png',
-        description: `Florida International University is a public research university with its main campus in University Park, Florida. Founded in 1965 by the Florida Legislature, the school opened its doors to students in 1972.`,
-        address: '11200 SW 8th St, Miami, FL',
-        bannerImage: 'https://www.miamiandbeaches.com/getmedia/b55086c8-eff3-401b-aa1f-5919c61cecec/fiu-1440x900.jpg',
+          'https://upload.wikimedia.org/wikipedia/en/thumb/3/3a/East_Carolina_University_seal.svg/1200px-East_Carolina_University_seal.svg.png',
+        description:
+          'Founded as a teachers college, today ECU is the only public university in the state with a dental school, medical school, and college of engineering.',
+        address: 'E 5th Street, Greenville, NC',
+        bannerImage:
+          'https://news.ecu.edu/wp-content/pv-uploads/sites/80/2020/10/Main_Campus_Student_Center_Map_uncropped_ch_inset.jpg',
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
