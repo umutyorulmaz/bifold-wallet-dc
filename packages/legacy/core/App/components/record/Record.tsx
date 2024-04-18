@@ -31,12 +31,10 @@ const Record: React.FC<RecordProps> = ({ header, footer, fields, hideFieldValues
       justifyContent: 'flex-end',
       paddingHorizontal: 25,
       paddingVertical: 16,
-
     },
     link: {
       minHeight: TextTheme.normal.fontSize,
       paddingVertical: 2,
-
     },
   })
 
@@ -63,19 +61,19 @@ const Record: React.FC<RecordProps> = ({ header, footer, fields, hideFieldValues
         field ? (
           field(attr, index, fields)
         ) : (
-            <RecordField
-              field={attr}
-              hideFieldValue={hideFieldValues}
-              onToggleViewPressed={() => {
-                const newShowState = [...shown]
-                newShowState[index] = !shown[index]
-                setShown(newShowState)
-                toggleShownState(newShowState)
-              }}
-              shown={hideFieldValues ? !!shown[index] : true}
-              hideBottomBorder={index === fields.length - 1}
-            />
-          )
+          <RecordField
+            field={attr}
+            hideFieldValue={hideFieldValues}
+            onToggleViewPressed={() => {
+              const newShowState = [...shown]
+              newShowState[index] = !shown[index]
+              setShown(newShowState)
+              toggleShownState(newShowState)
+            }}
+            shown={hideFieldValues ? !!shown[index] : true}
+            hideBottomBorder={index === fields.length - 1}
+          />
+        )
       }
       ListHeaderComponent={
         header ? (

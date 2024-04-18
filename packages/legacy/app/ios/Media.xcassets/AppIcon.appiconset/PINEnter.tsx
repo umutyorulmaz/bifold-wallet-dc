@@ -300,7 +300,8 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
           <View>
             {/* *ACS* added the DigiCred logo at the top of the PIN Enter screen
             <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} /> */}
-            <Image source={Assets.img.logoSecondary.src} style={style.image} />
+            {/* <Image source={Assets.img.logoSecondary.src} style={style.image} /> */}
+            <Image source={Assets.img.logoSecondary.src} style={{ alignSelf: 'center' }} width={150} height={75}/>
             <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold' }]}>
               DigiCred
             </Text>
