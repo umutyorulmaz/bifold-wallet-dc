@@ -1,85 +1,35 @@
-
-import { CaptureBaseAttributeType } from '@hyperledger/aries-oca'
-import { Attribute, Field } from '@hyperledger/aries-oca/build/legacy'
-import startCase from 'lodash.startcase'
-import React, { useMemo } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
+import { CaptureBaseAttributeType } from '@hyperledger/aries-oca';
+import { Attribute, Field } from '@hyperledger/aries-oca/build/legacy';
+import startCase from 'lodash.startcase';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '../../contexts/theme';
-import { testIdWithKey } from '../../utils/testable';
-import { isDataUrl } from '../../utils/helpers';
 
-import RecordBinaryField from './RecordBinaryField'
-import RecordDateIntField from './RecordDateIntField'
-import { hiddenFieldValue } from '../../constants'
+import { hiddenFieldValue } from '../../constants';
+import { useTheme } from '../../contexts/theme';
+import { isDataUrl } from '../../utils/helpers';
+import { testIdWithKey } from '../../utils/testable';
+
+import RecordBinaryField from './RecordBinaryField';
+import RecordDateIntField from './RecordDateIntField';
 
 interface RecordFieldProps {
-  field: Field
-  hideFieldValue?: boolean
-  hideBottomBorder?: boolean
-  shown?: boolean
-  onToggleViewPressed?: () => void
-  fieldLabel?: (field: Field) => React.ReactElement | null
-  fieldValue?: (field: Field) => React.ReactElement | null
+  field: Field;
+  hideFieldValue?: boolean;
+  hideBottomBorder?: boolean;
+  shown?: boolean;
+  onToggleViewPressed?: () => void;
+  fieldLabel?: (field: Field) => React.ReactElement | null;
+  fieldValue?: (field: Field) => React.ReactElement | null;
 }
 
-interface TranscriptItem {
-  CourseCode: string;
-  CourseTitle: string;
-  Grade: string;
-  syear: string;
-  Term: string;
-}
-
-
-export const validEncoding = 'base64'
-export const validFormat = new RegExp('^image/(jpeg|png|jpg)')
-
-
-const TranscriptDisplay: React.FC<{ value: string }> = ({ value }) => {
-  const { ListItems } = useTheme(); 
-  const parsed = useMemo(() => {
-    try {
-      return JSON.parse(value) as TranscriptItem[];
-    } catch (error) {
-      console.error("Failed to parse transcript data:", error);
-      return []; 
-    }
-  }, [value]);
-
-  const renderItem = ({ item }: { item: TranscriptItem }) => (
-    <View style={{ padding: 5 }}>
-      <Text style={{ color: '#333', fontWeight: 'bold' }}>Course Code:</Text>
-      <Text style={{ color: '#333' }}>{item.CourseCode}</Text>
-      <Text style={{ color: '#333', fontWeight: 'bold' }}>Course Title:</Text>
-      <Text style={{ color: '#333' }}>{item.CourseTitle}</Text>
-      <Text style={{ color: '#333', fontWeight: 'bold' }}>Grade:</Text>
-      <Text style={{ color: '#333' }}>{item.Grade}</Text>
-      <Text style={{ color: '#333', fontWeight: 'bold' }}>Year:</Text>
-      <Text style={{ color: '#333' }}>{item.syear}</Text>
-      <Text style={{ color: '#333', fontWeight: 'bold' }}>Term:</Text>
-      <Text style={{ color: '#333' }}>{item.Term}</Text>
-    </View>
-  );
-
-  const keyExtractor = (item: TranscriptItem) => `${item.CourseCode}-${item.syear}`;
-
-
-  return (
-    <FlatList
-      data={parsed}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-    />
-  );
-};
-
-
+export const validEncoding = 'base64';
+export const validFormat = new RegExp('^image/(jpeg|png|jpg)');
 
 interface AttributeValueParams {
-  field: Attribute
-  shown?: boolean
-  style?: Record<string, unknown>
+  field: Attribute;
+  shown?: boolean;
+  style?: Record<string, unknown>;
 }
 
 export const AttributeValue: React.FC<AttributeValueParams> = ({ field, style, shown }) => {
@@ -89,28 +39,99 @@ export const AttributeValue: React.FC<AttributeValueParams> = ({ field, style, s
       ...ListItems.recordAttributeText,
     },
   });
-  if (field.name === 'Transcript' && shown) {
-    if (field.value && typeof field.value === 'string') {
-      try {
-   
-        const data = JSON.parse(field.value);
-        if (Array.isArray(data)) {
-          // Use the TranscriptDisplay component to render the parsed data
-          return <TranscriptDisplay value={field.value} />;
-        }
-      } catch (error) {
-        // If parsing fails, just display the raw value
-        return <Text style={[style || styles.text || {}]}>{field.value}</Text>;
-      }
+
+// Function to render transcript data with improved styling
+const renderTranscript = (value: string) => {
+  try {
+    const data = JSON.parse(value);
+    if (Array.isArray(data)) {
+      return (
+        <View style={transcriptStyles.transcriptContainer}>
+          {data.map((item, index) => (
+            <View key={index} style={transcriptStyles.courseContainer}>
+              <Text style={transcriptStyles.courseLabel}>Course Code:</Text>
+              <Text style={transcriptStyles.courseValue}>{item.CourseCode}</Text>
+              <Text style={transcriptStyles.courseLabel}>Course Title:</Text>
+              <Text style={transcriptStyles.courseValue}>{item.CourseTitle}</Text>
+              <Text style={transcriptStyles.courseLabel}>Grade:</Text>
+              <Text style={transcriptStyles.courseValue}>{item.Grade}</Text>
+              <Text style={transcriptStyles.courseLabel}>Year:</Text>
+              <Text style={transcriptStyles.courseValue}>{item.syear}</Text>
+              <Text style={transcriptStyles.courseLabel}>Term:</Text>
+              <Text style={transcriptStyles.courseValue}>{item.Term}</Text>
+            </View>
+          ))}
+        </View>
+      );
     }
- 
-  if (
+  } catch (error) {
+    console.error('Failed to parse transcript data:', error);
+  }
+  return <Text style={transcriptStyles.text}>{value}</Text>;
+};
+
+// Stylesheet for transcript display
+const transcriptStyles = StyleSheet.create({
+  transcriptContainer: {
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  courseContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#cccccc',
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  courseLabel: {
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 2,
+  },
+  courseValue: {
+    color: '#666',
+    marginBottom: 5,
+  },
+  text: {
+    color: '#333',
+  },
+});
+
+  // // Function to render transcript data
+  // const renderTranscript = (value: string) => {
+  //   try {
+  //     const data = JSON.parse(value);
+  //     if (Array.isArray(data)) {
+  //       return (
+  //         <View>
+  //           {data.map((item, index) => (
+  //             <View key={index}>
+  //               <Text>Course Code: {item.CourseCode}</Text>
+  //               <Text>Course Title: {item.CourseTitle}</Text>
+  //               <Text>Grade: {item.Grade}</Text>
+  //               <Text>Year: {item.syear}</Text>
+  //               <Text>Term: {item.Term}</Text>
+  //             </View>
+  //           ))}
+  //         </View>
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to parse transcript data:', error);
+  //   }
+  //   return <Text style={style || styles.text}>{value}</Text>;
+  // };
+
+  // Handling different types of attribute values
+  if (field.name === 'Transcript' && shown) {
+    return renderTranscript(field.value);
+  } else if (
     (field.encoding === validEncoding && field.format && validFormat.test(field.format) && field.value) ||
     isDataUrl(field.value)
   ) {
     return <RecordBinaryField attributeValue={field.value as string} style={style} shown={shown} />;
-  }
-  if (field.type === CaptureBaseAttributeType.DateInt || field.type === CaptureBaseAttributeType.DateTime) {
+  } else if (field.type === CaptureBaseAttributeType.DateInt || field.type === CaptureBaseAttributeType.DateTime) {
     return <RecordDateIntField field={field} style={style} shown={shown} />;
   }
   return (
@@ -119,7 +140,6 @@ export const AttributeValue: React.FC<AttributeValueParams> = ({ field, style, s
     </Text>
   );
 };
-}
 
 const RecordField: React.FC<RecordFieldProps> = ({
   field,
@@ -130,21 +150,18 @@ const RecordField: React.FC<RecordFieldProps> = ({
   fieldLabel = null,
   fieldValue = null,
 }) => {
-  const { t } = useTranslation()
-  const { ListItems } = useTheme()
+  const { t } = useTranslation();
+  const { ListItems } = useTheme();
   const styles = StyleSheet.create({
     container: {
       ...ListItems.recordContainer,
       paddingHorizontal: 25,
       paddingTop: 16,
-      backgroundColor: '#f5f5f5',
-      // ...(field.name === 'Transcript' && { backgroundColor: 'pink' }),  // Highlight background if Transcript
     },
     border: {
       ...ListItems.recordBorder,
       borderBottomWidth: 2,
       paddingTop: 12,
-
     },
     link: {
       ...ListItems.recordLink,
@@ -154,25 +171,21 @@ const RecordField: React.FC<RecordFieldProps> = ({
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingTop: 5,
-
-
     },
     valueText: {
       ...ListItems.recordAttributeText,
       paddingVertical: 4,
     },
-  })
+  });
 
   return (
     <View style={styles.container}>
       <View style={styles.valueContainer}>
-        {fieldLabel ? (
-          fieldLabel(field)
-        ) : (
+        {fieldLabel ? fieldLabel(field) : (
           <Text style={[ListItems.recordAttributeLabel]} testID={testIdWithKey('AttributeName')}>
-          {field.label ?? startCase(field.name || '')}
-        </Text>
-          )}
+            {field.label ?? startCase(field.name || '')}
+          </Text>
+        )}
 
         {hideFieldValue ? (
           <TouchableOpacity
@@ -189,19 +202,17 @@ const RecordField: React.FC<RecordFieldProps> = ({
       </View>
 
       <View style={styles.valueContainer}>
-        {fieldValue ? (
-          fieldValue(field)
-        ) : (
-            <>
-              <View style={styles.valueText}>
-                <AttributeValue field={field as Attribute} shown={shown} />
-              </View>
-            </>
-          )}
+        {fieldValue ? fieldValue(field) : (
+          <View style={styles.valueText}>
+            <AttributeValue field={field as Attribute} shown={shown} />
+          </View>
+        )}
       </View>
       {<View style={[styles.border, hideBottomBorder && { borderBottomWidth: 0 }]} />}
     </View>
-  )
-}
+  );
+};
 
 export default RecordField;
+
+
