@@ -98,12 +98,14 @@ const customPages = (onTutorialCompleted: GenericFn, OnboardingTheme: any) => {
         </View>
         <View style={{ marginBottom: 20 }}>
           <Text style={[styles.headerText, { fontSize: 18 }]} testID={testIdWithKey('HeaderText')}>
-            Ornare suspendisse sed nisi lacus
+            Your credential wallet
           </Text>
           <Text style={[styles.bodyText, { marginTop: 25 }]} testID={testIdWithKey('BodyText')}>
-            Enim facilisis gravida neque convallis a cras semper. Suscipit adipiscing bibendum est ultricies integer
-            quis auctor elit sed.
+            This is your wallet where you will hold your digital credentials. It will help you receive and present your
+            documents when you are in-person or online. You will receive your documents from participating organizations
+            and be able to safely and securely share them with others.
           </Text>
+          <Text>Interact with confidence with individuals and organizations you trust.</Text>
         </View>
       </ScrollView>
       <View style={{ marginTop: 'auto', margin: 20 }}>
@@ -122,14 +124,14 @@ const customPages = (onTutorialCompleted: GenericFn, OnboardingTheme: any) => {
 const guides: Array<{ image: React.FC<SvgProps>; title: string; body: string; devModeListener?: boolean }> = [
   {
     image: CredentialList,
-    title: 'Lorem ipsum dolor sit amet',
-    body: 'Ipsum faucibus vitae aliquet nec ullamcorper sit amet risus.',
+    title: 'Digital Credentials',
+    body: 'Digital credentials are the electronic equivalent of physical credentials and documents such as identity cards, certificates, or transcripts offered by participating services.\n\nServices are simplified and expedited as organizations can confirm who you are and what you have accomplished with trusted information from the digital credentials.\n\n',
     devModeListener: true,
   },
   {
     image: ScanShare,
-    title: 'Excepteur sint occaecat ',
-    body: 'Mollis aliquam ut porttitor leo a diam sollicitudin tempor.',
+    title: 'Private and Confidential',
+    body: 'Your privacy is important.\n\nDigiCred nor any other party has access to your credentials unless they issued them directly to you or you have explicitly consented to share them.  There is no tracking, analytics or correlation.\n\nYou approve every use of your digital credentials.\n\n',
   },
 ]
 
