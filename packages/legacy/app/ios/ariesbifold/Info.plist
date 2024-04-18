@@ -2,11 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We use your location to provide navigation instructions, even when the app is in the background, enhancing routing accuracy and offering real-time updates.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We use your location to provide navigation instructions when the app is actively in use, helping you reach your destinations more efficiently.</string>
-
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -43,9 +38,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>The camera is used for in-app QR code scanning, enabling easy access and interactions within the app.</string>
+	<string>Camera used for in-app QR Code scanning</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) uses FaceID/TouchID to verify your identity for secure and personalized access.</string>
+	<string>$(PRODUCT_NAME) Wants to use your FaceID/TouchID to Authenticate your Identity</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>MaterialIcons.ttf</string>
