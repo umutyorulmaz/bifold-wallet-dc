@@ -70,9 +70,9 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
     },
     image: {
       ...PINEnterTheme.image,
-      height: Assets.img.logoSecondary.height,
-      width: Assets.img.logoSecondary.width,
-      resizeMode: Assets.img.logoSecondary.resizeMode,
+      height: Assets.img.logoPrimary.height,
+      width: Assets.img.logoPrimary.width,
+      resizeMode: Assets.img.logoPrimary.resizeMode,
     },
   })
 
@@ -299,12 +299,16 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
         <View style={style.contentContainer}>
           <View>
             {/* *ACS* added the DigiCred logo at the top of the PIN Enter screen */}
-            <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} />
-            <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold' }]}>
+            {/* <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} /> */}
+            {/* <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold' }]}>
+              DigiCred
+            </Text> */}
+            <Image source={Assets.img.logoPrimary.src} style={style.image} />
+          <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold' }]}>
               DigiCred
             </Text>
           </View>
-          <Image source={Assets.img.logoSecondary.src} style={style.image} />
+          
           {biometricsEnrollmentChange ? (
             <>
               <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center' }]}>
