@@ -500,7 +500,10 @@ const translation = {
     "TabStack": {
         "Home": "Notifications (FR)",
         "Scan": "Numériser",
-        "Credentials": "Justificatifs"
+        "Credentials": "Justificatifs",
+        "Conversation": "Conversation",
+        "Settings": "Paramètres",
+        "Contacts": "Contacts",
     },
     "RootStack": {
         "Contacts": "Contacts",

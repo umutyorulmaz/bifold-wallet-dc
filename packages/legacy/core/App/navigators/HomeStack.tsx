@@ -1,8 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-
-import SettingsMenu from '../components/buttons/SettingsMenu'
 import { useTheme } from '../contexts/theme'
 import Home from '../screens/Home'
 import { HomeStackParams, Screens } from '../types/navigators'
@@ -23,7 +21,6 @@ const HomeStack: React.FC = () => {
         options={() => ({
           title: t('Screens.Home'),
           headerRight: () => null,
-          headerLeft: () => <SettingsMenu />,
         })}
       />
     </Stack.Navigator>

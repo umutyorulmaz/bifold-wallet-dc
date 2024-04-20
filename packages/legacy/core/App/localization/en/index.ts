@@ -517,6 +517,9 @@ const translation = {
     "Home": "Home",
     "Scan": "Scan",
     "Credentials": "Credentials",
+    "Conversation": "Conversation",
+    "Settings": "Settings",
+    "Contacts": "Contacts",
   },
   "RootStack": {
     "Contacts": "Contacts",

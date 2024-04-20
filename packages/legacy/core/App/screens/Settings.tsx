@@ -94,43 +94,8 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   const settingsSections: SettingSection[] = [
     {
       header: {
-        icon: { name: store.preferences.useConnectionInviterCapability ? 'person' : 'contacts', size: 30 }, // *ACS* changed icon to contacts
-        title: store.preferences.useConnectionInviterCapability ? store.preferences.walletName : t('Screens.Contacts'),
-        iconRight: {
-          name: 'edit',
-          action: () => {
-            navigation.navigate(Screens.NameWallet)
-          },
-          accessibilityLabel: t('NameWallet.EditWalletName'),
-          testID: testIdWithKey('EditWalletName'),
-          style: { color: ColorPallet.brand.primary },
-        },
-        titleTestID: store.preferences.useConnectionInviterCapability ? testIdWithKey('WalletName') : undefined,
-      },
-      data: [
-        {
-          title: t('Screens.Contacts'),
-          accessibilityLabel: t('Screens.Contacts'),
-          testID: testIdWithKey('Contacts'),
-          onPress: () =>
-            navigation
-              .getParent()
-              ?.navigate(Stacks.ContactStack, { screen: Screens.Contacts, params: { navigation: navigation } }),
-        },
-        // *ACS* - not displaying 'What are Contacts?' information screen for now
-        // {
-        //   title: t('Settings.WhatAreContacts'),
-        //   accessibilityLabel: t('Settings.WhatAreContacts'),
-        //   testID: testIdWithKey('WhatAreContacts'),
-        //   onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.WhatAreContacts }),
-        //   value: undefined,
-        // },
-      ],
-    },
-    {
-      header: {
-        icon: { name: 'settings' },
-        title: t('Settings.AppSettings'),
+        icon: { name:''},
+        title: " ",
       },
       data: [
         {

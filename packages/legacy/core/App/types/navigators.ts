@@ -60,6 +60,8 @@ export enum TabStacks {
   HomeStack = 'Tab Home Stack',
   ConnectStack = 'Tab Connect Stack',
   CredentialStack = 'Tab Credential Stack',
+  ContactStack = 'Tab Contact Stack',
+  SettingStack = 'Tab Setting Stack',
 }
 
 export type RootStackParams = {
@@ -77,6 +79,8 @@ export type TabStackParams = {
   [TabStacks.HomeStack]: NavigatorScreenParams<HomeStackParams>
   [TabStacks.ConnectStack]: NavigatorScreenParams<ConnectStackParams>
   [TabStacks.CredentialStack]: NavigatorScreenParams<CredentialStackParams>
+  [TabStacks.SettingStack]:NavigatorScreenParams<SettingStackParams>
+  [TabStacks.ContactStack]:NavigatorScreenParams<ContactStackParams>
 }
 
 export type AuthenticateStackParams = {

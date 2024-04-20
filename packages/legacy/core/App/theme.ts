@@ -267,12 +267,12 @@ export const TextTheme: ITextTheme = {
     color: ColorPallet.brand.text,
   },
   normal: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'normal',
     color: ColorPallet.brand.text,
   },
   bold: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: ColorPallet.brand.text,
   },

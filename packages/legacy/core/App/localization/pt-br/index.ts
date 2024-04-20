@@ -487,6 +487,9 @@ const translation = {
     "Home": "Notificações",
     "Scan": "Scanear",
     "Credentials": "Credenciais",
+    "Conversation": "Conversa",
+    "Settings": "Configurações",
+    "Contacts": "Contatos",
   },
   "RootStack": {
     "Contacts": "Contatos",
