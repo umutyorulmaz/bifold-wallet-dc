@@ -1,4 +1,4 @@
-package com.ariesbifold;
+package com.digicred;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

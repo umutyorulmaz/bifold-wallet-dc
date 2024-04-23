@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.ariesbifold">
+  package="com.digicred">
 
     <uses-permission android:name="android.permission.USE_BIOMETRICS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />

@@ -93,11 +93,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.ariesbifold"
+        applicationId "com.digicred"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         missingDimensionStrategy 'react-native-camera', 'general'
     }
