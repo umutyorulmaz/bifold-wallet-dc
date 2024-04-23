@@ -3,29 +3,29 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import React, { FC } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { SvgProps } from 'react-native-svg'
-
 import BuildingOutline from '../assets/icons/building-outline.svg'
 import CapitolOutline from '../assets/icons/capitol-outline.svg'
 import GraduationOutline from '../assets/icons/graduation-outline.svg'
 import ShieldOutline from '../assets/icons/shield-outline.svg'
-import { RootStackParamList } from '../types/navigators'
+import { HomeStackParams, Screens } from '../types/navigators'
 
-type NavigationProp = StackNavigationProp<RootStackParamList>
+type NavigationProp = {
+  navigation: StackNavigationProp<HomeStackParams>
+}
 
-const FindAndConnectOpportunities = () => {
-  const navigation = useNavigation<NavigationProp>()
+const FindAndConnectOpportunities: React.FC<NavigationProp> = ({navigation}) =>  {
 
   interface Category {
     name: string
-    icon: FC<SvgProps> // Expect a React component instead of a string
-    screen: keyof RootStackParamList
+    icon: FC<SvgProps> 
+    screen: keyof HomeStackParams
   }
 
   const categories: Category[] = [
-    { name: 'Education', icon: GraduationOutline, screen: 'EducationScreen' },
-    { name: 'Employers', icon: BuildingOutline, screen: 'EmployersScreen' },
-    { name: 'Military', icon: ShieldOutline, screen: 'MilitaryScreen' },
-    { name: 'State\nGov', icon: CapitolOutline, screen: 'StateGovernmentScreen' },
+    { name: 'Education', icon: GraduationOutline, screen: Screens.EducationList },
+    { name: 'Employers', icon: BuildingOutline, screen: Screens.EmployersList},
+    { name: 'Military', icon: ShieldOutline, screen: Screens.MilitaryList},
+    { name: 'State\nGov', icon: CapitolOutline, screen: Screens.StateGovernmentList },
   ]
 
   const styles = StyleSheet.create({
@@ -65,9 +65,9 @@ const FindAndConnectOpportunities = () => {
     },
   })
 
-  const navigateToScreen = (screenName: keyof RootStackParamList) => {
+  const navigateToScreen = (screenName: keyof HomeStackParams) => {
     console.log(screenName)
-    if (screenName != 'StateGovernmentScreen') { // *ACS* Gov screen is currently not active
+    if (screenName != 'StateGovernmentList') { // *ACS* Gov screen is currently not active
       navigation.navigate(screenName)
     }
   }

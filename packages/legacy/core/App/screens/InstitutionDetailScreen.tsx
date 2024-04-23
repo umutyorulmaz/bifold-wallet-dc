@@ -5,13 +5,13 @@ import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'rea
 
 //import { useTheme } from '../contexts/theme' // *ACS*
 import { InstitutionRegistry } from '../data/institutions-data'
-import { RootStackParamList, Screens, Stacks } from '../types/navigators'
+import { HomeStackParams, Screens, Stacks } from '../types/navigators'
 import { connectFromInvitation } from '../utils/helpers'
 
 import { ScanProps } from './Scan'
 
 // Type for the route parameter
-type InstitutionDetailRouteProp = RouteProp<RootStackParamList, 'InstitutionDetail'>
+type InstitutionDetailRouteProp = RouteProp<HomeStackParams, Screens.InstitutionDetail>
 
 const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
   const route = useRoute<InstitutionDetailRouteProp>()

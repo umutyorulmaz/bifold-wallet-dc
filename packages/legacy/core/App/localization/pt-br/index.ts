@@ -546,6 +546,12 @@ const translation = {
     "CreateConnectionInvitation": "Criar um convite de conexão",
     "NameWallet": "Nomear sua carteira",
     "RenameContact": "Editar nome do contato",
+    "Find And Connect Opportunities": "Encontrar e Conectar Oportunidades",
+    "Education": "Educação",
+    "Institution Detail": "Detalhe da Instituição",
+    "Military": "Militar",
+    "Employers": "Empregadores",
+    "State Government": "Governo Estadual",
   },
   "Loading": {
     "TakingTooLong": "Isso esta demorando mais que o normal. Você pode voltar para a home ou continuar esperando.",
