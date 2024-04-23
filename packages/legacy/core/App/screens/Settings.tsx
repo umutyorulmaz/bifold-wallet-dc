@@ -223,22 +223,22 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   }
 
   const SectionHeader: React.FC<{
-    icon: SettingIcon
+    // icon: SettingIcon
     iconRight?: SettingIcon
     title: string
     titleTestID?: string
-  }> = ({ icon, iconRight, title, titleTestID }) =>
+  }> = ({ iconRight, title, titleTestID }) =>
       // gate keep behind developer mode
       store.preferences.useConnectionInviterCapability ? (
         <View style={[styles.section, styles.sectionHeader, { justifyContent: iconRight ? 'space-between' : undefined }]}>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Icon
+            {/* <Icon
               importantForAccessibility={'no-hide-descendants'}
               accessible={false}
               name={icon.name}
               size={icon.size ?? defaultIconSize}
               style={[{ marginRight: 10, color: SettingsTheme.iconColor }, icon.style]}
-            />
+            /> */}
             <Text
               testID={titleTestID}
               numberOfLines={1}
@@ -261,13 +261,13 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
         </View>
       ) : (
           <View style={[styles.section, styles.sectionHeader]}>
-            <Icon
+            {/* <Icon
               importantForAccessibility={'no-hide-descendants'}
               accessible={false}
               name={icon.name}
               size={24}
               style={{ marginRight: 10, color: SettingsTheme.iconColor }}
-            />
+            /> */}
             <Text accessibilityRole={'header'} style={[TextTheme.headingThree, { flexShrink: 1 }]}>
               {title}
             </Text>
@@ -311,7 +311,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           section: {
             header: { title, icon, iconRight, titleTestID },
           },
-        }) => <SectionHeader icon={icon} iconRight={iconRight} title={title} titleTestID={titleTestID} />}
+        }) => <SectionHeader iconRight={iconRight} title={title} titleTestID={titleTestID} />}
         ItemSeparatorComponent={() => (
           <View style={{ backgroundColor: SettingsTheme.groupBackground }}>
             <View style={[styles.itemSeparator]}></View>

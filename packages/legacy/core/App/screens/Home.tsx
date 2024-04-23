@@ -18,7 +18,7 @@ import FindAndConnectOpportunities from './FindAndConnectOpportunities'
 
 type HomeProps = {
   homeProps : StackScreenProps<HomeStackParams, Screens.Home>
-  navigation: StackNavigationProp<HomeStackParams, 'EducationList'>
+  navigation: StackNavigationProp<HomeStackParams>
 }
 
 const Home: React.FC<HomeProps> = ({navigation}) => {
