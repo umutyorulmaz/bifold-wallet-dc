@@ -1,6 +1,6 @@
 import { useAgent } from '@aries-framework/react-hooks'
 import { useRoute, RouteProp } from '@react-navigation/native'
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 //import { useTheme } from '../contexts/theme' // *ACS*
@@ -29,7 +29,11 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
     )
   }
 
+  // State to manage button clickability
+  const [isButtonDisabled, setButtonDisabled] = useState(false)
+
   const onApplyPress = async () => {
+    setButtonDisabled(true)
     //const defaultInvitationURL =
     //'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzNTdlYjE3YS1jZTgzLTQwMTMtOTdiNy1iYmY3ZTYzYzMyOGUiLCAibGFiZWwiOiAiRGlnaUNyZWRBIiwgInJlY2lwaWVudEtleXMiOiBbIkVIOUQ2U3V0RGlFbkoxRkNkeVdGbmhHRHZabXpWeHd2ZzljZERnd3ZCQlNBIl0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9'
     try {
@@ -61,6 +65,7 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error processing the invitation:', error)
+      setButtonDisabled(false)
       // Handle error appropriately
     }
   }
@@ -105,6 +110,12 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
     },
   })
 
+  const getButtonStyles = () => ({
+    ...styles.applyButton,
+    backgroundColor: isButtonDisabled ? '#AAB8C2' : '#062c80', // Light grey when disabled
+    opacity: isButtonDisabled ? 0.5 : 1,
+  })
+
   return (
     <ScrollView>
       <Image source={{ uri: institution.bannerImage }} style={styles.bannerImage} />
@@ -114,7 +125,7 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
         <Text style={styles.institutionDescription}>{institution.description}</Text>
         {/* Conditionally render the Apply button if there's an invitationLink */}
         {institution.invitationLink && (
-          <TouchableOpacity style={styles.applyButton} onPress={onApplyPress}>
+          <TouchableOpacity style={getButtonStyles()} onPress={onApplyPress} disabled={isButtonDisabled}>
             <Text style={styles.applyButtonText}>APPLY</Text>
           </TouchableOpacity>
         )}
