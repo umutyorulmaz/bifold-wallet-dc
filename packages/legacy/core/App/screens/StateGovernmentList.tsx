@@ -4,13 +4,13 @@ import { FlatList, View, StyleSheet } from 'react-native'
 
 import InstitutionCard from '../components/institution/InstitutionCard'
 import { InstitutionRegistry, InstitutionCategoryType, InstitutionDetail } from '../data/institutions-data'
-import { RootStackParamList } from '../types/navigators'
+import { HomeStackParams, Screens } from '../types/navigators'
 
 type StateGovernmentScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'StateGovernmentScreen'>
+  navigation: StackNavigationProp<HomeStackParams>
 }
 
-const StateGovernmentScreen: React.FC<StateGovernmentScreenProps> = ({ navigation }) => {
+const StateGovernmentList: React.FC<StateGovernmentScreenProps> = ({ navigation }) => {
   const categoryType = InstitutionCategoryType.StateGovernment
 
   const stateGovernmentInstitutions =
@@ -20,7 +20,7 @@ const StateGovernmentScreen: React.FC<StateGovernmentScreenProps> = ({ navigatio
     <InstitutionCard
       institution={item}
       onPress={() => {
-        navigation.navigate('InstitutionDetail', {
+        navigation.navigate(Screens.InstitutionDetail, {
           institutionId: item.id,
           categoryType: categoryType,
         })
@@ -46,4 +46,4 @@ const StateGovernmentScreen: React.FC<StateGovernmentScreenProps> = ({ navigatio
   )
 }
 
-export default StateGovernmentScreen
+export default StateGovernmentList

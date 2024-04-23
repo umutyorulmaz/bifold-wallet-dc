@@ -500,7 +500,10 @@ const translation = {
     "TabStack": {
         "Home": "Notifications (FR)",
         "Scan": "Numériser",
-        "Credentials": "Justificatifs"
+        "Credentials": "Justificatifs",
+        "Conversation": "Conversation",
+        "Settings": "Paramètres",
+        "Contacts": "Contacts",
     },
     "RootStack": {
         "Contacts": "Contacts",
@@ -565,6 +568,13 @@ const translation = {
         "ProofRequesting": 'Demande de preuve',
         "NameWallet": "Name your wallet (FR)",
         "RenameContact": "Edit Contact Name (FR)",
+        "Find And Connect Opportunities": "Trouver et connecter des opportunités",
+        "Education": "Éducation",
+        "Institution Detail": "Détail de l'institution",
+        "Military": "Militaire",
+        "Employers": "Employeurs",
+        "State Government": "Gouvernement de l'État",
+
     },
     "Loading": {
         "TakingTooLong": "Cela prend plus de temps que d'habitude. Vous pouvez retourner à l'accueil ou continuer à attendre.",

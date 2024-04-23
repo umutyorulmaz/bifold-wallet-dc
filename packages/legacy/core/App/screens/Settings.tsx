@@ -94,43 +94,8 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   const settingsSections: SettingSection[] = [
     {
       header: {
-        icon: { name: store.preferences.useConnectionInviterCapability ? 'person' : 'contacts', size: 30 }, // *ACS* changed icon to contacts
-        title: store.preferences.useConnectionInviterCapability ? store.preferences.walletName : t('Screens.Contacts'),
-        iconRight: {
-          name: 'edit',
-          action: () => {
-            navigation.navigate(Screens.NameWallet)
-          },
-          accessibilityLabel: t('NameWallet.EditWalletName'),
-          testID: testIdWithKey('EditWalletName'),
-          style: { color: ColorPallet.brand.primary },
-        },
-        titleTestID: store.preferences.useConnectionInviterCapability ? testIdWithKey('WalletName') : undefined,
-      },
-      data: [
-        {
-          title: t('Screens.Contacts'),
-          accessibilityLabel: t('Screens.Contacts'),
-          testID: testIdWithKey('Contacts'),
-          onPress: () =>
-            navigation
-              .getParent()
-              ?.navigate(Stacks.ContactStack, { screen: Screens.Contacts, params: { navigation: navigation } }),
-        },
-        // *ACS* - not displaying 'What are Contacts?' information screen for now
-        // {
-        //   title: t('Settings.WhatAreContacts'),
-        //   accessibilityLabel: t('Settings.WhatAreContacts'),
-        //   testID: testIdWithKey('WhatAreContacts'),
-        //   onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.WhatAreContacts }),
-        //   value: undefined,
-        // },
-      ],
-    },
-    {
-      header: {
-        icon: { name: 'settings' },
-        title: t('Settings.AppSettings'),
+        icon: { name:''},
+        title: " ",
       },
       data: [
         {
@@ -258,22 +223,22 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   }
 
   const SectionHeader: React.FC<{
-    icon: SettingIcon
+    // icon: SettingIcon
     iconRight?: SettingIcon
     title: string
     titleTestID?: string
-  }> = ({ icon, iconRight, title, titleTestID }) =>
+  }> = ({ iconRight, title, titleTestID }) =>
       // gate keep behind developer mode
       store.preferences.useConnectionInviterCapability ? (
         <View style={[styles.section, styles.sectionHeader, { justifyContent: iconRight ? 'space-between' : undefined }]}>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Icon
+            {/* <Icon
               importantForAccessibility={'no-hide-descendants'}
               accessible={false}
               name={icon.name}
               size={icon.size ?? defaultIconSize}
               style={[{ marginRight: 10, color: SettingsTheme.iconColor }, icon.style]}
-            />
+            /> */}
             <Text
               testID={titleTestID}
               numberOfLines={1}
@@ -296,13 +261,13 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
         </View>
       ) : (
           <View style={[styles.section, styles.sectionHeader]}>
-            <Icon
+            {/* <Icon
               importantForAccessibility={'no-hide-descendants'}
               accessible={false}
               name={icon.name}
               size={24}
               style={{ marginRight: 10, color: SettingsTheme.iconColor }}
-            />
+            /> */}
             <Text accessibilityRole={'header'} style={[TextTheme.headingThree, { flexShrink: 1 }]}>
               {title}
             </Text>
@@ -346,7 +311,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           section: {
             header: { title, icon, iconRight, titleTestID },
           },
-        }) => <SectionHeader icon={icon} iconRight={iconRight} title={title} titleTestID={titleTestID} />}
+        }) => <SectionHeader iconRight={iconRight} title={title} titleTestID={titleTestID} />}
         ItemSeparatorComponent={() => (
           <View style={{ backgroundColor: SettingsTheme.groupBackground }}>
             <View style={[styles.itemSeparator]}></View>
