@@ -4,13 +4,13 @@ import { FlatList, View, StyleSheet } from 'react-native'
 
 import InstitutionCard from '../components/institution/InstitutionCard'
 import { InstitutionRegistry, InstitutionCategoryType, InstitutionDetail } from '../data/institutions-data'
-import { RootStackParamList } from '../types/navigators'
+import { HomeStackParams, Screens } from '../types/navigators'
 
 type EducationScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'EducationScreen'>
+  navigation: StackNavigationProp<HomeStackParams>
 }
 
-const EducationScreen: React.FC<EducationScreenProps> = ({ navigation }) => {
+const EducationList: React.FC<EducationScreenProps> = ({ navigation }) => {
   const categoryType = InstitutionCategoryType.Education
 
   const educationInstitutions =
@@ -20,7 +20,7 @@ const EducationScreen: React.FC<EducationScreenProps> = ({ navigation }) => {
     <InstitutionCard
       institution={item}
       onPress={() => {
-        navigation.navigate('InstitutionDetail', {
+        navigation.navigate(Screens.InstitutionDetail, {
           institutionId: item.id,
           categoryType: categoryType,
         })
@@ -46,4 +46,4 @@ const EducationScreen: React.FC<EducationScreenProps> = ({ navigation }) => {
   )
 }
 
-export default EducationScreen
+export default EducationList

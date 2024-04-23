@@ -44,7 +44,7 @@ describe('displays a home screen', () => {
   test('renders correctly', () => {
     const tree = render(
       <ConfigurationContext.Provider value={configurationContext}>
-        <Home route={{} as any} navigation={useNavigation()} />
+        <Home homeProps={{} as any} navigation={useNavigation()} />
       </ConfigurationContext.Provider>
     )
 
@@ -61,7 +61,7 @@ describe('displays a home screen', () => {
   test('defaults to no notifications', async () => {
     const { findByText } = render(
       <ConfigurationContext.Provider value={configurationContext}>
-        <Home route={{} as any} navigation={useNavigation()} />
+        <Home homeProps={{} as any} navigation={useNavigation()} />
       </ConfigurationContext.Provider>
     )
     const notificationLabel = await findByText('Home.NoNewUpdates')
@@ -133,7 +133,7 @@ describe('with a notifications module, when an issuer sends a credential offer',
   test('notifications are displayed', async () => {
     const { findAllByTestId } = render(
       <ConfigurationContext.Provider value={configurationContext}>
-        <Home route={{} as any} navigation={useNavigation()} />
+        <Home homeProps={{} as any} navigation={useNavigation()} />
       </ConfigurationContext.Provider>
     )
 
@@ -152,7 +152,7 @@ describe('with a notifications module, when an issuer sends a credential offer',
     const navigation = useNavigation()
     const view = render(
       <ConfigurationContext.Provider value={configurationContext}>
-        <Home route={{} as any} navigation={navigation as any} />
+        <Home homeProps={{} as any} navigation={navigation as any} />
       </ConfigurationContext.Provider>
     )
 
@@ -181,7 +181,7 @@ describe('with a notifications module, when an issuer sends a credential offer',
   test('touch notification triggers navigation correctly II', async () => {
     const { findByTestId } = render(
       <ConfigurationContext.Provider value={configurationContext}>
-        <Home route={{} as any} navigation={useNavigation()} />
+        <Home homeProps={{} as any} navigation={useNavigation()} />
       </ConfigurationContext.Provider>
     )
 
@@ -211,7 +211,7 @@ describe('with a notifications module, when an issuer sends a credential offer',
   test('touch notification triggers navigation correctly III', async () => {
     const { findByTestId } = render(
       <ConfigurationContext.Provider value={configurationContext}>
-        <Home route={{} as any} navigation={useNavigation()} />
+        <Home homeProps={{} as any} navigation={useNavigation()} />
       </ConfigurationContext.Provider>
     )
 
@@ -240,7 +240,7 @@ describe('with a notifications module, when an issuer sends a credential offer',
   test('touch notification triggers navigation correctly IV', async () => {
     const { findByTestId } = render(
       <ConfigurationContext.Provider value={configurationContext}>
-        <Home route={{} as any} navigation={useNavigation()} />
+        <Home homeProps={{} as any} navigation={useNavigation()} />
       </ConfigurationContext.Provider>
     )
     await act(async () => {

@@ -4,13 +4,13 @@ import { FlatList, View, StyleSheet } from 'react-native'
 
 import InstitutionCard from '../components/institution/InstitutionCard'
 import { InstitutionRegistry, InstitutionCategoryType, InstitutionDetail } from '../data/institutions-data'
-import { RootStackParamList } from '../types/navigators'
+import { HomeStackParams, Screens } from '../types/navigators'
 
 type EmployersScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'EmployersScreen'>
+  navigation: StackNavigationProp<HomeStackParams>
 }
 
-const EmployersScreen: React.FC<EmployersScreenProps> = ({ navigation }) => {
+const EmployersList: React.FC<EmployersScreenProps> = ({ navigation }) => {
   const categoryType = InstitutionCategoryType.Employers
 
   const employersInstitutions =
@@ -20,7 +20,7 @@ const EmployersScreen: React.FC<EmployersScreenProps> = ({ navigation }) => {
     <InstitutionCard
       institution={item}
       onPress={() => {
-        navigation.navigate('InstitutionDetail', {
+        navigation.navigate(Screens.InstitutionDetail, {
           institutionId: item.id,
           categoryType: categoryType,
         })
@@ -46,4 +46,4 @@ const EmployersScreen: React.FC<EmployersScreenProps> = ({ navigation }) => {
   )
 }
 
-export default EmployersScreen
+export default EmployersList
