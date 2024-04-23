@@ -22,7 +22,7 @@ import { testIdWithKey } from '../utils/testable'
 type ContactDetailsProps = StackScreenProps<ContactStackParams, Screens.ContactDetails>
 
 const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
-  const { connectionId } = route?.params
+  const { connectionId } = route.params
   const { agent } = useAgent()
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<ContactStackParams>>()
@@ -118,7 +118,7 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
         accessibilityLabel={t('Screens.RenameContact')}
         accessibilityRole={'button'}
         testID={testIdWithKey('RenameContact')}
-        style={[styles.contentContainer, { backgroundColor: '#dddddd', marginTop: 10, borderBottomWidth: 1, }]} // *ACS*
+        style={[styles.contentContainer, { backgroundColor: '#dddddd', marginTop: 10, borderBottomWidth: 1 }]} // *ACS*
       >
         <Text style={{ ...TextTheme.normal }}>{t('Screens.RenameContact')}</Text>
       </TouchableOpacity>

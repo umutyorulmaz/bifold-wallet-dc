@@ -42,14 +42,16 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
       )
 
       if (record?.connectionRecord?.id) {
-        navigation.getParent()?.navigate(Stacks.ConnectionStack, {
-          screen: Screens.Connection,
+        // eslint-disable-next-line no-console
+        //console.log('Navigating to Chat with connectionId:', record.connectionRecord.id)
+        navigation.navigate(Stacks.ContactStack as any, {
+          screen: Screens.Chat,
           params: { connectionId: record.connectionRecord.id },
         })
       } else {
         // Handling for connectionless scenarios
-        navigation.navigate(Stacks.ConnectionStack as any, {
-          screen: Screens.Connection,
+        navigation.navigate(Stacks.ContactStack as any, {
+          screen: Screens.Chat,
           params: { threadId: record?.outOfBandRecord.outOfBandInvitation.threadId },
         })
       } //else {
