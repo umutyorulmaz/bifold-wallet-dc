@@ -66,8 +66,10 @@ const FindAndConnectOpportunities = () => {
   })
 
   const navigateToScreen = (screenName: keyof RootStackParamList) => {
+    // eslint-disable-next-line no-console
     console.log(screenName)
-    if (screenName != 'StateGovernmentScreen') { // *ACS* Gov screen is currently not active
+    if (screenName != 'StateGovernmentScreen') {
+      // *ACS* Gov screen is currently not active
       navigation.navigate(screenName)
     }
   }

@@ -7,6 +7,7 @@ import Biometrics from './assets/img/biometrics.svg'
 import ContactBook from './assets/img/contact-book.svg'
 import CredentialDeclined from './assets/img/credential-declined.svg'
 import DeleteNotification from './assets/img/delete-notification.svg'
+import Logo from './assets/img/digi-cred-logo.svg'
 import EmptyWallet from './assets/img/empty-wallet.svg'
 import IconCredentialOfferDark from './assets/img/icon-credential-offer-dark.svg'
 import IconCredentialOfferLight from './assets/img/icon-credential-offer-light.svg'
@@ -16,7 +17,6 @@ import IconInfoSentDark from './assets/img/icon-info-sent-dark.svg'
 import IconInfoSentLight from './assets/img/icon-info-sent-light.svg'
 import IconProofRequestDark from './assets/img/icon-proof-request-dark.svg'
 import IconProofRequestLight from './assets/img/icon-proof-request-light.svg'
-import Logo from './assets/img/digi-cred-logo.svg'
 import NoInfoShared from './assets/img/no_information_shared.svg'
 import Preface from './assets/img/preface.svg'
 import ProofRequestDeclined from './assets/img/proof-declined.svg'
@@ -195,7 +195,7 @@ const BrandColors: IBrandColors = {
   primaryLight: `rgba(30, 64, 175, ${lightOpacity})`, // *ACS*
   highlight: '#d3f689', // *ACS* changed from Bifold's gold highlight
   primaryBackground: '#f5f5f5', // *ACS* changed from '#000000'
-  secondaryBackground: '#D3D3D3', // *ACS* 
+  secondaryBackground: '#D3D3D3', // *ACS*
   modalPrimary: '#191970', // *ACS* changed to DigiCred blue from: primary: '#42803E' Bifold green
   modalSecondary: '#e5e7eb',
   modalPrimaryBackground: '#D3D3D3', // *ACS* changed from '#000000'
@@ -568,7 +568,6 @@ export const TabTheme = {
     shadowOpacity: 0.1,
     borderTopWidth: 0,
     paddingBottom: 0,
-
   },
   tabBarContainerStyle: {
     flex: 1,

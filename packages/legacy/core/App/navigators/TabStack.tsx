@@ -32,7 +32,7 @@ const TabStack: React.FC = () => {
   const styles = StyleSheet.create({
     tabBarIcon: {
       flex: 1,
-      color: '#ff0000'
+      color: '#ff0000',
     },
   })
 
@@ -105,7 +105,6 @@ const TabStack: React.FC = () => {
                   position: 'relative',
                   flex: 1,
                   width: 90,
-
                 }}
               >
                 <AttachTourStep tourID={TourID.HomeTour} index={0} fill>
@@ -131,7 +130,12 @@ const TabStack: React.FC = () => {
                           accessible={true}
                           accessibilityRole={'button'}
                           accessibilityLabel={t('TabStack.Scan')}
-                          style={{ ...TabTheme.focusTabIconStyle, borderRadius: 45, borderWidth: 2, borderColor: '#000000', }}
+                          style={{
+                            ...TabTheme.focusTabIconStyle,
+                            borderRadius: 45,
+                            borderWidth: 2,
+                            borderColor: '#000000',
+                          }}
                         >
                           <Icon
                             accessible={false}
