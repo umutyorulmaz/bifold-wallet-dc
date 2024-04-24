@@ -4,13 +4,13 @@ import { FlatList, View, StyleSheet } from 'react-native'
 
 import InstitutionCard from '../components/institution/InstitutionCard'
 import { InstitutionRegistry, InstitutionCategoryType, InstitutionDetail } from '../data/institutions-data'
-import { RootStackParamList } from '../types/navigators'
+import { HomeStackParams, Screens } from '../types/navigators'
 
 type MilitaryScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'MilitaryScreen'>
+  navigation: StackNavigationProp<HomeStackParams>
 }
 
-const MilitaryScreen: React.FC<MilitaryScreenProps> = ({ navigation }) => {
+const MilitaryList: React.FC<MilitaryScreenProps> = ({ navigation }) => {
   const categoryType = InstitutionCategoryType.Military
 
   const militaryInstitutions =
@@ -20,7 +20,7 @@ const MilitaryScreen: React.FC<MilitaryScreenProps> = ({ navigation }) => {
     <InstitutionCard
       institution={item}
       onPress={() => {
-        navigation.navigate('InstitutionDetail', {
+        navigation.navigate(Screens.InstitutionDetail, {
           institutionId: item.id,
           categoryType: categoryType,
         })
@@ -47,4 +47,4 @@ const MilitaryScreen: React.FC<MilitaryScreenProps> = ({ navigation }) => {
   )
 }
 
-export default MilitaryScreen
+export default MilitaryList

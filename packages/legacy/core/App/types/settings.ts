@@ -20,7 +20,7 @@ export interface SettingIcon {
 export interface SettingSection {
   header: {
     title: string
-    icon: SettingIcon
+    icon?: SettingIcon
     iconRight?: SettingIcon
     titleTestID?: string
   }

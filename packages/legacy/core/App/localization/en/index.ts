@@ -517,6 +517,9 @@ const translation = {
     "Home": "Home",
     "Scan": "Scan",
     "Credentials": "Credentials",
+    "Conversation": "Conversation",
+    "Settings": "Settings",
+    "Contacts": "Contacts",
   },
   "RootStack": {
     "Contacts": "Contacts",
@@ -582,6 +585,12 @@ const translation = {
     "ProofRequesting": 'Proof Requesting',
     "NameWallet": "Name your wallet",
     "RenameContact": "Edit Contact Name",
+    "FindAndConnectOpportunities": "Find And Connect Opportunities",
+    "EducationList": "Education",
+    "InstitutionDetail": "Institution Detail",
+    "MilitaryList": "Military",
+    "EmployersList": "Employers",
+    "StateGovernmentList": "State Government",
   },
   "Loading": {
     "TakingTooLong": "This is taking longer than usual. You can return to home or continue waiting.",

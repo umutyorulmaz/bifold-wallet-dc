@@ -7,7 +7,6 @@ import { parseUrl } from 'query-string'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, DeviceEventEmitter } from 'react-native'
-import { SvgUri } from 'react-native-svg'
 
 import HeaderButton, { ButtonLocation } from '../components/buttons/HeaderButton'
 import { EventTypes, walletTimeout } from '../constants'
@@ -20,12 +19,7 @@ import { useTheme } from '../contexts/theme'
 import { useDeepLinks } from '../hooks/deep-links'
 import AttemptLockout from '../screens/AttemptLockout'
 import Chat from '../screens/Chat'
-import EducationScreen from '../screens/EducationList'
-import EmployersScreen from '../screens/EmployersList'
-import InstitutionDetailScreen from '../screens/InstitutionDetailScreen'
-import MilitaryScreen from '../screens/MilitaryList'
 import PINEnter from '../screens/PINEnter'
-import StateGovernmentScreen from '../screens/StateGovernmentList'
 import { BifoldError } from '../types/error'
 import { AuthenticateStackParams, Screens, Stacks, TabStacks } from '../types/navigators'
 import { connectFromInvitation, getOobDeepLink } from '../utils/helpers'
@@ -283,45 +277,6 @@ const RootStack: React.FC = () => {
         <Stack.Screen name={Stacks.NotificationStack} component={NotificationStack} />
         <Stack.Screen name={Stacks.ConnectionStack} component={DeliveryStack} options={{ gestureEnabled: false }} />
         <Stack.Screen name={Stacks.ProofRequestsStack} component={ProofRequestStack} />
-        <Stack.Screen
-          name="EducationScreen"
-          component={EducationScreen}
-          options={{
-            title: 'Education', // The title you want to display in the header
-            // headerBackImage: () => (
-            //   <Image
-            //     source={require('../path-to-back-arrow-icon.png')} // Your back arrow icon
-            //     style={{ width: 25, height: 25, marginLeft: 10 }}
-            //   />
-            // ),
-            //the below suppose to show digicred logo and title on top but somehow doesnt work!?
-            headerRight: () => (
-              <SvgUri
-                width="50"
-                height="50"
-                uri={require('../assets/img/digi-cred-logo.svg')}
-                style={{ marginRight: 10 }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="InstitutionDetail"
-          component={InstitutionDetailScreen}
-          options={{ title: 'Institution Details' }}
-        />
-        <Stack.Screen name="MilitaryScreen" component={MilitaryScreen} options={{ title: 'Military Opportunities' }} />
-
-        <Stack.Screen
-          name="EmployersScreen"
-          component={EmployersScreen}
-          options={{ title: 'Employers Opportunities' }}
-        />
-        <Stack.Screen
-          name="StateGovernmentScreen"
-          component={StateGovernmentScreen}
-          options={{ title: 'State Government Opportunities' }}
-        />
       </Stack.Navigator>
     )
   }

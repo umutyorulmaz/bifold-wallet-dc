@@ -42,6 +42,12 @@ export enum Screens {
   NameWallet = 'Name Wallet',
   RenameContact = 'Rename Contact',
   ScanHelp = 'Scan Help',
+  FindAndConnectOpportunities = 'Find And Connect Opportunities',
+  EducationList = 'Education List',
+  InstitutionDetail = 'Institution Detail',
+  MilitaryList = 'Military List',
+  EmployersList = 'Employers',
+  StateGovernmentList = 'State Government',
 }
 
 export enum Stacks {
@@ -60,6 +66,8 @@ export enum TabStacks {
   HomeStack = 'Tab Home Stack',
   ConnectStack = 'Tab Connect Stack',
   CredentialStack = 'Tab Credential Stack',
+  ContactStack = 'Tab Contact Stack',
+  SettingStack = 'Tab Setting Stack',
 }
 
 export type RootStackParams = {
@@ -77,6 +85,8 @@ export type TabStackParams = {
   [TabStacks.HomeStack]: NavigatorScreenParams<HomeStackParams>
   [TabStacks.ConnectStack]: NavigatorScreenParams<ConnectStackParams>
   [TabStacks.CredentialStack]: NavigatorScreenParams<CredentialStackParams>
+  [TabStacks.SettingStack]: NavigatorScreenParams<SettingStackParams>
+  [TabStacks.ContactStack]: NavigatorScreenParams<ContactStackParams>
 }
 
 export type AuthenticateStackParams = {
@@ -128,7 +138,24 @@ export type CredentialStackParams = {
 }
 
 export type HomeStackParams = {
+  EducationList: undefined
+  MilitaryList: undefined
+  EmployersScreen: undefined
+  StateGovernmentList: undefined
+  InstitutionDetail: {
+    institutionId: string
+    categoryType: InstitutionCategoryType
+  }
   [Screens.Home]: undefined
+  [Screens.FindAndConnectOpportunities]: undefined
+  [Screens.EducationList]: undefined
+  [Screens.InstitutionDetail]: {
+    institutionId: string
+    categoryType: InstitutionCategoryType
+  }
+  [Screens.MilitaryList]: undefined
+  [Screens.EmployersList]: undefined
+  [Screens.StateGovernmentList]: undefined
 }
 
 export type ConnectStackParams = {
@@ -166,18 +193,6 @@ export type DeliveryStackParams = {
   [Screens.OnTheWay]: { credentialId: string }
   [Screens.Declined]: { credentialId: string }
   [Screens.Chat]: { connectionId: string }
-}
-
-//opportunities
-export type RootStackParamList = {
-  EducationScreen: undefined
-  MilitaryScreen: undefined
-  EmployersScreen: undefined
-  StateGovernmentScreen: undefined
-  InstitutionDetail: {
-    institutionId: string
-    categoryType: InstitutionCategoryType
-  }
 }
 
 export type ScreenOptionsType = Partial<Record<Screens, StackNavigationOptions>>

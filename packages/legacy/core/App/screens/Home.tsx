@@ -1,5 +1,5 @@
 import { useIsFocused } from '@react-navigation/native'
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, View, StyleSheet } from 'react-native'
@@ -7,7 +7,6 @@ import { FlatList, View, StyleSheet } from 'react-native'
 import NotificationListItem, { NotificationType } from '../components/listItems/NotificationListItem'
 import NoNewUpdates from '../components/misc/NoNewUpdates'
 import AppGuideModal from '../components/modals/AppGuideModal'
-//import HomeFooterView from '../components/views/HomeFooterView'
 import { useConfiguration } from '../contexts/configuration'
 import { DispatchAction } from '../contexts/reducers/store'
 import { useStore } from '../contexts/store'
@@ -18,9 +17,12 @@ import { TourID } from '../types/tour'
 
 import FindAndConnectOpportunities from './FindAndConnectOpportunities'
 
-type HomeProps = StackScreenProps<HomeStackParams, Screens.Home>
+type HomeProps = {
+  homeProps: StackScreenProps<HomeStackParams, Screens.Home>
+  navigation: StackNavigationProp<HomeStackParams>
+}
 
-const Home: React.FC<HomeProps> = () => {
+const Home: React.FC<HomeProps> = ({ navigation }) => {
   const {
     useCustomNotifications,
     enableTours: enableToursConfig,
@@ -135,7 +137,7 @@ const Home: React.FC<HomeProps> = () => {
           </View>
         )}
       />
-      <FindAndConnectOpportunities />
+      <FindAndConnectOpportunities navigation={navigation} />
       {showTourPopup && (
         <AppGuideModal
           title={t('Tour.GuideTitle')}
