@@ -1,8 +1,8 @@
 {
-  "name": "aries-bifold-app",
+  "name": "digicred-wallet-mobile-app",
   "version": "1.0.0",
   "private": true,
-  "description": "Aries Bifold Wallet App",
+  "description": "Digicred Wallet to hold Verifiable Credentials",
   "scripts": {
     "android": "react-native run-android",
     "gradle": "./android/gradlew --project-dir=./android --no-daemon",

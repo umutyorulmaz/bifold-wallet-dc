@@ -12,7 +12,6 @@ import {
 } from 'react-native'
 import { getVersion, getBuildNumber } from 'react-native-device-info'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import HeaderButton, { ButtonLocation } from '../components/buttons/HeaderButton'
 import { useConfiguration } from '../contexts/configuration'
@@ -35,7 +34,6 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   const developerOptionCount = useRef(0)
   const { SettingsTheme, TextTheme, ColorPallet, Assets } = useTheme()
   const { settings, enableTours, enablePushNotifications } = useConfiguration()
-  const defaultIconSize = 24
   const styles = StyleSheet.create({
     container: {
       backgroundColor: ColorPallet.brand.primaryBackground,
@@ -56,7 +54,6 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
     },
     sectionSeparator: {
       marginBottom: 10,
-
     },
     sectionRow: {
       flexDirection: 'row',
@@ -94,8 +91,8 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   const settingsSections: SettingSection[] = [
     {
       header: {
-        icon: { name:''},
-        title: " ",
+        icon: { name: '' },
+        title: ' ',
       },
       data: [
         {
@@ -228,51 +225,51 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
     title: string
     titleTestID?: string
   }> = ({ iconRight, title, titleTestID }) =>
-      // gate keep behind developer mode
-      store.preferences.useConnectionInviterCapability ? (
-        <View style={[styles.section, styles.sectionHeader, { justifyContent: iconRight ? 'space-between' : undefined }]}>
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            {/* <Icon
+    // gate keep behind developer mode
+    store.preferences.useConnectionInviterCapability ? (
+      <View style={[styles.section, styles.sectionHeader, { justifyContent: iconRight ? 'space-between' : undefined }]}>
+        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          {/* <Icon
               importantForAccessibility={'no-hide-descendants'}
               accessible={false}
               name={icon.name}
               size={icon.size ?? defaultIconSize}
               style={[{ marginRight: 10, color: SettingsTheme.iconColor }, icon.style]}
             /> */}
-            <Text
-              testID={titleTestID}
-              numberOfLines={1}
-              accessibilityRole={'header'}
-              style={[TextTheme.headingThree, { flexShrink: 1 }]}
-            >
-              {title}
-            </Text>
-          </View>
-          {iconRight && (
-            <HeaderButton
-              buttonLocation={ButtonLocation.Right}
-              accessibilityLabel={iconRight.accessibilityLabel!}
-              testID={iconRight.testID!}
-              onPress={iconRight.action!}
-              icon={'pencil'}
-              iconTintColor={TextTheme.headingThree.color}
-            />
-          )}
+          <Text
+            testID={titleTestID}
+            numberOfLines={1}
+            accessibilityRole={'header'}
+            style={[TextTheme.headingThree, { flexShrink: 1 }]}
+          >
+            {title}
+          </Text>
         </View>
-      ) : (
-          <View style={[styles.section, styles.sectionHeader]}>
-            {/* <Icon
+        {iconRight && (
+          <HeaderButton
+            buttonLocation={ButtonLocation.Right}
+            accessibilityLabel={iconRight.accessibilityLabel!}
+            testID={iconRight.testID!}
+            onPress={iconRight.action!}
+            icon={'pencil'}
+            iconTintColor={TextTheme.headingThree.color}
+          />
+        )}
+      </View>
+    ) : (
+      <View style={[styles.section, styles.sectionHeader]}>
+        {/* <Icon
               importantForAccessibility={'no-hide-descendants'}
               accessible={false}
               name={icon.name}
               size={24}
               style={{ marginRight: 10, color: SettingsTheme.iconColor }}
             /> */}
-            <Text accessibilityRole={'header'} style={[TextTheme.headingThree, { flexShrink: 1 }]}>
-              {title}
-            </Text>
-          </View>
-        )
+        <Text accessibilityRole={'header'} style={[TextTheme.headingThree, { flexShrink: 1 }]}>
+          {title}
+        </Text>
+      </View>
+    )
 
   const SectionRow: React.FC<{
     title: string
@@ -309,7 +306,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
         )}
         renderSectionHeader={({
           section: {
-            header: { title, icon, iconRight, titleTestID },
+            header: { title, iconRight, titleTestID },
           },
         }) => <SectionHeader iconRight={iconRight} title={title} titleTestID={titleTestID} />}
         ItemSeparatorComponent={() => (

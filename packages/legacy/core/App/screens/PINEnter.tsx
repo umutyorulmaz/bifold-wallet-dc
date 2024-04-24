@@ -3,6 +3,7 @@ import { CommonActions } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Keyboard, StyleSheet, Text, Image, View, DeviceEventEmitter } from 'react-native'
+
 import Button, { ButtonType } from '../components/buttons/Button'
 import PINInput from '../components/inputs/PINInput'
 import { InfoBoxType } from '../components/misc/InfoBox'
@@ -305,7 +306,7 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
               DigiCred
             </Text>
           </View>
-         
+
           {biometricsEnrollmentChange ? (
             <>
               <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center' }]}>
@@ -323,8 +324,8 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
               </Text>
             </>
           ) : (
-                <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16 }]}>{t('PINEnter.EnterPIN')}</Text>
-              )}
+            <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16 }]}>{t('PINEnter.EnterPIN')}</Text>
+          )}
           <PINInput
             onPINChanged={(p: string) => {
               setPIN(p)

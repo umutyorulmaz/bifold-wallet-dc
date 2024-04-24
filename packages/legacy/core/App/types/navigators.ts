@@ -85,8 +85,8 @@ export type TabStackParams = {
   [TabStacks.HomeStack]: NavigatorScreenParams<HomeStackParams>
   [TabStacks.ConnectStack]: NavigatorScreenParams<ConnectStackParams>
   [TabStacks.CredentialStack]: NavigatorScreenParams<CredentialStackParams>
-  [TabStacks.SettingStack]:NavigatorScreenParams<SettingStackParams>
-  [TabStacks.ContactStack]:NavigatorScreenParams<ContactStackParams>
+  [TabStacks.SettingStack]: NavigatorScreenParams<SettingStackParams>
+  [TabStacks.ContactStack]: NavigatorScreenParams<ContactStackParams>
 }
 
 export type AuthenticateStackParams = {
@@ -143,13 +143,13 @@ export type HomeStackParams = {
   EmployersScreen: undefined
   StateGovernmentList: undefined
   InstitutionDetail: {
-      institutionId: string
-      categoryType: InstitutionCategoryType
-    }
+    institutionId: string
+    categoryType: InstitutionCategoryType
+  }
   [Screens.Home]: undefined
-  [Screens.FindAndConnectOpportunities] : undefined
+  [Screens.FindAndConnectOpportunities]: undefined
   [Screens.EducationList]: undefined
-  [Screens.InstitutionDetail] : {
+  [Screens.InstitutionDetail]: {
     institutionId: string
     categoryType: InstitutionCategoryType
   }
@@ -194,6 +194,5 @@ export type DeliveryStackParams = {
   [Screens.Declined]: { credentialId: string }
   [Screens.Chat]: { connectionId: string }
 }
-
 
 export type ScreenOptionsType = Partial<Record<Screens, StackNavigationOptions>>

@@ -1,4 +1,4 @@
-package com.ariesbifold;
+package com.digicred;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

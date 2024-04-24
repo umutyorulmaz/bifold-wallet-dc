@@ -7473,103 +7473,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aries-bifold-app@workspace:packages/legacy/app":
-  version: 0.0.0-use.local
-  resolution: "aries-bifold-app@workspace:packages/legacy/app"
-  dependencies:
-    "@aries-framework/anoncreds": ^0.4.0
-    "@aries-framework/anoncreds-rs": ^0.4.0
-    "@aries-framework/askar": ^0.4.0
-    "@aries-framework/core": ^0.4.0
-    "@aries-framework/indy-sdk-to-askar-migration": 0.4.0
-    "@aries-framework/indy-vdr": ^0.4.0
-    "@aries-framework/push-notifications": 0.5.0
-    "@aries-framework/react-hooks": ^0.4.2
-    "@aries-framework/react-native": ^0.4.0
-    "@babel/core": ^7.20.0
-    "@babel/preset-env": ^7.20.0
-    "@babel/runtime": ^7.20.0
-    "@formatjs/intl-datetimeformat": 4.2.4
-    "@formatjs/intl-displaynames": 5.2.4
-    "@formatjs/intl-getcanonicallocales": 1.7.3
-    "@formatjs/intl-listformat": 6.3.4
-    "@formatjs/intl-locale": 2.4.38
-    "@formatjs/intl-numberformat": 7.2.4
-    "@formatjs/intl-pluralrules": 4.1.4
-    "@formatjs/intl-relativetimeformat": 9.3.1
-    "@hyperledger/anoncreds-react-native": ^0.1.0
-    "@hyperledger/aries-askar-react-native": ^0.1.1
-    "@hyperledger/aries-bifold-core": ^1.0.0
-    "@hyperledger/aries-oca": ^1.0.0
-    "@hyperledger/indy-vdr-react-native": ^0.1.0
-    "@react-native-async-storage/async-storage": 1.15.11
-    "@react-native-community/masked-view": 0.1.11
-    "@react-native-community/netinfo": ^9.3.0
-    "@react-native/eslint-config": ^0.72.2
-    "@react-native/metro-config": ^0.72.11
-    "@react-navigation/bottom-tabs": 6.0.9
-    "@react-navigation/core": 6.1.0
-    "@react-navigation/devtools": ^6.0.8
-    "@react-navigation/native": 6.0.6
-    "@react-navigation/stack": 6.0.11
-    "@tsconfig/react-native": ^3.0.0
-    "@types/lodash.flatten": ^4.4.6
-    "@types/lodash.merge": ^4.6.6
-    "@types/lodash.startcase": ^4.4.7
-    "@types/react": ^18.0.24
-    "@types/react-native": 0.71.5
-    axios: ^1.4.0
-    babel-plugin-module-resolver: ^5.0.0
-    eslint: ^8.48.0
-    eslint-import-resolver-typescript: ^2.5.0
-    i18next: ^21.4.0
-    lodash.flatten: ^4.4.0
-    lodash.startcase: ^4.4.0
-    metro-react-native-babel-preset: ^0.77.0
-    moment: ^2.29.4
-    patch-package: ^6.4.4
-    pod-install: 0.1.38
-    prettier: ^2.8.4
-    query-string: ^7.0.1
-    react: "*"
-    react-i18next: 11.13.0
-    react-native: "*"
-    react-native-animated-pagination-dots: ^0.1.72
-    react-native-argon2: ^2.0.1
-    react-native-bouncy-checkbox: ^3.0.5
-    react-native-collapsible: ^1.6.1
-    react-native-config: ^1.4.2
-    react-native-confirmation-code-field: ^7.3.0
-    react-native-device-info: ^8.4.9
-    react-native-encrypted-storage: ^4.0.2
-    react-native-fs: ^2.16.6
-    react-native-gesture-handler: ^1.10.3
-    react-native-get-random-values: ^1.7.0
-    react-native-gifted-chat: "*"
-    react-native-keychain: ^8.1.1
-    react-native-localize: ^2.2.4
-    react-native-orientation-locker: ^1.6.0
-    react-native-permissions: ^4.0.1
-    react-native-qrcode-svg: ^6.2.0
-    react-native-reanimated: ^3.4.2
-    react-native-safe-area-context: ^3.2.0
-    react-native-scalable-image: ^1.1.0
-    react-native-screens: ^3.24.0
-    react-native-splash-screen: ^3.3.0
-    react-native-svg: ^12.1.1
-    react-native-svg-transformer: ^0.14.3
-    react-native-tcp-socket: ^6.0.6
-    react-native-toast-message: ^2.1.6
-    react-native-uuid: ^2.0.1
-    react-native-vector-icons: ^10.0.0
-    react-native-vision-camera: ^3.6.16
-    react-native-webview: ^11.22.3
-    tsyringe: ^4.7.0
-    typescript: ^5.0.4
-    uuid: ^9.0.0
-  languageName: unknown
-  linkType: soft
-
 "aries-bifold-root@workspace:.":
   version: 0.0.0-use.local
   resolution: "aries-bifold-root@workspace:."
@@ -10275,6 +10178,103 @@ __metadata:
   checksum: f2c09b0ce4e6b301c221addd83bf3f454c0bc00caa3dd837cf6c127d6edf7223aa2bbe3b688feea110b7f262adbfc845b757c44c8a9f8c0c5b15d8fa9ce9d20d
   languageName: node
   linkType: hard
+
+"digicred-wallet-mobile-app@workspace:packages/legacy/app":
+  version: 0.0.0-use.local
+  resolution: "digicred-wallet-mobile-app@workspace:packages/legacy/app"
+  dependencies:
+    "@aries-framework/anoncreds": ^0.4.0
+    "@aries-framework/anoncreds-rs": ^0.4.0
+    "@aries-framework/askar": ^0.4.0
+    "@aries-framework/core": ^0.4.0
+    "@aries-framework/indy-sdk-to-askar-migration": 0.4.0
+    "@aries-framework/indy-vdr": ^0.4.0
+    "@aries-framework/push-notifications": 0.5.0
+    "@aries-framework/react-hooks": ^0.4.2
+    "@aries-framework/react-native": ^0.4.0
+    "@babel/core": ^7.20.0
+    "@babel/preset-env": ^7.20.0
+    "@babel/runtime": ^7.20.0
+    "@formatjs/intl-datetimeformat": 4.2.4
+    "@formatjs/intl-displaynames": 5.2.4
+    "@formatjs/intl-getcanonicallocales": 1.7.3
+    "@formatjs/intl-listformat": 6.3.4
+    "@formatjs/intl-locale": 2.4.38
+    "@formatjs/intl-numberformat": 7.2.4
+    "@formatjs/intl-pluralrules": 4.1.4
+    "@formatjs/intl-relativetimeformat": 9.3.1
+    "@hyperledger/anoncreds-react-native": ^0.1.0
+    "@hyperledger/aries-askar-react-native": ^0.1.1
+    "@hyperledger/aries-bifold-core": ^1.0.0
+    "@hyperledger/aries-oca": ^1.0.0
+    "@hyperledger/indy-vdr-react-native": ^0.1.0
+    "@react-native-async-storage/async-storage": 1.15.11
+    "@react-native-community/masked-view": 0.1.11
+    "@react-native-community/netinfo": ^9.3.0
+    "@react-native/eslint-config": ^0.72.2
+    "@react-native/metro-config": ^0.72.11
+    "@react-navigation/bottom-tabs": 6.0.9
+    "@react-navigation/core": 6.1.0
+    "@react-navigation/devtools": ^6.0.8
+    "@react-navigation/native": 6.0.6
+    "@react-navigation/stack": 6.0.11
+    "@tsconfig/react-native": ^3.0.0
+    "@types/lodash.flatten": ^4.4.6
+    "@types/lodash.merge": ^4.6.6
+    "@types/lodash.startcase": ^4.4.7
+    "@types/react": ^18.0.24
+    "@types/react-native": 0.71.5
+    axios: ^1.4.0
+    babel-plugin-module-resolver: ^5.0.0
+    eslint: ^8.48.0
+    eslint-import-resolver-typescript: ^2.5.0
+    i18next: ^21.4.0
+    lodash.flatten: ^4.4.0
+    lodash.startcase: ^4.4.0
+    metro-react-native-babel-preset: ^0.77.0
+    moment: ^2.29.4
+    patch-package: ^6.4.4
+    pod-install: 0.1.38
+    prettier: ^2.8.4
+    query-string: ^7.0.1
+    react: "*"
+    react-i18next: 11.13.0
+    react-native: "*"
+    react-native-animated-pagination-dots: ^0.1.72
+    react-native-argon2: ^2.0.1
+    react-native-bouncy-checkbox: ^3.0.5
+    react-native-collapsible: ^1.6.1
+    react-native-config: ^1.4.2
+    react-native-confirmation-code-field: ^7.3.0
+    react-native-device-info: ^8.4.9
+    react-native-encrypted-storage: ^4.0.2
+    react-native-fs: ^2.16.6
+    react-native-gesture-handler: ^1.10.3
+    react-native-get-random-values: ^1.7.0
+    react-native-gifted-chat: "*"
+    react-native-keychain: ^8.1.1
+    react-native-localize: ^2.2.4
+    react-native-orientation-locker: ^1.6.0
+    react-native-permissions: ^4.0.1
+    react-native-qrcode-svg: ^6.2.0
+    react-native-reanimated: ^3.4.2
+    react-native-safe-area-context: ^3.2.0
+    react-native-scalable-image: ^1.1.0
+    react-native-screens: ^3.24.0
+    react-native-splash-screen: ^3.3.0
+    react-native-svg: ^12.1.1
+    react-native-svg-transformer: ^0.14.3
+    react-native-tcp-socket: ^6.0.6
+    react-native-toast-message: ^2.1.6
+    react-native-uuid: ^2.0.1
+    react-native-vector-icons: ^10.0.0
+    react-native-vision-camera: ^3.6.16
+    react-native-webview: ^11.22.3
+    tsyringe: ^4.7.0
+    typescript: ^5.0.4
+    uuid: ^9.0.0
+  languageName: unknown
+  linkType: soft
 
 "dijkstrajs@npm:^1.0.1":
   version: 1.0.2

@@ -3,6 +3,7 @@ import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, View, StyleSheet } from 'react-native'
+
 import NotificationListItem, { NotificationType } from '../components/listItems/NotificationListItem'
 import NoNewUpdates from '../components/misc/NoNewUpdates'
 import AppGuideModal from '../components/modals/AppGuideModal'
@@ -17,11 +18,11 @@ import { TourID } from '../types/tour'
 import FindAndConnectOpportunities from './FindAndConnectOpportunities'
 
 type HomeProps = {
-  homeProps : StackScreenProps<HomeStackParams, Screens.Home>
+  homeProps: StackScreenProps<HomeStackParams, Screens.Home>
   navigation: StackNavigationProp<HomeStackParams>
 }
 
-const Home: React.FC<HomeProps> = ({navigation}) => {
+const Home: React.FC<HomeProps> = ({ navigation }) => {
   const {
     useCustomNotifications,
     enableTours: enableToursConfig,
@@ -136,7 +137,7 @@ const Home: React.FC<HomeProps> = ({navigation}) => {
           </View>
         )}
       />
-      <FindAndConnectOpportunities navigation ={navigation} />
+      <FindAndConnectOpportunities navigation={navigation} />
       {showTourPopup && (
         <AppGuideModal
           title={t('Tour.GuideTitle')}

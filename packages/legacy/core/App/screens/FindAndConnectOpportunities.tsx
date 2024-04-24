@@ -1,8 +1,8 @@
-import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { FC } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { SvgProps } from 'react-native-svg'
+
 import BuildingOutline from '../assets/icons/building-outline.svg'
 import CapitolOutline from '../assets/icons/capitol-outline.svg'
 import GraduationOutline from '../assets/icons/graduation-outline.svg'
@@ -13,18 +13,17 @@ type NavigationProp = {
   navigation: StackNavigationProp<HomeStackParams>
 }
 
-const FindAndConnectOpportunities: React.FC<NavigationProp> = ({navigation}) =>  {
-
+const FindAndConnectOpportunities: React.FC<NavigationProp> = ({ navigation }) => {
   interface Category {
     name: string
-    icon: FC<SvgProps> 
+    icon: FC<SvgProps>
     screen: keyof HomeStackParams
   }
 
   const categories: Category[] = [
     { name: 'Education', icon: GraduationOutline, screen: Screens.EducationList },
-    { name: 'Employers', icon: BuildingOutline, screen: Screens.EmployersList},
-    { name: 'Military', icon: ShieldOutline, screen: Screens.MilitaryList},
+    { name: 'Employers', icon: BuildingOutline, screen: Screens.EmployersList },
+    { name: 'Military', icon: ShieldOutline, screen: Screens.MilitaryList },
     { name: 'State\nGov', icon: CapitolOutline, screen: Screens.StateGovernmentList },
   ]
 
@@ -66,8 +65,10 @@ const FindAndConnectOpportunities: React.FC<NavigationProp> = ({navigation}) => 
   })
 
   const navigateToScreen = (screenName: keyof HomeStackParams) => {
+    // eslint-disable-next-line no-console
     console.log(screenName)
-    if (screenName != 'StateGovernmentList') { // *ACS* Gov screen is currently not active
+    if (screenName != 'StateGovernmentList') {
+      // *ACS* Gov screen is currently not active
       navigation.navigate(screenName)
     }
   }
