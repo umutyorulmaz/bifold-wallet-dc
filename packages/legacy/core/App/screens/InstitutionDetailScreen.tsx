@@ -1,6 +1,6 @@
 import { useAgent } from '@aries-framework/react-hooks'
-import { useRoute, RouteProp } from '@react-navigation/native'
-import React, { useState } from 'react'
+import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native'
+import React, { useState, useCallback } from 'react'
 import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 //import { useTheme } from '../contexts/theme' // *ACS*
@@ -31,6 +31,13 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
 
   // State to manage button clickability
   const [isButtonDisabled, setButtonDisabled] = useState(false)
+
+  useFocusEffect(
+    useCallback(() => {
+      // Enable the button when the screen is focused
+      setButtonDisabled(false)
+    }, [])
+  )
 
   const onApplyPress = async () => {
     setButtonDisabled(true)
