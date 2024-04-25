@@ -564,6 +564,18 @@ export const InstitutionRegistry: InstitutionCategory[] = [
     institutions: [
       {
         id: '01',
+        name: 'NC|Novant Health',
+        iconUrl:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Novant_Health_logo.svg/220px-Novant_Health_logo.svg.png',
+        description: `Novant Health is a four-state integrated network of physician clinics, outpatient centers and hospitals. Its network consists of more than 1,600 physicians and 29,000 employees at more than 640 locations, including 15 medical centers and hundreds of outpatient facilities and physician clinics.`,
+        address: '2085 Frontis Plaza Boulevard, Winston-Salem, NC',
+        bannerImage: 'https://supportnovanthealth.org/wp-content/uploads/Screen-Shot-2022-08-19-at-12.14.39-PM.png',
+        cardImage: '/src/assets/images/generic-student-id.svg',
+        invitationLink:
+          'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICJmOTYzOWJkMS00ODEyLTRiNWItODViMy00ZDY2ZDI5ZmJmNjQiLCAibGFiZWwiOiAiTm92YW50IEhlYWx0aCIsICJyZWNpcGllbnRLZXlzIjogWyJBaVhLakJRZFliUVBlcGZlNW9ialFwWmN2d1NkOWlna0E4WE1HVTJOOG5GdyJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAifQ==',
+      },
+      {
+        id: '02',
         name: 'FL|CTS Engine',
         iconUrl: 'https://mms.businesswire.com/media/20160510005142/en/334195/23/CTS_Engines_RGB_Small.jpg',
         description: `CTS Engines is a leading provider of world-class jet engine maintenance, repair, and overhaul services. CTS specializes in the test, repair, and overhaul of the CF6-50, CF6-80A, CF6-80C2, CF6-80E1, PW2000, PW4000 and GP7200. Utilizing state-of-the-art facilities, cutting-edge technologies, and a highly skilled workforce, CTS Engines offers comprehensive solutions tailored to meet specific needs.`,
@@ -574,7 +586,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
           'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzNmU5OTZkZS01ODgzLTQxMDktOTFlYS05MTNkMGUwYmJlYWQiLCAibGFiZWwiOiAiQ1RTIEVuZ2luZXMiLCAicmVjaXBpZW50S2V5cyI6IFsiZzdneEd2alFleGJzcmltaU00ckZDbnNtREtmYWZmeWVSeEZGekxIcEMzViJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAifQ==',
       },
       {
-        id: '02',
+        id: '03',
         name: 'FL|Boeing',
         iconUrl: 'https://nasa-uli.utk.edu/wp-content/uploads/2019/02/boeing-logo.png',
         description: `The Boeing Company is an American multinational corporation that designs, manufactures, and sells airplanes, rotorcraft, rockets, satellites, and missiles worldwide. The company also provides leasing and product support services. Boeing is among the largest global aerospace manufacturers; it is the fourth-largest defense contractor in the world based on 2022 revenue and is the largest exporter in the United States by dollar value. Boeing was founded by William Boeing in Seattle, Washington, on July 15, 1916.`,
@@ -586,7 +598,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
           'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICI1ZWM0MjFlZC03MWVlLTQ0YTktYTQzMi0yNGJkMzM0NWZjZmUiLCAibGFiZWwiOiAiQm9laW5nIiwgInJlY2lwaWVudEtleXMiOiBbIjRzZ3hrVzFlN2lXQ2VuRFpNSGR1NVV5Y3VCM3lEVjVvRXZLa0hSVGVacDl3Il0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9',
       },
       {
-        id: '03',
+        id: '04',
         name: 'FL|Spirit Airlines',
         iconUrl: 'https://e7.pngegg.com/pngimages/923/237/png-clipart-spirit-airlines-thumbnail.png',
         description: `Spirit Airlines, Inc., stylized as spirit, is a major American ultra-low cost airline headquartered in Miramar, Florida, in the Miami metropolitan area. Spirit operates scheduled flights throughout the United States, the Caribbean and Latin America.`,
@@ -597,7 +609,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
           'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIyMmJjZGYxNS01NDM4LTQ3ZjctYmExYy03YjRhZGViNTkzZDAiLCAibGFiZWwiOiAiU3Bpcml0IEFpcmxpbmVzIiwgInJlY2lwaWVudEtleXMiOiBbIjhMSGYybTN1VDhoTDM0MTlNU01rNkNXQlBERWlnOVI0NENwWHZZaFVtZ0R4Il0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9',
       },
       {
-        id: '04',
+        id: '05',
         name: 'FL|General Dynamics',
         iconUrl: 'https://i.dell.com/sites/csimages/Banner_Imagery/all/general-dynamics.png',
         description: `General Dynamics Corporation (GD) is an American publicly traded aerospace and defense corporation headquartered in Reston, Virginia. As of 2020, it was the fifth-largest defense contractor in the world by arms sales, and fifth largest in the United States by total sales.`,
@@ -609,7 +621,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
           'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzMWNkZDNlOS02NWQ4LTRhOTUtOWRmZi02Y2VmMTdiMWVkMDMiLCAibGFiZWwiOiAiR2VuZXJhbCBEeW5hbWljcyIsICJyZWNpcGllbnRLZXlzIjogWyI5a29IZ1RXOW1pMlJ1VUpDMUQ4RWVmbVV3aWFkdmJMYkFmSlJZVzRIM3BiSiJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAifQ==',
       },
       {
-        id: '05',
+        id: '06',
         name: 'NC|Bayliss Boatworks',
         iconUrl:
           'https://www.baylissboatworks.com/wp-content/themes/bayliss-custom-theme/library/images/footer-logo.png',
@@ -619,7 +631,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '06',
+        id: '07',
         name: 'NC|Nordhavn Yachts',
         iconUrl:
           'https://media.licdn.com/dms/image/C4D0BAQFh1LNtmPEzGQ/company-logo_200_200/0/1674865506898/nordhavn_yachts_logo?e=1718236800&v=beta&t=Hc-G9SSUToD7c7kkuXkku2Jfc1r40JduaakzY5EYqWY',
@@ -629,7 +641,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '07',
+        id: '08',
         name: 'NC|Onslow Bay Boats',
         iconUrl: 'https://onslowbayboats.com/wp-content/uploads/2021/06/Onslow-Bay-Web-01.png',
         description: `Onslow Bay Boatworks offers a fleet of superior center console offshore and tournament edition boats designed with avid fishermen in mind.`,
@@ -638,7 +650,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '08',
+        id: '09',
         name: 'NC|Jarrett Bay',
         iconUrl: 'https://ocfishing.com/app/uploads/2022/08/jarrettbay-boatworks-logo.jpg',
         description: `Jarrett Bay Boatworks is a world-class boat builder and yacht service facility in the United States. Having delivered over 100 custom sport fishing boats and semi-production models, while servicing tens of thousands of recreational and commercial vessels, Jarrett Bay is renowned for quality craftsmanship.`,
@@ -647,7 +659,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '09',
+        id: '10',
         name: 'NC|Iconic Marine Group',
         iconUrl:
           'https://media.licdn.com/dms/image/C560BAQErqlzo7jbeqw/company-logo_200_200/0/1631336968992?e=1717632000&v=beta&t=ZOneN_DbzNu1aphPgLoDOFo_j6AapffXYNjWPfXs_p0',
@@ -658,7 +670,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '10',
+        id: '11',
         name: 'LA|Northrop Grumman Corp',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Northrop_Grumman_logo_blue-on-clear_2020.svg/440px-Northrop_Grumman_logo_blue-on-clear_2020.svg.png',
@@ -669,7 +681,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '11',
+        id: '12',
         name: 'LA|Walt Disney Co.',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/The_Walt_Disney_Company_Logo.svg/440px-The_Walt_Disney_Company_Logo.svg.png',
@@ -680,7 +692,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '12',
+        id: '13',
         name: 'LA|NBCUniversal',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/NBCUniversal_Logo.svg/530px-NBCUniversal_Logo.svg.png',
@@ -690,7 +702,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '13',
+        id: '14',
         name: 'LA|Space Exploration Technologies Corp. (SpaceX)',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/SpaceX_logo_black.svg/500px-SpaceX_logo_black.svg.png',
@@ -700,7 +712,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '14',
+        id: '15',
         name: 'LA|Raytheon Co.',
         iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Raytheon.svg/400px-Raytheon.svg.png',
         description: `RTX Corporation, formerly Raytheon Technologies Corporation, is an American multinational aerospace and defense conglomerate headquartered in Arlington, Virginia. It is one of the largest aerospace and defense manufacturers in the world by revenue and market capitalization, as well as one of the largest providers of intelligence services.`,
@@ -709,7 +721,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '15',
+        id: '16',
         name: 'LA|Amgen',
         iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/500px-Amgen.svg.png',
         description: `Amgen Inc. (formerly Applied Molecular Genetics Inc.) is an American multinational biopharmaceutical company headquartered in Thousand Oaks, California. One of the world's largest independent biotechnology companies, Amgen's Thousand Oaks staff in 2022 numbered approximately 5,000 (8.5% of total city employment) and included hundreds of scientists, making Amgen the largest employer in Ventura County. As of 2022, Amgen has approximately 24,000 staff in total.`,
@@ -719,7 +731,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '16',
+        id: '17',
         name: 'LA|Paramount Pictures Corp',
         iconUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Paramount_Pictures_2022_%28Blue%29.svg/350px-Paramount_Pictures_2022_%28Blue%29.svg.png',
@@ -730,7 +742,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '17',
+        id: '18',
         name: 'NC|Corning Cable Systems',
         iconUrl: 'https://cdn.freebiesupply.com/logos/large/2x/corning-1-logo-png-transparent.png',
         description: `Corning Cable Systems offers a range of end-to-end fiber-optic and copper product solutions for various telecommunications networks. Its solutions include cables, connectors, and related hardware, and network services that include network design, project management, installation and maintenance, equipment rental, and training programs. The company offers an inventory of products, including digital subscriber line products, fiber closures, micro cabling systems, offshore and aerial cables, pedestals, plug & play systems, splice and test equipment, submarine cable systems, subscriber demarcation points, terminals, toolkits, and training equipment. It also offers public and private network solutions, original equipment manufacturer-specific products, cable assembly houses, copper solutions, and fiber-optic rentals.`,
@@ -740,7 +752,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '18',
+        id: '19',
         name: 'NC|Atrium Health',
         iconUrl: 'https://atriumhealth.org/-/media/chs/images/logo/atrium-health-logo-square-151px.png',
         description: `Atrium Health, formerly Carolinas HealthCare System, is a hospital network with more than 70,000 employees and part of Advocate Health.`,
@@ -750,23 +762,13 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
-        id: '19',
+        id: '20',
         name: 'NC|Live Oak Bank',
         iconUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c6/Live_Oak_Bank%27s_New_Logo_released_in_June_2020.png',
         description: `Live Oak Bank, a subsidiary of Live Oak Bancshares, Inc., is an American bank. Headquartered in Wilmington, NC, it serves small business owners in all 50 states and was the leading SBA by dollar volume in 2022.`,
         address: '1757 Tiburon Drive, Wilmington, NC',
         bannerImage:
           'https://cdnassets.hw.net/66/b6/968c39e844d7952438f5831b40dc/0713b43c-e038-403a-aea8-8198539df19c.jpg',
-        cardImage: '/src/assets/images/generic-student-id.svg',
-      },
-      {
-        id: '20',
-        name: 'NC|Novant Health',
-        iconUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Novant_Health_logo.svg/220px-Novant_Health_logo.svg.png',
-        description: `Novant Health is a four-state integrated network of physician clinics, outpatient centers and hospitals. Its network consists of more than 1,600 physicians and 29,000 employees at more than 640 locations, including 15 medical centers and hundreds of outpatient facilities and physician clinics.`,
-        address: '2085 Frontis Plaza Boulevard, Winston-Salem, NC',
-        bannerImage: 'https://supportnovanthealth.org/wp-content/uploads/Screen-Shot-2022-08-19-at-12.14.39-PM.png',
         cardImage: '/src/assets/images/generic-student-id.svg',
       },
       {
