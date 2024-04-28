@@ -75,6 +75,7 @@ const translation = {
     "code_en": "Inglês",
     "code_fr": "Francês",
     "code_pt-BR": "Português",
+    "code_sp": "Espanhol",
   },
   "Error": {
     "ReportThisProblem": "Reportar este problema",
