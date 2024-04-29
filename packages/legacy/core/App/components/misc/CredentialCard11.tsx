@@ -104,14 +104,16 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
   )
   const [helpAction, setHelpAction] = useState<GenericFn>()
   const [overlay, setOverlay] = useState<CredentialOverlay<BrandingOverlay>>({})
+
   // below navigation only to be used from proof request screen
   const navigation = useNavigation<StackNavigationProp<NotificationStackParams, Screens.ProofRequest>>()
   const primaryField = overlay?.presentationFields?.find(
-    (field) => field.name === overlay?.brandingOverlay?.primaryAttribute
-  )
+    (field: any) => field.name === overlay?.brandingOverlay?.primaryAttribute
+  );
+  
   const secondaryField = overlay?.presentationFields?.find(
-    (field) => field.name === overlay?.brandingOverlay?.secondaryAttribute
-  )
+    (field: any) => field.name === overlay?.brandingOverlay?.secondaryAttribute
+  );
   const attributeTypes = overlay.bundle?.captureBase.attributes
   const attributeFormats: Record<string, string | undefined> = (overlay.bundle as any)?.bundle.attributes
     .map((attr: any) => {
@@ -223,6 +225,38 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
       fontWeight: TextTheme.bold.fontWeight,
       color: ColorPallet.brand.link,
     },
+    attributeLabel: {
+      fontWeight: 'bold',
+      color: '#333',
+      marginBottom: 5, 
+    },
+    attributeValue: {
+      color: '#666',
+    },
+    transcriptContainer: {
+      padding: 10,
+      backgroundColor: '#f0f0f0',
+      borderRadius: 5,
+      marginVertical: 5,
+    },
+    courseContainer: {
+      borderBottomWidth: 1,
+      borderBottomColor: '#cccccc',
+      paddingBottom: 10,
+      marginBottom: 10,
+    },
+    detailContainer: {
+    },
+    detailLabel: {
+      fontWeight: 'bold',
+      color: '#333',
+    },
+    detailValue: {
+      color: '#666',
+    },
+    text: {
+      color: '#333',
+    },
   })
 
   const backgroundColorIfErrorState = (backgroundColor?: string) =>
@@ -239,6 +273,35 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
 
     return shade == Shade.Light ? ColorPallet.grayscale.darkGrey : ColorPallet.grayscale.lightGrey
   }
+
+
+const renderJSONAttributes = (jsonString: string) => {
+  try {
+    const data = JSON.parse(jsonString);
+    if (Array.isArray(data)) {
+      return (
+        <View style={styles.transcriptContainer}>
+          {data.map((item, index) => (
+            <View key={index} style={styles.courseContainer}>
+              {Object.entries(item).map(([key, value], idx) => (
+                <View key={idx} style={styles.detailContainer}>
+                  <Text style={styles.detailLabel}>{startCase(key)}:</Text>
+                  <Text style={styles.detailValue}>
+                    {typeof value === 'string' || typeof value === 'number' ? value : JSON.stringify(value)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ))}
+        </View>
+      );
+    }
+  } catch (error) {
+    console.error('Failed to parse JSON:', error);
+    return <Text style={styles.text}>{jsonString}</Text>; // Fallback to plain text if parsing fails
+  }
+};
+
 
   const parseAttribute = (item: (Attribute & Predicate) | undefined) => {
     let parsedItem = item
@@ -399,48 +462,16 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
     )
   }
 
-  const renderCardAttribute = (item: Attribute & Predicate) => {
-    const { label, value } = parseAttribute(item)
-    const parsedValue = formatIfDate(item?.format, value) ?? ''
+  const renderCardAttribute = (item:any) => {
+    const { label, value } = parseAttribute(item); 
     return (
-      item && (
-        <View style={{ marginTop: 15 }}>
-          {!(item?.value || item?.satisfied) ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Icon
-                style={{ paddingTop: 2, paddingHorizontal: 2 }}
-                name="close"
-                color={ListItems.proofError.color}
-                size={ListItems.recordAttributeText.fontSize}
-              />
-              <AttributeLabel label={label} />
-            </View>
-          ) : (
-            <AttributeLabel label={label} />
-          )}
-          {!(item?.value || item?.pValue) ? null : (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {flaggedAttributes?.includes(label) && !item.pValue && !allPI && proof && (
-                <Icon
-                  style={{ paddingTop: 2, paddingHorizontal: 2 }}
-                  name="warning"
-                  color={ColorPallet.notification.warnIcon}
-                  size={ListItems.recordAttributeText.fontSize}
-                />
-              )}
-              <AttributeValue warn={flaggedAttributes?.includes(label) && !item.pValue && proof} value={parsedValue} />
-            </View>
-          )}
-          {item?.satisfied != undefined && item?.satisfied === false ? (
-            <Text style={[styles.errorText]} numberOfLines={1}>
-              {t('ProofRequest.PredicateNotSatisfied')}
-            </Text>
-          ) : null}
-        </View>
-      )
-    )
-  }
-
+      <View style={{ marginTop: 15 }}>
+        <Text style={styles.attributeLabel}>{label}:</Text>
+        {typeof value === 'string' ? renderJSONAttributes(value) : <Text style={styles.attributeValue}>{value}</Text>}
+      </View>
+    );
+  };
+  
   const CredentialCardPrimaryBody: React.FC = () => {
     return (
       <View testID={testIdWithKey('CredentialCardPrimaryBody')} style={styles.primaryBodyContainer}>
@@ -492,28 +523,25 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
           </View>
         )}
         <FlatList
-          data={cardData}
-          scrollEnabled={false}
-          initialNumToRender={cardData?.length}
-          renderItem={({ item }) => {
-            return renderCardAttribute(item as Attribute & Predicate)
-          }}
-          ListFooterComponent={
-            hasAltCredentials && handleAltCredChange ? (
-              <CredentialActionFooter
-                onPress={handleAltCredChange}
-                text={t('ProofRequest.ChangeCredential')}
-                testID={'ChangeCredential'}
-              />
-            ) : error && helpAction ? (
-              <CredentialActionFooter
-                onPress={helpAction}
-                text={t('ProofRequest.GetThisCredential')}
-                testID={'GetThisCredential'}
-              />
-            ) : null
-          }
-        />
+  data={displayItems}
+  renderItem={({ item }) => renderCardAttribute(item)}
+  keyExtractor={(item, index) => `attribute-${index}`}
+  ListFooterComponent={
+    hasAltCredentials && handleAltCredChange ? (
+      <CredentialActionFooter
+        onPress={handleAltCredChange}
+        text={t('ProofRequest.ChangeCredential')}
+        testID={'ChangeCredential'}
+      />
+    ) : error && helpAction ? (
+      <CredentialActionFooter
+        onPress={helpAction}
+        text={t('ProofRequest.GetThisCredential')}
+        testID={'GetThisCredential'}
+      />
+    ) : null
+  }
+/>
       </View>
     )
   }

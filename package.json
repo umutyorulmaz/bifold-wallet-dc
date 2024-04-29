@@ -59,6 +59,7 @@
     "@aries-framework/react-hooks": "patch:@aries-framework/react-hooks@npm:0.4.2#./.yarn/patches/@aries-framework-react-hooks-npm-0.4.2-84b7eb8764.patch"
   },
   "dependencies": {
+    "lodash.startcase": "^4.4.0",
     "react-native-svg": "^15.1.0"
   }
 }
