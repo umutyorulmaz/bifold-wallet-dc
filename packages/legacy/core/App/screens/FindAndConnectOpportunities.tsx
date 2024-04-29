@@ -41,11 +41,11 @@ const FindAndConnectOpportunities: React.FC<NavigationProp> = ({ navigation }) =
       marginBottom: 10,
     },
     title: {
-      fontSize: 24,
+      fontSize: 20,
       fontWeight: 'bold',
       textAlign: 'center',
       color: '#000000',
-      marginBottom: 20,
+      marginBottom: 5,
       marginTop: 10,
     },
     row: {
@@ -66,7 +66,7 @@ const FindAndConnectOpportunities: React.FC<NavigationProp> = ({ navigation }) =
     },
     text: {
       textAlign: 'center',
-      fontSize: 16,
+      fontSize: 12,
       fontWeight: 'bold',
       color: '#000000',
     },
