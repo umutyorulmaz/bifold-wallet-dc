@@ -76,6 +76,7 @@ const translation = {
     "code_en": "English",
     "code_fr": "French",
     "code_pt-BR": "Portuguese",
+    "code_sp": "Spanish",
   },
   "Error": {
     "ReportThisProblem": "Report this problem",
@@ -189,8 +190,8 @@ const translation = {
       "NoRepetitionOfTheTwoSameNumbersValidation": "Does not contain repeating two-digit sequence.",
       "NoSeriesOfNumbersValidation": "Does not contain a series of numbers (123).",
       "PINOnlyContainDigitsValidation": "Must contain only digits.",
-      "PINTooShortValidation": "The PIN is long enought.",
-      "PINTooLongValidation": "The PIN is long enought.",
+      "PINTooShortValidation": "The PIN should contain 6 digits.",
+      "PINTooLongValidation": "The PIN should contain 6 digits.",
     },
     "UserAuthenticationPIN": "User authentication PIN",
     "PINTooShort": "PIN is too short",
