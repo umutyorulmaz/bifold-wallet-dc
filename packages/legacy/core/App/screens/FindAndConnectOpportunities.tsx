@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { FC } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { SvgProps } from 'react-native-svg'
 
 import BuildingOutline from '../assets/icons/building-outline.svg'
@@ -24,27 +24,35 @@ const FindAndConnectOpportunities: React.FC<NavigationProp> = ({ navigation }) =
     { name: 'Education', icon: GraduationOutline, screen: Screens.EducationList },
     { name: 'Employers', icon: BuildingOutline, screen: Screens.EmployersList },
     { name: 'Military', icon: ShieldOutline, screen: Screens.MilitaryList },
-    { name: 'State\nGov', icon: CapitolOutline, screen: Screens.StateGovernmentList },
+    { name: 'State Gov', icon: CapitolOutline, screen: Screens.StateGovernmentList },
   ]
 
   const styles = StyleSheet.create({
     outerContainer: {
       flexDirection: 'column',
-      flexWrap: 'wrap',
+      //flexWrap: 'wrap',
+      paddingTop: 20,
       paddingBottom: 10,
-      justifyContent: 'space-between',
+      justifyContent: 'flex-start',
     },
     container: {
-      flexDirection: 'row',
-      marginBottom: 20,
+      flexDirection: 'column',
+      alignItems: 'center',
+      marginBottom: 10,
     },
     title: {
-      fontSize: 16,
+      fontSize: 24,
       fontWeight: 'bold',
       textAlign: 'center',
       color: '#000000',
-      marginBottom: 5,
-      marginTop: -10,
+      marginBottom: 20,
+      marginTop: 10,
+    },
+    row: {
+      // New style for rows
+      flexDirection: 'row',
+      justifyContent: 'space-between', // Space out the cards evenly
+      marginBottom: 10, // Space between rows
     },
     category: {
       alignItems: 'center',
@@ -58,7 +66,7 @@ const FindAndConnectOpportunities: React.FC<NavigationProp> = ({ navigation }) =
     },
     text: {
       textAlign: 'center',
-      fontSize: 12,
+      fontSize: 16,
       fontWeight: 'bold',
       color: '#000000',
     },
@@ -77,17 +85,32 @@ const FindAndConnectOpportunities: React.FC<NavigationProp> = ({ navigation }) =
     <View style={styles.outerContainer}>
       <Text style={styles.title}>Find & Connect Opportunities</Text>
       <View style={styles.container}>
-        {/* Mapping through categories to create buttons for each */}
-        {categories.map((category) => (
-          <TouchableOpacity
-            key={category.name}
-            style={styles.category}
-            onPress={() => navigateToScreen(category.screen)}
-          >
-            <category.icon width={36} height={36} />
-            <Text style={styles.text}>{category.name}</Text>
-          </TouchableOpacity>
-        ))}
+        {/* First row */}
+        <View style={styles.row}>
+          {categories.slice(0, 2).map((category) => (
+            <TouchableOpacity
+              key={category.name}
+              style={styles.category}
+              onPress={() => navigateToScreen(category.screen)}
+            >
+              <category.icon width={36} height={36} />
+              <Text style={styles.text}>{category.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        {/* Second row */}
+        <View style={styles.row}>
+          {categories.slice(2, 4).map((category) => (
+            <TouchableOpacity
+              key={category.name}
+              style={styles.category}
+              onPress={() => navigateToScreen(category.screen)}
+            >
+              <category.icon width={36} height={36} />
+              <Text style={styles.text}>{category.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
     </View>
   )
