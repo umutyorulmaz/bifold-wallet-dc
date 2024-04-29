@@ -6,7 +6,6 @@
 	<string>We use your location to provide navigation instructions, even when the app is in the background, enhancing routing accuracy and offering real-time updates.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We use your location to provide navigation instructions when the app is actively in use, helping you reach your destinations more efficiently.</string>
-
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
