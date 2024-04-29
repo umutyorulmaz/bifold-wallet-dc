@@ -299,12 +299,12 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({ notificatio
         break
       case NotificationType.CredentialOffer:
         onPress = () => {
-          navigation.getParent()?.navigate(Stacks.NotificationStack, {
-            screen: Screens.CredentialOffer,
-            params: { credentialId: notification.id },
+          navigation.getParent()?.navigate(Stacks.ContactStack, {
+            screen: Screens.Chat,
+            params: { connectionId: notification.connectionId },
           })
         }
-        onClose = toggleDeclineModalVisible
+        onClose = dismissBasicMessage
         break
       case NotificationType.ProofRequest:
         if (isReceivedProof) {
