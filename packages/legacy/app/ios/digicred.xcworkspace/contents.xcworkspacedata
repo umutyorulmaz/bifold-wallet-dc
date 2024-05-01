@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:AriesBifold.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:ariesbifold.xcodeproj">
+      location = "group:digicred.xcodeproj">
    </FileRef>
 </Workspace>
