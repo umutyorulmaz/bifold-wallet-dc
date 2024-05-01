@@ -298,18 +298,18 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
     <KeyboardView>
       <View style={style.screenContainer}>
         <View style={style.contentContainer}>
-          <View>
-            {/* *ACS* added the DigiCred logo at the top of the PIN Enter screen
-            <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} /> */}
-            <Image source={Assets.img.logoSecondary.src} style={style.image} />
-            <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold' }]}>
+          <View style={{ marginTop: 200 }}>
+            {/* *ACS* added the DigiCred logo at the top of the PIN Enter screen */}
+            <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} />
+            {/* <Image source={Assets.img.logoSecondary.src} style={style.image} /> */}
+            <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold'}]}>
               DigiCred
             </Text>
           </View>
 
           {biometricsEnrollmentChange ? (
             <>
-              <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center' }]}>
+              <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center'}]}>
                 {t('PINEnter.BiometricsChanged')}
               </Text>
               <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16 }]}>
@@ -324,7 +324,7 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
               </Text>
             </>
           ) : (
-            <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16 }]}>{t('PINEnter.EnterPIN')}</Text>
+            <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16, marginTop: 20 }]}>{t('PINEnter.EnterPIN')}</Text>
           )}
           <PINInput
             onPINChanged={(p: string) => {
