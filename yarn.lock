@@ -169,9 +169,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aries-framework/react-hooks@patch:@aries-framework/react-hooks@npm:0.4.2#./.yarn/patches/@aries-framework-react-hooks-npm-0.4.2-84b7eb8764.patch::locator=aries-bifold-root%40workspace%3A.":
+"@aries-framework/react-hooks@patch:@aries-framework/react-hooks@npm:0.4.2#./.yarn/patches/@aries-framework-react-hooks-npm-0.4.2-84b7eb8764.patch::locator=digicred-wallet-root%40workspace%3A.":
   version: 0.4.2
-  resolution: "@aries-framework/react-hooks@patch:@aries-framework/react-hooks@npm%3A0.4.2#./.yarn/patches/@aries-framework-react-hooks-npm-0.4.2-84b7eb8764.patch::version=0.4.2&hash=486b38&locator=aries-bifold-root%40workspace%3A."
+  resolution: "@aries-framework/react-hooks@patch:@aries-framework/react-hooks@npm%3A0.4.2#./.yarn/patches/@aries-framework-react-hooks-npm-0.4.2-84b7eb8764.patch::version=0.4.2&hash=486b38&locator=digicred-wallet-root%40workspace%3A."
   dependencies:
     rxjs: ^7.2.0
   peerDependencies:
@@ -7473,30 +7473,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aries-bifold-root@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "aries-bifold-root@workspace:."
-  dependencies:
-    "@react-native-community/eslint-config": ^3.2.0
-    "@types/conventional-recommended-bump": ^6.1.0
-    "@typescript-eslint/eslint-plugin": ^6.6.0
-    "@typescript-eslint/parser": ^6.6.0
-    conventional-changelog-conventionalcommits: ^5.0.0
-    conventional-recommended-bump: ^6.1.0
-    eslint: ^8.48.0
-    eslint-import-resolver-typescript: ^2.5.0
-    eslint-plugin-import: ^2.28.1
-    eslint-plugin-prettier: ^4.0.0
-    lerna: ^6.6.2
-    lodash.startcase: ^4.4.0
-    npm-run-all: ^4.1.5
-    prettier: ^2.8.4
-    react-native-svg: ^15.1.0
-    ts-node: ^10.0.0
-    typescript: ^5.0.4
-  languageName: unknown
-  linkType: soft
-
 "arr-union@npm:^3.1.0":
   version: 3.1.0
   resolution: "arr-union@npm:3.1.0"
@@ -10274,6 +10250,30 @@ __metadata:
     tsyringe: ^4.7.0
     typescript: ^5.0.4
     uuid: ^9.0.0
+  languageName: unknown
+  linkType: soft
+
+"digicred-wallet-root@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "digicred-wallet-root@workspace:."
+  dependencies:
+    "@react-native-community/eslint-config": ^3.2.0
+    "@types/conventional-recommended-bump": ^6.1.0
+    "@typescript-eslint/eslint-plugin": ^6.6.0
+    "@typescript-eslint/parser": ^6.6.0
+    conventional-changelog-conventionalcommits: ^5.0.0
+    conventional-recommended-bump: ^6.1.0
+    eslint: ^8.48.0
+    eslint-import-resolver-typescript: ^2.5.0
+    eslint-plugin-import: ^2.28.1
+    eslint-plugin-prettier: ^4.0.0
+    lerna: ^6.6.2
+    lodash.startcase: ^4.4.0
+    npm-run-all: ^4.1.5
+    prettier: ^2.8.4
+    react-native-svg: ^15.1.0
+    ts-node: ^10.0.0
+    typescript: ^5.0.4
   languageName: unknown
   linkType: soft
 
