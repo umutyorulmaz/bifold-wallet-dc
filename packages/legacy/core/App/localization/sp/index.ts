@@ -218,7 +218,7 @@ const translation = {
     "Hide": "Ocultar contraseña",
     "ChangePIN": "Cambiar contraseña",
     "Continue": "Continuar",
-    "EnterYourCurrentcontraseña": "Ingresa tu contraseña actual"
+    "EnterYourCurrentPIN": "Ingresa tu contraseña actual"
   },
   "PINEnter": {
     "EnterPIN": "Ingresa la contraseña de tu billetera",
