@@ -1,20 +1,20 @@
 # Developers Guide
 
-The following document is intended to help developers get started with the Bifold project. It includes information on how to set up your development environment, build the project, and run the app in an emulator.
+The following document is intended to help developers get started with the DigiCred VC Wallet project. It includes information on how to set up your development environment, build the project, and run the app in an emulator.
 
 # Project Overview
 
-The Aries Mobile Agent React Native (Bifold) is a user-friendly mobile agent that is built with React Native and uses Credo to exchange verifiable credentials with other agents. While Credo handles the heavy lifting of verifiable credential work, Bifold focuses on user experience and interactions with these credentials.
+The Aries Mobile Agent React Native (DigiCred VC Wallet) is a user-friendly mobile agent that is built with React Native and uses Credo to exchange verifiable credentials with other agents. While Credo handles the heavy lifting of verifiable credential work, DigiCred VC Wallet focuses on user experience and interactions with these credentials.
 
 Key points to note:
 
-- Bifold uses the Credo library, which in turn uses these Rust libraries.
+- DigiCred VC Wallet uses the Credo library, which in turn uses these Rust libraries.
 - Credo uses the HTTP protocol to communicate with Aries agents and WebSockets for messaging via a mediator.
-- Bifold relies on a mediator because mobile devices don't have a fixed IP address and often don't accept inbound network connections. The mediator, a service that runs on a server with a fixed IP address, relays messages between an agent and Bifold. The mediator is configured within the Bifold app.
+- DigiCred VC Wallet relies on a mediator because mobile devices don't have a fixed IP address and often don't accept inbound network connections. The mediator, a service that runs on a server with a fixed IP address, relays messages between an agent and DigiCred VC Wallet. The mediator is configured within the DigiCred VC Wallet app.
 
 ## Setup
 
-The setup for Bifold is similar to other React Native projects. The following sections will walk you through the process of setting up your development environment, installing dependencies, and running the app in an emulator.
+The setup for DigiCred VC Wallet is similar to other React Native projects. The following sections will walk you through the process of setting up your development environment, installing dependencies, and running the app in an emulator.
 
 ### Prerequisites
 
@@ -22,7 +22,7 @@ This is a [yarn](https://yarnpkg.com) based project, not [npm](https://www.npmjs
 
 ```sh
 npm install -g yarn
-nvm install 18.18
+nvm install 18.18.2
 ```
 
 This project will need to run on an iOS device or Android device or emulator. While it is recommended to test your software on both, especially if you're contributing back to the project, for demonstration purposes you can choose one or the other.
@@ -39,8 +39,8 @@ If you are using Mac OS with ARM64 chip, see this [suggested setup](./DEVELOPER_
 Start by cloning the repository:
 
 ```sh
-git clone https://github.com/hyperledger/aries-mobile-agent-react-native.git bifold \ &&
-cd bifold
+git clone https://github.com/DigiCred-Holdings/bifold-wallet.git DigiCred \ &&
+cd DigiCred
 ```
 
 Install all the package dependencies by running the following command from the root of the cloned repository:
@@ -51,7 +51,7 @@ yarn install
 
 In case of issues after running yarn install, ensure you are using the following versions:
 
-Node: v18.18
+Node: v18.18.2
 Yarn: 3.3.1
 Python: 3.11
 
@@ -61,7 +61,7 @@ Some packages need to be built (transpiled) before they can be used from the app
 yarn run build
 ```
 
-As noted above Bifold requires a mediator to communicate with other Agents. For development purposes, this can be set by creating a `.env` file in the following directory:
+As noted above DigiCred VC Wallet requires a mediator to communicate with other Agents. For development purposes, this can be set by creating a `.env` file in the following directory:
 
 ```sh
 touch packages/legacy/app/.env
@@ -75,11 +75,11 @@ MEDIATOR_URL=https://public.mediator.indiciotech.io?c_i=eyJAdHlwZSI6ICJkaWQ6c292
 
 You can use the above mentioned public mediator hosted by Indecio or set up your own mediator. See [Aries Mediator](https://github.com/hyperledger/aries-mediator-service) for more information.
 
-# Running Bifold
+# Running DigiCred VC Wallet
 
-## Running Bifold on an Android Device or Emulator
+## Running DigiCred VC Wallet on an Android Device or Emulator
 
-The simplest way to run Bifold on Android is via Android Studio. Here's how:
+The simplest way to run DigiCred VC Wallet on Android is via Android Studio. Here's how:
 
 1. Open Android Studio.
 2. Select `File -> Open` and navigate to the `packages/legacy/app/android` directory. This will load the project into Android Studio.
@@ -140,7 +140,7 @@ Use `-partition-size 1024` to increase the size of the emulator's data partition
    yarn run android
    ```
 
-This will launch Bifold on your selected Android emulator for development and testing.
+This will launch DigiCred VC Wallet on your selected Android emulator for development and testing.
 
 ### For MacOS
 
@@ -150,11 +150,11 @@ TBD - Help Wanted
 
 TBD - Help Wanted
 
-## Running Bifold on an iOS Device
+## Running DigiCred VC Wallet on an iOS Device
 
-Please note, you can't run the iOS version of Bifold on an iOS simulator – it must be run on an actual iOS device. To develop for iOS, you'll need a Mac with Xcode installed and potentially a developer team membership to execute Bifold on your device.
+Please note, you can't run the iOS version of DigiCred VC Wallet on an iOS simulator – it must be run on an actual iOS device. To develop for iOS, you'll need a Mac with Xcode installed and potentially a developer team membership to execute DigiCred VC Wallet on your device.
 
-The easiest way to run Bifold on an iOS device is through Xcode, as outlined below:
+The easiest way to run DigiCred VC Wallet on an iOS device is through Xcode, as outlined below:
 
 1. Install the [Cocoapods](https://cocoapods.org/) package manager. You can use brew or any method you prefer:
 
@@ -172,12 +172,12 @@ pod install
 3. Open the workspace (not the project file) in Xcode:
 
 ```sh
-open packages/legacy/app/ios/ariesbifold.xcworkspace
+open packages/legacy/app/ios/digicred.xcworkspace
 ```
 
 4. In Xcode, select your device, development team, and (if necessary) your Bundle ID. Note: Detailing these steps is beyond the scope of this guide.
 
-5. Run the app on your device by clicking the 'Play' button in Xcode. This will launch Bifold on your selected iOS device for development and testing. It will also launch Metro, the React Native packager, in a separate terminal window. If you prefer to do this manually use the following command:
+5. Run the app on your device by clicking the 'Play' button in Xcode. This will launch DigiCred VC Wallet on your selected iOS device for development and testing. It will also launch Metro, the React Native packager, in a separate terminal window. If you prefer to do this manually use the following command:
 
 ```sh
 cd packages/legacy/app
