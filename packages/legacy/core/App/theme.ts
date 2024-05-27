@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { StyleSheet } from 'react-native'
 import { SvgProps } from 'react-native-svg'
 
@@ -219,9 +220,9 @@ const SemanticColors: ISemanticColors = {
 }
 
 const NotificationColors: INotificationColors = {
-  success: '#313132',
-  successBorder: '#2E8540',
-  successIcon: '#2E8540',
+  success: '#062c80',
+  successBorder: '#062c80',
+  successIcon: '#FFFFFF',
   successText: '#FFFFFF',
   info: '#313132',
   infoBorder: '#0099FF',
@@ -238,12 +239,15 @@ const NotificationColors: INotificationColors = {
   popupOverlay: `rgba(0, 0, 0, ${lightOpacity})`,
 }
 
+
 export const ColorPallet: IColorPallet = {
   brand: BrandColors,
   semantic: SemanticColors,
   notification: NotificationColors,
   grayscale: GrayscaleColors,
 }
+
+
 
 export const TextTheme: ITextTheme = {
   headingOne: {
