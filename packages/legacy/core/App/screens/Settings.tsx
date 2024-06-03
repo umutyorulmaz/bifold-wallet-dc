@@ -95,13 +95,13 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
         title: ' ',
       },
       data: [
-        {
-          title: t('Screens.NameWallet'),
-          value: store.preferences.walletName ? store.preferences.walletName : undefined,
-          accessibilityLabel: t('Screens.NameWallet'),
-          testID: testIdWithKey('NameWallet'),
-          onPress: () => navigation.navigate(Screens.NameWallet),
-        },
+        // {
+        //   title: t('Screens.NameWallet'),
+        //   value: store.preferences.walletName ? store.preferences.walletName : undefined,
+        //   accessibilityLabel: t('Screens.NameWallet'),
+        //   testID: testIdWithKey('NameWallet'),
+        //   onPress: () => navigation.navigate(Screens.NameWallet),
+        // },
         {
           title: t('Global.Biometrics'),
           value: store.preferences.useBiometry ? t('Global.On') : t('Global.Off'),
