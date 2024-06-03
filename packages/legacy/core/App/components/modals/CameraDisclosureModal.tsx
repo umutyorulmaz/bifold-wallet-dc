@@ -58,11 +58,6 @@ const CameraDisclosureModal: React.FC<CameraDisclosureModalProps> = ({ requestCa
     navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
   }
 
-  const onNotNowTouched = () => {
-    setModalVisible(false)
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
-  }
-
   const onOpenSettingsDismissed = () => {
     setShowSettingsPopup(false)
   }
@@ -85,6 +80,7 @@ const CameraDisclosureModal: React.FC<CameraDisclosureModalProps> = ({ requestCa
           </Text>
           <Text style={[TextTheme.modalNormal, styles.messageText]}>{t('CameraDisclosure.CameraDisclosure')}</Text>
           <Text style={[TextTheme.modalNormal, styles.messageText]}>{t('CameraDisclosure.ToContinueUsing')}</Text>
+          <Text style={[TextTheme.modalNormal, styles.messageText]}>{t('CameraDisclosure.SettingsApp')}</Text>
         </ScrollView>
         <View style={[styles.controlsContainer]}>
           <View style={styles.buttonContainer}>
@@ -95,15 +91,6 @@ const CameraDisclosureModal: React.FC<CameraDisclosureModalProps> = ({ requestCa
               onPress={onContinueTouched}
               buttonType={ButtonType.ModalPrimary}
               disabled={requestInProgress}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button
-              title={t('Global.NotNow')}
-              accessibilityLabel={t('Global.NotNow')}
-              testID={testIdWithKey('NotNow')}
-              onPress={onNotNowTouched}
-              buttonType={ButtonType.ModalSecondary}
             />
           </View>
         </View>

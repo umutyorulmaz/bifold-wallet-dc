@@ -169,6 +169,7 @@ const translation = {
     "AllowCameraUse": "Permitir el uso de la cámara",
     "CameraDisclosure": "La cámara se utiliza para escanear códigos QR que inician una oferta de la credencial o una solicitud de la credencial. No se almacena información sobre las imágenes, se usa para análisis o se comparte.",
     "ToContinueUsing": "Para continuar usando la función de escaneo de DigiCred Wallet, por favor, permita los permisos de cámara.",
+    "SettingsApp": "Puede cambiar esta opción más tarde en la aplicación de Configuración",
     "OpenSettings": "Abrir configuraciones",
   },
   "PINCreate": {
@@ -218,7 +219,7 @@ const translation = {
     "Hide": "Ocultar contraseña",
     "ChangePIN": "Cambiar contraseña",
     "Continue": "Continuar",
-    "EnterYourCurrentcontraseña": "Ingresa tu contraseña actual"
+    "EnterYourCurrentPIN": "Ingresa tu contraseña actual"
   },
   "PINEnter": {
     "EnterPIN": "Ingresa la contraseña de tu billetera",
