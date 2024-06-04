@@ -169,7 +169,9 @@ const translation = {
     "AllowCameraUse": "Allow camera use",
     "CameraDisclosure": "The camera is used to scan QR codes that initiate a credential offer or credential request. No information about the images is stored, used for analytics, or shared.",
     "ToContinueUsing": "To continue using the DigiCred Wallet scan feature, please allow camera permissions.",
+    "SettingsApp": "You can change this option later in the Settings app.",
     "OpenSettings": "Open settings",
+    
   },
   "PINCreate": {
     "Message": {
