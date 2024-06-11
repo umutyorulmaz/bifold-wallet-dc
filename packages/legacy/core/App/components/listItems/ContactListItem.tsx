@@ -1,8 +1,8 @@
 import type {
   BasicMessageRecord,
-    ConnectionRecord,
-    CredentialExchangeRecord,
-    ProofExchangeRecord,
+  ConnectionRecord,
+  CredentialExchangeRecord,
+  ProofExchangeRecord,
 } from '@aries-framework/core'
 
 import { useBasicMessagesByConnectionId } from '@aries-framework/react-hooks'
@@ -93,7 +93,30 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
   })
 
   useEffect(() => {
+    const isValidJsonFormat = (content: string) => {
+      try {
+        const parsedContent = JSON.parse(content)
+        return typeof parsedContent === 'object'
+      } catch (e) {
+        return false
+      }
+    }
+
     const transformedMessages: Array<CondensedMessage> = basicMessages.map((record: BasicMessageRecord) => {
+      if (record) {
+        if (record.content === ':menu') {
+          return {
+            text: 'Awaiting Action Menu Workflow',
+            createdAt: record.updatedAt || record.createdAt,
+          }
+        } else if (isValidJsonFormat(record.content)) {
+          const parsedContent = JSON.parse(record.content)
+          return {
+            text: `Action Menu Workflow ${parsedContent.workflowID} In progress`,
+            createdAt: record.updatedAt || record.createdAt,
+          }
+        }
+      }
       return {
         text: record.content,
         createdAt: record.updatedAt || record.createdAt,
@@ -162,8 +185,8 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
               <Image style={styles.avatarImage} source={{ uri: contact.imageUrl }} />
             </View>
           ) : (
-              <Text style={styles.avatarPlaceholder}>{contactLabelAbbr}</Text>
-            )}
+            <Text style={styles.avatarPlaceholder}>{contactLabelAbbr}</Text>
+          )}
         </View>
         <View style={{ flex: 1 }}>
           <View style={styles.nameAndTimeContainer}>
