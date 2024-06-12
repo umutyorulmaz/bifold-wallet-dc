@@ -655,42 +655,42 @@ export const ChatTheme = {
     alignSelf: 'flex-end',
   },
   leftBubble: {
-    backgroundColor: '#03a89e', // *ACS* changed from secondaryBackground,
+    backgroundColor: 'transparent', // *ACS* changed from secondaryBackground,
     borderRadius: 20,
     padding: 16,
     marginLeft: 16,
   },
   rightBubble: {
-    backgroundColor: '#00688b', // *ACS* - changed from primaryLight
+    backgroundColor: 'transparent', // *ACS* - changed from primaryLight
     borderRadius: 20,
     padding: 16,
     marginRight: 16,
   },
   timeStyleLeft: {
-    color: ColorPallet.grayscale.white, // *ACS*
+    color: ColorPallet.grayscale.darkGrey, // *ACS*
     fontSize: 12,
     marginTop: 8,
   },
   timeStyleRight: {
-    color: ColorPallet.grayscale.white, // *ACS*
+    color: ColorPallet.grayscale.darkGrey, // *ACS*
     fontSize: 12,
     marginTop: 8,
   },
   leftText: {
-    color: ColorPallet.grayscale.white, // *ACS*
+    color: ColorPallet.grayscale.black, // *ACS*
     fontSize: TextTheme.normal.fontSize,
   },
   leftTextHighlighted: {
     ...TextTheme.bold,
-    color: ColorPallet.grayscale.white, // *ACS*
+    color: ColorPallet.grayscale.black, // *ACS*
   },
   rightText: {
-    color: ColorPallet.grayscale.white, // *ACS*
+    color: ColorPallet.grayscale.black, // *ACS*
     fontSize: TextTheme.normal.fontSize,
   },
   rightTextHighlighted: {
     ...TextTheme.bold,
-    color: ColorPallet.grayscale.white, // *ACS*
+    color: ColorPallet.grayscale.black, // *ACS*
   },
   inputToolbar: {
     backgroundColor: ColorPallet.brand.secondary,
