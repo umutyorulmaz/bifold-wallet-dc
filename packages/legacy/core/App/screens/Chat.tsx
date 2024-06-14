@@ -9,15 +9,16 @@ import {
 import { useAgent, useBasicMessagesByConnectionId, useConnectionById } from '@aries-framework/react-hooks'
 import { isPresentationReceived } from '@hyperledger/aries-bifold-verifier'
 import { useIsFocused, useNavigation } from '@react-navigation/core'
-import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack'
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack'
+import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { GiftedChat, IMessage } from 'react-native-gifted-chat'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import InfoIcon from '../components/buttons/InfoIcon'
 import { renderComposer, renderInputToolbar, renderSend } from '../components/chat'
+import ActionMenuBubble from '../components/chat/ActionMenuMessage'
 import ActionSlider from '../components/chat/ActionSlider'
 import { renderActions } from '../components/chat/ChatActions'
 import { ChatEvent } from '../components/chat/ChatEvent'
@@ -60,10 +61,9 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   const [messages, setMessages] = useState<Array<ExtendedChatMessage>>([])
   const [showActionSlider, setShowActionSlider] = useState(false)
   const { ChatTheme: theme, Assets } = useTheme()
-  const { ColorPallet } = useTheme()
+  // const { ColorPallet } = useTheme()
   const [theirLabel, setTheirLabel] = useState(getConnectionName(connection, store.preferences.alternateContactNames))
 
-  // This useEffect is for properly rendering changes to the alt contact name, useMemo did not pick them up
   useEffect(() => {
     setTheirLabel(getConnectionName(connection, store.preferences.alternateContactNames))
   }, [isFocused, connection, store.preferences.alternateContactNames])
@@ -79,7 +79,6 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
     })
   }, [connection, theirLabel])
 
-  // when chat is open, mark messages as seen
   useEffect(() => {
     basicMessages.forEach((msg) => {
       const meta = msg.metadata.get(BasicMessageMetadata.customMetadata) as basicMessageCustomMetadata
@@ -91,42 +90,96 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
     })
   }, [basicMessages])
 
+  const handleActionButtonPress = async (action: string, workflowID: string) => {
+    const actionJSON = {
+      workflowID: `${workflowID}`,
+      actionID: `${action}`,
+      data: {},
+    }
+    await agent?.basicMessages.sendMessage(connectionId, `${JSON.stringify(actionJSON)}`)
+  }
+
+  const styles = StyleSheet.create({
+    leftContainer: {
+      backgroundColor: 'rgba(211, 211, 211, 0.7)',
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 10,
+      alignSelf: 'flex-start',
+    },
+    rightContainer: {
+      backgroundColor: 'rgba(0, 100, 200, 0.7)',
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 10,
+      alignSelf: 'flex-end',
+    },
+    leftText: {
+      color: '#000',
+    },
+    rightText: {
+      color: '#fff',
+    },
+  })
+
   useEffect(() => {
-    const transformedMessages: Array<ExtendedChatMessage> = basicMessages.map((record: BasicMessageRecord) => {
-      const role = getMessageEventRole(record)
-      // eslint-disable-next-line
-      const linkRegex = /(?:https?\:\/\/\w+(?:\.\w+)+\S*)|(?:[\w\d\.\_\-]+@\w+(?:\.\w+)+)/gm
-      // eslint-disable-next-line
-      const mailRegex = /^[\w\d\.\_\-]+@\w+(?:\.\w+)+$/gm
-      const links = record.content.match(linkRegex) ?? []
-      const handleLinkPress = (link: string) => {
-        if (link.match(mailRegex)) {
-          link = 'mailto:' + link
+    const connectionName = getConnectionName(connection, store.preferences.alternateContactNames)
+    const filteredBasicMessages = basicMessages.filter((record) => {
+      // Check if the content is JSON
+      let isJsonContent = false
+      try {
+        const parsedContent = JSON.parse(record.content)
+        if (typeof parsedContent === 'object' && parsedContent !== null) {
+          isJsonContent = true
         }
-        Linking.openURL(link)
+      } catch (e) {
+        // Not a JSON string
       }
-      const msgText = (
-        <Text style={role === Role.me ? theme.rightText : theme.leftText}>
-          {record.content.split(linkRegex).map((split, i) => {
-            if (i < links.length) {
-              const link = links[i]
-              return (
-                <Fragment key={`${record.id}-${i}`}>
-                  <Text>{split}</Text>
-                  <Text
-                    onPress={() => handleLinkPress(link)}
-                    style={{ color: ColorPallet.brand.link, textDecorationLine: 'underline' }}
-                    accessibilityRole={'link'}
-                  >
-                    {link}
-                  </Text>
-                </Fragment>
-              )
-            }
-            return <Text key={`${record.id}-${i}`}>{split}</Text>
-          })}
-        </Text>
-      )
+
+      // Get the role of the message sender
+      const role = getMessageEventRole(record)
+
+      if (
+        (record.content === ':menu' && role === Role.me) ||
+        record.content === `${connectionName} received your message` ||
+        (isJsonContent && role === Role.me)
+      ) {
+        return false
+      }
+
+      return true
+    })
+
+    const transformedMessages: Array<ExtendedChatMessage> = filteredBasicMessages.map((record: BasicMessageRecord) => {
+      const role = getMessageEventRole(record)
+      let msgText: JSX.Element
+
+      try {
+        const content = JSON.parse(record.content)
+
+        if (content && Array.isArray(content.displayData)) {
+          msgText = (
+            <ActionMenuBubble
+              content={content.displayData}
+              workflowID={content.workflowID}
+              handleActionButtonPress={handleActionButtonPress}
+            />
+          )
+        } else {
+          msgText = (
+            <View style={role === Role.me ? styles.rightContainer : styles.leftContainer}>
+              <Text style={role === Role.me ? styles.rightText : styles.leftText}>{record.content}</Text>
+            </View>
+          )
+        }
+      } catch (e) {
+        msgText = (
+          <View style={role === Role.me ? styles.rightContainer : styles.leftContainer}>
+            <Text style={role === Role.me ? styles.rightText : styles.leftText}>{record.content}</Text>
+          </View>
+        )
+      }
+
       return {
         _id: record.id,
         text: record.content,
@@ -326,4 +379,4 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   )
 }
 
-export default Chat
+export default Chat;
