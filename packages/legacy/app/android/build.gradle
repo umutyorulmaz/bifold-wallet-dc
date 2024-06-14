@@ -44,13 +44,11 @@ allprojects {
 }
 subprojects {
     configurations.all {
-       //it.resolutionStrategy.activateDependencyLocking()
+       it.resolutionStrategy.activateDependencyLocking()
     }
 }
 
-// dependencyLocking {
-//     lockAllConfigurations()
-// }
-
-//Keeping dependency locking commented out can lead to several potential problems figure out another method to handle build issues in the future!
+dependencyLocking {
+    lockAllConfigurations()
+}
 
