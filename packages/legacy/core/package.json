@@ -225,5 +225,9 @@
       "module",
       "typescript"
     ]
+  },
+  "dependencies": {
+    "@react-native-firebase/app": "^20.1.0",
+    "@react-native-firebase/messaging": "^20.1.0"
   }
 }

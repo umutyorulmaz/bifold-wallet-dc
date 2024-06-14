@@ -20,6 +20,7 @@ import { useTheme } from '../contexts/theme'
 import { BifoldError } from '../types/error'
 import { Screens, Stacks } from '../types/navigators'
 import { Onboarding as StoreOnboardingState } from '../types/state'
+import { activate } from '../utils/PushNotificationsHelper'
 import { getAgentModules, createLinkSecretIfRequired } from '../utils/agent'
 import { migrateToAskar, didMigrateToAskar } from '../utils/migration'
 
@@ -32,7 +33,12 @@ const onboardingComplete = (state: StoreOnboardingState, params: { termsVersion?
 
 const resumeOnboardingAt = (
   state: StoreOnboardingState,
-  params: { enableWalletNaming?: boolean; showPreface?: boolean; termsVersion?: boolean | string }
+  params: {
+    enableWalletNaming?: boolean
+    enablePushNotifications?: boolean
+    showPreface?: boolean
+    termsVersion?: boolean | string
+  }
 ): Screens => {
   const termsVer = params.termsVersion ?? true
   if (
@@ -40,6 +46,7 @@ const resumeOnboardingAt = (
     state.didCompleteTutorial &&
     state.didAgreeToTerms === termsVer &&
     state.didCreatePIN &&
+    (state.didConsiderPushNotifications || !params.enablePushNotifications) &&
     (state.didNameWallet || !params.enableWalletNaming) &&
     !state.didConsiderBiometry
   ) {
@@ -51,6 +58,7 @@ const resumeOnboardingAt = (
     state.didCompleteTutorial &&
     state.didAgreeToTerms === termsVer &&
     state.didCreatePIN &&
+    (state.didConsiderPushNotifications || !params.enablePushNotifications) &&
     params.enableWalletNaming &&
     !state.didNameWallet
   ) {
@@ -83,7 +91,7 @@ const resumeOnboardingAt = (
  * of this view.
  */
 const Splash: React.FC = () => {
-  const { indyLedgers, showPreface } = useConfiguration()
+  const { indyLedgers, showPreface, enablePushNotifications } = useConfiguration()
   const { setAgent } = useAgent()
   const { t } = useTranslation()
   const [store, dispatch] = useStore()
@@ -151,6 +159,7 @@ const Splash: React.FC = () => {
                 {
                   name: resumeOnboardingAt(store.onboarding, {
                     enableWalletNaming: store.preferences.enableWalletNaming,
+                    enablePushNotifications: !!enablePushNotifications,
                     showPreface,
                     termsVersion: TermsVersion,
                   }),
@@ -227,6 +236,9 @@ const Splash: React.FC = () => {
         await createLinkSecretIfRequired(newAgent)
 
         setAgent(newAgent)
+        if (store.preferences.usePushNotifications) {
+          activate(newAgent)
+        }
         navigation.dispatch(
           CommonActions.reset({
             index: 0,

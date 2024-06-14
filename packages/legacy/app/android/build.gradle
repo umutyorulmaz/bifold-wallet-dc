@@ -7,16 +7,23 @@ buildscript {
         compileSdkVersion = 33
         targetSdkVersion = 33
         ndkVersion = "25.1.8937393"
+        androidXBrowser = "1.5.0"
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle")
-        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath ('com.android.tools.build:gradle')
+        classpath ('com.google.gms:google-services:4.4.2')
+        classpath ('com.facebook.react:react-native-gradle-plugin')
     }
-}
+} 
+
+// plugins {
+//     // Add the dependency for the Google services Gradle plugin
+//     id 'com.google.gms.google-services' version '4.4.2' apply false
+// }
 
 allprojects {
     repositories {
@@ -37,11 +44,13 @@ allprojects {
 }
 subprojects {
     configurations.all {
-       it.resolutionStrategy.activateDependencyLocking()
+       //it.resolutionStrategy.activateDependencyLocking()
     }
 }
 
-dependencyLocking {
-    lockAllConfigurations()
-}
+// dependencyLocking {
+//     lockAllConfigurations()
+// }
+
+//Keeping dependency locking commented out can lead to several potential problems figure out another method to handle build issues in the future!
 

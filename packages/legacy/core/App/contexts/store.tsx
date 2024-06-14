@@ -41,7 +41,7 @@ export const defaultState: State = {
     developerModeEnabled: false,
     biometryPreferencesUpdated: false,
     useBiometry: false,
-    usePushNotifications: false,
+    usePushNotifications: true,
     useVerifierCapability: false,
     useConnectionInviterCapability: false,
     useDevVerifierTemplates: false,

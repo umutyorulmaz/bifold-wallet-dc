@@ -181,4 +181,8 @@ packages/legacy/app/vendor/bundle/**
 
 #data
 
+#firebase info
+packages/legacy/app/android/app/google-services.json
+packages/legacy/app/ios/GoogleService-Info.plist
+
 

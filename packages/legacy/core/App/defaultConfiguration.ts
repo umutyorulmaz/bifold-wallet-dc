@@ -1,3 +1,4 @@
+import { Agent } from '@aries-framework/core'
 import { useProofRequestTemplates } from '@hyperledger/aries-bifold-verifier'
 import { IOverlayBundleData } from '@hyperledger/aries-oca'
 import { BrandingOverlayType, DefaultOCABundleResolver } from '@hyperledger/aries-oca/build/legacy'
@@ -19,6 +20,7 @@ import Scan from './screens/Scan'
 import Splash from './screens/Splash'
 import Terms from './screens/Terms'
 import UseBiometry from './screens/UseBiometry'
+import { setup, activate, deactivate, status } from './utils/PushNotificationsHelper'
 
 export const defaultConfiguration: ConfigurationContext = {
   pages: OnboardingPages,
@@ -46,6 +48,18 @@ export const defaultConfiguration: ConfigurationContext = {
     description: '',
     buttonTitle: '',
     pageTitle: '',
+  },
+  enableUseMultUseInvitation: false,
+  enablePushNotifications: {
+    status: status,
+    setup: setup,
+    toggle: async (state: boolean, agent: Agent) => {
+      if (state) {
+        await activate(agent)
+      } else {
+        await deactivate(agent)
+      }
+    },
   },
   proofRequestTemplates: useProofRequestTemplates,
   enableTours: false,
