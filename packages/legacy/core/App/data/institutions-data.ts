@@ -572,7 +572,7 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         bannerImage: 'https://supportnovanthealth.org/wp-content/uploads/Screen-Shot-2022-08-19-at-12.14.39-PM.png',
         cardImage: '/src/assets/images/generic-student-id.svg',
         invitationLink:
-          'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICJmOTYzOWJkMS00ODEyLTRiNWItODViMy00ZDY2ZDI5ZmJmNjQiLCAibGFiZWwiOiAiTm92YW50IEhlYWx0aCIsICJyZWNpcGllbnRLZXlzIjogWyJBaVhLakJRZFliUVBlcGZlNW9ialFwWmN2d1NkOWlna0E4WE1HVTJOOG5GdyJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAifQ==',
+          'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICJlZDkzYjdhZi0zMjVmLTQ1MzgtOTVkYi02NmI3NmUyNTg3ZDciLCAibGFiZWwiOiAiTm92YW50IEhlYWx0aCIsICJyZWNpcGllbnRLZXlzIjogWyI1eUc2Q3RmckFCakF4aHlUMVlwZkhRQ2Q1cFBSR21zU0NGOG1ZUEVteVVOcSJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAiLCAiaW1hZ2VVcmwiOiAiaHR0cHM6Ly9idWlsZGhlYWx0aGNoYWxsZW5nZS5vcmcvd3AtY29udGVudC91cGxvYWRzLzIwMTcvMDkvTm92YW50LUhlYWx0aC1sb2dvLTg4MHg2NDUtMjYzeDI2My5wbmcifQ==',
       },
       {
         id: '02',
