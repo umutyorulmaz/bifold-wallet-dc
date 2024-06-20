@@ -57,7 +57,8 @@ const ProofRequestAccept: React.FC<ProofRequestAcceptProps> = ({ visible, proofI
   }
 
   const onBackToHomeTouched = () => {
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    navigation.goBack()
+    // navigation.getParent()?.navigate(TabStacks.ContactStack, { screen: Screens.Home })
   }
 
   useEffect(() => {
