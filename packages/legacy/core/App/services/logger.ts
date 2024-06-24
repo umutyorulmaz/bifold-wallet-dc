@@ -84,3 +84,5 @@ export class AppConsoleLogger {
     return logLevel >= this.logLevel
   }
 }
+// Manually set the log level for production
+//export const logger = new AppConsoleLogger(LogLevel.off)
