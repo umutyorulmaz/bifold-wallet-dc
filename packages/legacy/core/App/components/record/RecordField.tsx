@@ -56,6 +56,16 @@ interface Vaccination {
   [key: string]: string
 }
 
+interface TestScore {
+  [key: string]: string | TestScore
+}
+
+interface TestInfo {
+  TestName: string
+  AdministrationDate: string
+  Scores: TestScore[] | TestScore
+}
+
 export const AttributeValue = ({ field, style, shown }: AttributeValueParams): React.ReactElement => {
   const { ListItems } = useTheme()
   const styles = StyleSheet.create({
@@ -135,7 +145,85 @@ export const AttributeValue = ({ field, style, shown }: AttributeValueParams): R
       color: '#000',
       marginBottom: 5,
     },
+    testingContainer: {
+      padding: 10,
+      backgroundColor: '#f0f0f0',
+      borderRadius: 5,
+      marginVertical: 5,
+    },
+    testItem: {
+      marginBottom: 15,
+      borderBottomWidth: 1,
+      borderBottomColor: '#ccc',
+      paddingBottom: 10,
+    },
+    testName: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      color: '#000',
+      marginBottom: 5,
+    },
+    testDate: {
+      fontSize: 14,
+      color: '#333',
+      marginBottom: 5,
+    },
+    scoreItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 2,
+    },
+    scoreLabel: {
+      fontWeight: 'bold',
+      color: '#000',
+      flex: 1,
+    },
+    scoreValue: {
+      color: '#000',
+      flex: 1,
+      textAlign: 'right',
+    },
   })
+
+  const renderScoreObject = (scoreObj: TestScore, index: number) => (
+    <View key={index}>
+      {Object.entries(scoreObj).map(([key, value], i) => (
+        <View key={i} style={styles.scoreItem}>
+          <Text style={styles.scoreLabel}>{key}:</Text>
+          <Text style={styles.scoreValue}>{typeof value === 'string' ? value : JSON.stringify(value)}</Text>
+        </View>
+      ))}
+    </View>
+  )
+
+  const renderScores = (scores: TestScore[] | TestScore) => {
+    if (Array.isArray(scores)) {
+      return scores.map((scoreObj, index) => renderScoreObject(scoreObj, index))
+    } else {
+      return renderScoreObject(scores, 0)
+    }
+  }
+
+  const renderTestingInformation = (testingData: string) => {
+    try {
+      const testInfo: TestInfo[] = JSON.parse(testingData)
+      return (
+        <ScrollView style={styles.testingContainer}>
+          {testInfo.map((test, index) => (
+            <View key={index} style={styles.testItem}>
+              <Text style={styles.testName}>{test.TestName}</Text>
+              <Text style={styles.testDate}>Date: {test.AdministrationDate}</Text>
+              {renderScores(test.Scores)}
+            </View>
+          ))}
+        </ScrollView>
+      )
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to parse testing information:', error)
+      return <Text style={styles.text}>Error parsing testing information</Text>
+    }
+  }
 
   const renderVaccinations = (vaccinationsData: string) => {
     try {
@@ -230,6 +318,8 @@ export const AttributeValue = ({ field, style, shown }: AttributeValueParams): R
       return renderTranscript(field.value)
     } else if (field.name === 'Vaccinations' && typeof field.value === 'string') {
       return renderVaccinations(field.value)
+    } else if (field.name === 'Testing Information' && typeof field.value === 'string') {
+      return renderTestingInformation(field.value)
     } else if (
       field.encoding === validEncoding &&
       field.format &&
