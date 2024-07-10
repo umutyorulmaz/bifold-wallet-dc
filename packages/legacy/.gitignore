@@ -176,3 +176,6 @@ lib/
 app/android/app/src/main/assets/app.bundle
 **/.yarn/cache
 .yarn/install-state.gz
+
+# Android Studio
+app/android/app/release/app-release.aab

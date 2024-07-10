@@ -1,129 +1,205 @@
-import { CaptureBaseAttributeType } from '@hyperledger/aries-oca';
-import { Attribute, Field } from '@hyperledger/aries-oca/build/legacy';
-import startCase from 'lodash.startcase';
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { CaptureBaseAttributeType } from '@hyperledger/aries-oca'
+import { Attribute, Field } from '@hyperledger/aries-oca/build/legacy'
+import startCase from 'lodash.startcase'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
 
-import { hiddenFieldValue } from '../../constants';
-import { useTheme } from '../../contexts/theme';
-import { isDataUrl } from '../../utils/helpers';
-import { testIdWithKey } from '../../utils/testable';
+import { hiddenFieldValue } from '../../constants'
+import { useTheme } from '../../contexts/theme'
+import { isDataUrl } from '../../utils/helpers'
+import { testIdWithKey } from '../../utils/testable'
 
-import RecordBinaryField from './RecordBinaryField';
-import RecordDateIntField from './RecordDateIntField';
+import RecordBinaryField from './RecordBinaryField'
+import RecordDateIntField from './RecordDateIntField'
 
 interface RecordFieldProps {
-  field: Field;
-  hideFieldValue?: boolean;
-  hideBottomBorder?: boolean;
-  shown?: boolean;
-  onToggleViewPressed?: () => void;
-  fieldLabel?: (field: Field) => React.ReactElement | "";
-  fieldValue?: (field: Field) => React.ReactElement | "";
+  field: Field
+  hideFieldValue?: boolean
+  hideBottomBorder?: boolean
+  shown?: boolean
+  onToggleViewPressed?: () => void
+  fieldLabel?: (field: Field) => React.ReactElement | ''
+  fieldValue?: (field: Field) => React.ReactElement | ''
 }
 
-export const validEncoding = 'base64';
-export const validFormat = new RegExp('^image/(jpeg|png|jpg)');
+export const validEncoding = 'base64'
+export const validFormat = new RegExp('^image/(jpeg|png|jpg)')
 
 interface AttributeValueParams {
-  field: Attribute;
-  shown?: boolean;
-  style?: Record<string, unknown>;
+  field: Attribute
+  shown?: boolean
+  style?: Record<string, unknown>
+}
+interface Course {
+  courseTitle: string
+  courseNumber: string
+  subject: string
+  grade: string
+  creditsAttempted: number
+  creditsEarned: number
+  [key: string]: any // for other properties
 }
 
-export const AttributeValue: React.FC<AttributeValueParams> = ({ field, style, shown }) => {
-  const { ListItems } = useTheme();
+interface Term {
+  term: string
+  school: string
+  courses: Course[]
+  cumulativeGPA: number
+  cumulativeCredits: number
+  cumulativeWeightedGPA: number
+  creditsThisTerm: number
+}
+export const AttributeValue = ({ field, style, shown }: AttributeValueParams): React.ReactElement => {
+  const { ListItems } = useTheme()
   const styles = StyleSheet.create({
     text: {
       ...ListItems.recordAttributeText,
     },
-  });
- 
-  const renderTranscript = (value: string) => {
-    try {
-      const data = JSON.parse(value);
-      if (Array.isArray(data)) {
-        return (
-          <View style={transcriptStyles.transcriptContainer}>
-          {data.map((item, index) => (
-            <View key={index} style={transcriptStyles.courseContainer}>
-              {Object.entries(item).map(([key, value]) => (
-                <View key={key} style={transcriptStyles.detailContainer}>
-                  <Text style={transcriptStyles.detailLabel}>{startCase(key)}:</Text>
-                  <Text style={transcriptStyles.detailValue}>{typeof value === 'string' || typeof value === 'number' ? value : JSON.stringify(value)}</Text>
-                </View>
-              ))}
-            </View>
-          ))}
-        </View>
-        );
-      }
-    } catch (error) {
-      console.error('Failed to parse transcript data:', error);
-    }
-    return <Text style={transcriptStyles.text}>{value}</Text>;
-  };
-  
-  // Stylesheet for transcript display
-  const transcriptStyles = StyleSheet.create({
     transcriptContainer: {
       padding: 10,
       backgroundColor: '#f0f0f0',
       borderRadius: 5,
       marginVertical: 5,
     },
-    courseContainer: {
+    termContainer: {
+      marginBottom: 15,
       borderBottomWidth: 1,
-      borderBottomColor: '#cccccc',
+      borderBottomColor: '#ccc',
       paddingBottom: 10,
+    },
+    termTitleContainer: {
       marginBottom: 10,
+    },
+    termTitle: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      marginBottom: 10,
+      color: '#000',
+    },
+    termSchool: {
+      fontSize: 16,
+      color: '#000',
+    },
+    coursesContainer: {
+      marginLeft: 10,
+    },
+    courseItem: {
+      marginBottom: 10,
+    },
+    courseTitle: {
+      fontWeight: 'bold',
     },
     detailContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginBottom: 5,
+      marginBottom: 2,
     },
-    detailLabel: {
+    label: {
       fontWeight: 'bold',
-      color: '#333',
+      color: '#000',
+      felx: 1,
     },
-    detailValue: {
-      color: '#666',
+    value: {
+      color: '#000',
+      flex: 2,
+      textAlign: 'right',
     },
-    text: {
-      color: '#333',
+    courseValue: {
+      color: '#000',
+      flex: 2,
+      textAlign: 'right',
+      fontWeight: 'bold',
     },
-  });
-  
-   if ( shown) {
-        if (typeof field.value === 'string') {
-          return renderTranscript(field.value);
-        } else {
-          console.error('Expected string for transcript data, received:', typeof field.value);
-          return <Text style={style || styles.text}>Invalid transcript data</Text>;
-        }
-      } else if (
-        field.encoding === validEncoding &&
-        field.format &&
-        validFormat.test(field.format) &&
-        typeof field.value === 'string' &&
-        (isDataUrl(field.value) || field.value)
-      ) {
-        return <RecordBinaryField attributeValue={field.value} style={style} shown={shown} />;
-      } else if (
-        (field.type === CaptureBaseAttributeType.DateInt || field.type === CaptureBaseAttributeType.DateTime) &&
-        typeof field.value === 'string'
-      ) {
-        return <RecordDateIntField field={field} style={style} shown={shown} />;
-      }
+  })
+  const renderTranscript = (transcriptData: string) => {
+    try {
+      const transcript: Term[] = JSON.parse(transcriptData)
       return (
-        <Text style={style || styles.text} testID={testIdWithKey('AttributeValue')}>
-          {shown ? field.value : hiddenFieldValue}
-        </Text>
-      );
-    };
+        <ScrollView style={styles.transcriptContainer}>
+          {transcript.map((term, index) => (
+            <View key={index} style={styles.termContainer}>
+              <View style={styles.termTitleContainer}>
+                <Text style={styles.termTitle}>{term.term}</Text>
+                <Text style={styles.termSchool}>{term.school}</Text>
+              </View>
+              <View style={styles.coursesContainer}>
+                {term.courses.map((course, courseIndex) => (
+                  <View key={courseIndex} style={styles.courseItem}>
+                    <View style={styles.detailContainer}>
+                      <Text style={styles.label}>Course Title:</Text>
+                      <Text style={styles.courseValue}>{course.courseTitle}</Text>
+                    </View>
+                    {Object.entries(course).map(
+                      ([key, value]) =>
+                        key !== 'courseTitle' && (
+                          <View key={key} style={styles.detailContainer}>
+                            <Text style={styles.label}>{startCase(key)}:</Text>
+                            <Text style={styles.value}>
+                              {typeof value === 'string' || typeof value === 'number' ? value : JSON.stringify(value)}
+                            </Text>
+                          </View>
+                        )
+                    )}
+                  </View>
+                ))}
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.label}>Cumulative GPA:</Text>
+                <Text style={styles.value}>{term.cumulativeGPA}</Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.label}>Cumulative Credits:</Text>
+                <Text style={styles.value}>{term.cumulativeCredits}</Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.label}>Cumulative Weighted GPA:</Text>
+                <Text style={styles.value}>{term.cumulativeWeightedGPA}</Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.label}>Credits This Term:</Text>
+                <Text style={styles.value}>{term.creditsThisTerm}</Text>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      )
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to parse transcript data:', error)
+      return <Text style={styles.text}>Error parsing transcript data</Text>
+    }
+  }
 
+  if (shown) {
+    if (field.name === 'Transcript' && typeof field.value === 'string') {
+      return renderTranscript(field.value)
+    } else if (
+      field.encoding === validEncoding &&
+      field.format &&
+      validFormat.test(field.format) &&
+      typeof field.value === 'string' &&
+      (isDataUrl(field.value) || field.value)
+    ) {
+      return <RecordBinaryField attributeValue={field.value} style={style} shown={shown} />
+    } else if (
+      (field.type === CaptureBaseAttributeType.DateInt || field.type === CaptureBaseAttributeType.DateTime) &&
+      typeof field.value === 'string'
+    ) {
+      return <RecordDateIntField field={field} style={style} shown={shown} />
+    }
+    return (
+      <Text style={style || styles.text} testID={testIdWithKey('AttributeValue')}>
+        {typeof field.value === 'string' ? field.value : JSON.stringify(field.value)}
+      </Text>
+    )
+  }
+  return (
+    <Text style={style || styles.text} testID={testIdWithKey('AttributeValue')}>
+      {hiddenFieldValue}
+    </Text>
+  )
+}
 
 const RecordField: React.FC<RecordFieldProps> = ({
   field,
@@ -131,11 +207,11 @@ const RecordField: React.FC<RecordFieldProps> = ({
   hideBottomBorder = false,
   shown = !hideFieldValue,
   onToggleViewPressed = () => undefined,
-  fieldLabel = "",
-  fieldValue = "",
+  fieldLabel = '',
+  fieldValue = '',
 }) => {
-  const { t } = useTranslation();
-  const { ListItems } = useTheme();
+  const { t } = useTranslation()
+  const { ListItems } = useTheme()
   const styles = StyleSheet.create({
     container: {
       ...ListItems.recordContainer,
@@ -160,7 +236,7 @@ const RecordField: React.FC<RecordFieldProps> = ({
       ...ListItems.recordAttributeText,
       paddingVertical: 4,
     },
-  });
+  })
 
   return (
     <View style={styles.container}>
@@ -172,7 +248,7 @@ const RecordField: React.FC<RecordFieldProps> = ({
             {field.label ?? startCase(field.name || '')}
           </Text>
         )}
-  
+
         {hideFieldValue && (
           <TouchableOpacity
             accessible={true}
@@ -186,7 +262,7 @@ const RecordField: React.FC<RecordFieldProps> = ({
           </TouchableOpacity>
         )}
       </View>
-  
+
       <View style={styles.valueContainer}>
         {typeof fieldValue === 'function' ? (
           fieldValue(field)
@@ -198,7 +274,7 @@ const RecordField: React.FC<RecordFieldProps> = ({
       </View>
       <View style={[styles.border, hideBottomBorder && { borderBottomWidth: 0 }]} />
     </View>
-  );
-};
+  )
+}
 
-export default RecordField;
+export default RecordField
