@@ -50,6 +50,12 @@ interface Term {
   cumulativeWeightedGPA: number
   creditsThisTerm: number
 }
+
+interface Vaccination {
+  Vaccination: string
+  [key: string]: string
+}
+
 export const AttributeValue = ({ field, style, shown }: AttributeValueParams): React.ReactElement => {
   const { ListItems } = useTheme()
   const styles = StyleSheet.create({
@@ -111,7 +117,55 @@ export const AttributeValue = ({ field, style, shown }: AttributeValueParams): R
       textAlign: 'right',
       fontWeight: 'bold',
     },
+    vaccinationContainer: {
+      padding: 10,
+      backgroundColor: '#f0f0f0',
+      borderRadius: 5,
+      marginVertical: 5,
+    },
+    vaccinationItem: {
+      marginBottom: 15,
+      borderBottomWidth: 1,
+      borderBottomColor: '#ccc',
+      paddingBottom: 10,
+    },
+    vaccinationName: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      color: '#000',
+      marginBottom: 5,
+    },
   })
+
+  const renderVaccinations = (vaccinationsData: string) => {
+    try {
+      //const vaccinations: Array<{ Vaccination: string; [key: string]: string }> = JSON.parse(vaccinationsData)
+      const vaccinations: Vaccination[] = JSON.parse(vaccinationsData)
+      return (
+        <ScrollView style={styles.vaccinationContainer}>
+          {vaccinations.map((vaccination, index) => (
+            <View key={index} style={styles.vaccinationItem}>
+              <Text style={styles.vaccinationName}>{vaccination.Vaccination}</Text>
+              {Object.entries(vaccination).map(
+                ([key, value]) =>
+                  key !== 'Vaccination' && (
+                    <View key={key} style={styles.detailContainer}>
+                      <Text style={styles.label}>{key}:</Text>
+                      <Text style={styles.value}>{value}</Text>
+                    </View>
+                  )
+              )}
+            </View>
+          ))}
+        </ScrollView>
+      )
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to parse vaccination data:', error)
+      return <Text style={styles.text}>Error parsing vaccination data</Text>
+    }
+  }
+
   const renderTranscript = (transcriptData: string) => {
     try {
       const transcript: Term[] = JSON.parse(transcriptData)
@@ -174,6 +228,8 @@ export const AttributeValue = ({ field, style, shown }: AttributeValueParams): R
   if (shown) {
     if (field.name === 'Transcript' && typeof field.value === 'string') {
       return renderTranscript(field.value)
+    } else if (field.name === 'Vaccinations' && typeof field.value === 'string') {
+      return renderVaccinations(field.value)
     } else if (
       field.encoding === validEncoding &&
       field.format &&
