@@ -266,6 +266,8 @@ export const InstitutionRegistry: InstitutionCategory[] = [
         bannerImage:
           'https://uncw.edu/media/images/image-text-feature/seahawk-statue-night-20171101-dsc3841-hdr-image-text-feature.jpg',
         cardImage: '/src/assets/images/generic-student-id.svg',
+        invitationLink:
+          'http://crms.digicred.services:8030/?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICJhOGUxNjYxNS1lMmNhLTQ5NDctYmE4OC1jMmViOTc5NzI4ZmYiLCAibGFiZWwiOiAiVW5pdmVyc2l0eSBvZiBOb3J0aCBDYXJvbGluYSBXaWxtaW5ndG9uIiwgInJlY2lwaWVudEtleXMiOiBbIkJmOXlyUUhaTVA4QWN2Z05oeFJ2cnA1a0JNWDl1cFpxYWlDMVpNMjlzVnFLIl0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCIsICJpbWFnZVVybCI6ICJodHRwczovL3BuZzIuY2xlYW5wbmcuY29tL3NoL2ZmMjViYzEzM2U3ZDU5MWM2YjQyNjdlYWVmOTFlNTQ5L0wwS3pRWW0zV01Bek41RDdqcEgwYVlQMmdMQnVUZ1Z2Y2FkcWl1VnlkSW13ZjdlMGp2OXpmSmt5ZTlON2IzenNmckswbEJsdGRacHpmQVo0YmozNGZyUzBsQmx0ZFpwelJlZDNZNGV3ZkxGdWo3MTBmcGd5anRkc2RIQjFQYkwwa0wxeGRwZ3lqT1JxYm9QemNjUHNqd1F1ZnBab2pORzJOWEs1UXJPOFZNZzZPSmM0ZWFZM01rbTBRNHE5VWNreVBXUTRTYXNBTlVtMVJZcTZWNzV4ZHBnPS9raXNzcG5nLXVuaXZlcnNpdHktb2Ytbm9ydGgtY2Fyb2xpbmEtd2lsbWluZ3Rvbi11bmMtd2lsbWluLXVuY3ctbG9nby1zdmctdmVjdG9yLWFtcC1wbmctdHJhbnNwYXJlbnQtdmVjdG8tNWI2MmI1NDg5MGYzYTQuMjkxMzk2MTkxNTMzMTk1NTkyNTkzNy5wbmcifQ==',
       },
       {
         id: '23',

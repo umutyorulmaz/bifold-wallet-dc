@@ -77,6 +77,7 @@ export class RemoteLogger extends BaseLogger {
       ...this.config,
       transport,
       transportOptions,
+      //severity: this.remoteLoggingEnabled ? this.config.severity : 'off', // Disable logging if remoteLogging is disabled
     }
 
     if (this.remoteLoggingEnabled && this.lokiUrl) {
