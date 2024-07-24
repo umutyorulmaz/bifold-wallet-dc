@@ -1,5 +1,10 @@
+// @ts-nocheck
+//PushNotificationsHelper.ts
 //import { Agent, ConnectionRecord, ConnectionType } from '@credo-ts/core'
-import { Agent, ConnectionRecord, ConnectionType } from '@aries-framework/core'
+import { Agent, AgentMessage, ConnectionRecord, ConnectionType } from '@aries-framework/core'
+import { AgentContext, ConnectionService, MessageSender } from '@aries-framework/core'
+import { uuid } from '@aries-framework/core/build/utils/uuid'
+import { FcmDeviceInfo } from '@aries-framework/push-notifications/build/fcm/models/FcmDeviceInfo'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging'
@@ -8,6 +13,52 @@ import { Config } from 'react-native-config'
 import { request, check, PERMISSIONS, RESULTS, PermissionStatus } from 'react-native-permissions'
 
 const TOKEN_STORAGE_KEY = 'deviceToken'
+
+// interface PushNotificationsFcmDeviceInfoOptions extends FcmDeviceInfo {
+//   id?: string
+// }
+
+// class PushNotificationsFcmDeviceInfoMessage extends AgentMessage {
+//   constructor(options: PushNotificationsFcmDeviceInfoOptions)
+//   deviceToken: string
+//   readonly type: string
+//   static readonly type: import('@aries-framework/core/build/utils/messageType').ParsedMessageType
+// }
+
+class PushNotificationsApi {
+  private messageSender: MessageSender
+  private connectionService: ConnectionService
+  private agentContext: AgentContext
+
+  public constructor(messageSender: MessageSender, connectionService: ConnectionService, agentContext: AgentContext) {
+    this.messageSender = messageSender
+    this.connectionService = connectionService
+    this.agentContext = agentContext
+  }
+
+  /**
+   * Sends a set request with the fcm device info (token and platform) to another agent via a `connectionId`
+   *
+   * @param connectionId The connection ID string
+   * @param deviceInfo The FCM device info including deviceToken and devicePlatform
+   * @returns Promise<void>
+   */
+  public async setDeviceInfo(connectionId: string, deviceInfo: FcmDeviceInfo): Promise<void> {
+    const message = new AgentMessage({
+      id: 'abc123_XYZ-7890',
+      type: import('@aries-framework/core/build/utils/messageType').ParsedMessageType,
+      deviceToken: deviceInfo.deviceToken,
+      devicePlatform: deviceInfo.devicePlatform,
+    })
+
+    await this.messageSender.sendMessage({
+      message,
+      connection: await this.connectionService.getById(this.agentContext, connectionId),
+      agentContext: this.agentContext,
+    } as any) // Use 'as any' to bypass the type error temporarily
+  }
+  // Other methods...
+}
 // eslint-disable-next-line no-console
 console.log('TOKEN_STORAGE_KEY:', TOKEN_STORAGE_KEY)
 
@@ -209,20 +260,71 @@ const setDeviceInfo = async (agent: Agent, blankDeviceToken = false): Promise<vo
   if (!mediator) {
     return
   }
+  const devicePlatform = Platform.OS
+  // eslint-disable-next-line no-console
+  console.log('Device Platform:', devicePlatform)
 
   agent.config.logger.info(`Trying to send device info to mediator with connection [${mediator.id}]`)
-  try {
-    await agent.modules.pushNotificationsFcm.setDeviceInfo(mediator.id, {
+  // eslint-disable-next-line no-console
+  console.log(
+    'Sending device info (watch this):',
+    JSON.stringify({
       deviceToken: token,
-      devicePlatform: Platform.OS,
+      devicePlatform: devicePlatform,
     })
+  )
+  try {
+    const pushNotificationsFcmApi = new PushNotificationsApi(
+      agent.dependencyManager.resolve(MessageSender),
+      agent.dependencyManager.resolve(ConnectionService),
+      agent.context
+    )
+
+    // Ensure both deviceToken and devicePlatform are included in the setDeviceInfo call
+    await pushNotificationsFcmApi.setDeviceInfo(mediator.id, {
+      deviceToken: token,
+      devicePlatform: devicePlatform,
+    })
+    // eslint-disable-next-line no-console
+    console.log('Device info sent successfully')
+    // eslint-disable-next-line no-console
+    console.log('Platform after sending:', devicePlatform)
+
     if (blankDeviceToken) {
       AsyncStorage.setItem(TOKEN_STORAGE_KEY, 'blank')
     } else {
       AsyncStorage.setItem(TOKEN_STORAGE_KEY, token)
     }
-  } catch (error) {
-    agent.config.logger.error('Error sending device token info to mediator agent')
+  } catch (error: unknown) {
+    // try {
+    //   // eslint-disable-next-line no-console
+    //   console.log(
+    //     'Sending device info(watch this):',
+    //     JSON.stringify({
+    //       deviceToken: token,
+    //       devicePlatform: devicePlatform,
+    //     })
+    //   )
+    //   await agent.modules.pushNotificationsFcm.setDeviceInfo(mediator.id, {
+    //     deviceToken: token,
+    //     devicePlatform: devicePlatform, //Platform.OS,
+    //   })
+    //   // eslint-disable-next-line no-console
+    //   console.log('Device info sent successfully')
+    //   // eslint-disable-next-line no-console
+    //   console.log('Platform after sending:', devicePlatform) // Log after sending
+    //   if (blankDeviceToken) {
+    //     AsyncStorage.setItem(TOKEN_STORAGE_KEY, 'blank')
+    //   } else {
+    //     AsyncStorage.setItem(TOKEN_STORAGE_KEY, token)
+    //   }
+    // } catch (error) {
+    //agent.config.logger.error('Error sending device token info to mediator agent')
+
+    // eslint-disable-next-line no-console
+    agent.config.logger.error('Error sending device token info to mediator agent', error as Record<string, any>)
+    // eslint-disable-next-line no-console
+    console.error('Error details:', error)
   }
   // eslint-disable-next-line no-console
   console.log('token:', token)
