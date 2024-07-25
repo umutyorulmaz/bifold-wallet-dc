@@ -1,9 +1,6 @@
-// @ts-nocheck
 //PushNotificationsHelper.ts
-//import { Agent, ConnectionRecord, ConnectionType } from '@credo-ts/core'
-import { Agent, AgentMessage, ConnectionRecord, ConnectionType } from '@aries-framework/core'
+import { Agent, ConnectionRecord, ConnectionType } from '@aries-framework/core'
 import { AgentContext, ConnectionService, MessageSender } from '@aries-framework/core'
-import { uuid } from '@aries-framework/core/build/utils/uuid'
 import { FcmDeviceInfo } from '@aries-framework/push-notifications/build/fcm/models/FcmDeviceInfo'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -14,18 +11,25 @@ import { request, check, PERMISSIONS, RESULTS, PermissionStatus } from 'react-na
 
 const TOKEN_STORAGE_KEY = 'deviceToken'
 
-// interface PushNotificationsFcmDeviceInfoOptions extends FcmDeviceInfo {
-//   id?: string
-// }
+class PushNotificationsFcmDeviceInfoMessage {
+  public deviceToken: string
+  public devicePlatform: string
 
-// class PushNotificationsFcmDeviceInfoMessage extends AgentMessage {
-//   constructor(options: PushNotificationsFcmDeviceInfoOptions)
-//   deviceToken: string
-//   readonly type: string
-//   static readonly type: import('@aries-framework/core/build/utils/messageType').ParsedMessageType
-// }
+  public constructor(options: { deviceToken: string; devicePlatform: string }) {
+    this.deviceToken = options.deviceToken
+    this.devicePlatform = options.devicePlatform
+  }
 
-class PushNotificationsApi {
+  public toJSON() {
+    return {
+      '@type': 'https://didcomm.org/push-notifications-fcm/1.0/device-info',
+      device_token: this.deviceToken,
+      device_platform: this.devicePlatform,
+    }
+  }
+}
+
+class PushNotificationsFcmApi {
   private messageSender: MessageSender
   private connectionService: ConnectionService
   private agentContext: AgentContext
@@ -44,21 +48,19 @@ class PushNotificationsApi {
    * @returns Promise<void>
    */
   public async setDeviceInfo(connectionId: string, deviceInfo: FcmDeviceInfo): Promise<void> {
-    const message = new AgentMessage({
-      id: 'abc123_XYZ-7890',
-      type: import('@aries-framework/core/build/utils/messageType').ParsedMessageType,
+    const message = new PushNotificationsFcmDeviceInfoMessage({
       deviceToken: deviceInfo.deviceToken,
       devicePlatform: deviceInfo.devicePlatform,
     })
 
     await this.messageSender.sendMessage({
-      message,
+      message: message.toJSON(),
       connection: await this.connectionService.getById(this.agentContext, connectionId),
       agentContext: this.agentContext,
-    } as any) // Use 'as any' to bypass the type error temporarily
+    } as any)
   }
-  // Other methods...
 }
+
 // eslint-disable-next-line no-console
 console.log('TOKEN_STORAGE_KEY:', TOKEN_STORAGE_KEY)
 
@@ -274,7 +276,7 @@ const setDeviceInfo = async (agent: Agent, blankDeviceToken = false): Promise<vo
     })
   )
   try {
-    const pushNotificationsFcmApi = new PushNotificationsApi(
+    const pushNotificationsFcmApi = new PushNotificationsFcmApi(
       agent.dependencyManager.resolve(MessageSender),
       agent.dependencyManager.resolve(ConnectionService),
       agent.context
