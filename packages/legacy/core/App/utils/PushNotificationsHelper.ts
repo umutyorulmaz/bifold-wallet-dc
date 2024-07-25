@@ -1,33 +1,77 @@
 //PushNotificationsHelper.ts
-import { Agent, ConnectionRecord, ConnectionType } from '@aries-framework/core'
-import { AgentContext, ConnectionService, MessageSender } from '@aries-framework/core'
+import type { ParsedMessageType } from '@aries-framework/core/build/utils/messageType'
+
+import {
+  Agent,
+  ConnectionRecord,
+  ConnectionType,
+  AgentMessage,
+  AgentContext,
+  ConnectionService,
+  MessageSender,
+  OutboundMessageContext,
+  ReturnRouteTypes,
+} from '@aries-framework/core'
 import { FcmDeviceInfo } from '@aries-framework/push-notifications/build/fcm/models/FcmDeviceInfo'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Platform } from 'react-native'
 import { Config } from 'react-native-config'
 import { request, check, PERMISSIONS, RESULTS, PermissionStatus } from 'react-native-permissions'
+import { v4 as uuidv4 } from 'uuid'
 
 const TOKEN_STORAGE_KEY = 'deviceToken'
 
-class PushNotificationsFcmDeviceInfoMessage {
+class PushNotificationsFcmDeviceInfoMessage extends AgentMessage {
+  public static readonly type: ParsedMessageType = {
+    messageName: 'device-info',
+    protocolName: 'push-notifications-fcm',
+    protocolMajorVersion: 1,
+    protocolMinorVersion: 0,
+    protocolVersion: '1.0',
+    documentUri: 'https://didcomm.org',
+    protocolUri: 'https://didcomm.org/push-notifications-fcm/1.0',
+    messageTypeUri: 'https://didcomm.org/push-notifications-fcm/1.0/device-info',
+  }
+
   public deviceToken: string
   public devicePlatform: string
 
-  public constructor(options: { deviceToken: string; devicePlatform: string }) {
+  public constructor(options: { id?: string; deviceToken: string; devicePlatform: string }) {
+    super()
+    this.id = options.id || uuidv4()
     this.deviceToken = options.deviceToken
     this.devicePlatform = options.devicePlatform
   }
 
-  public toJSON() {
+  // public get type(): string {
+  //   return PushNotificationsFcmDeviceInfoMessage.type.messageTypeUri
+  // }
+
+  public toJSON(): Record<string, unknown> {
     return {
-      '@type': 'https://didcomm.org/push-notifications-fcm/1.0/device-info',
+      ...super.toJSON(),
+      '@type': PushNotificationsFcmDeviceInfoMessage.type.messageTypeUri,
       device_token: this.deviceToken,
       device_platform: this.devicePlatform,
     }
   }
 }
+//   public deviceToken: string
+//   public devicePlatform: string
+
+//   public toJSON(): Record<string, unknown> {
+//     return classToPlain(this, { excludePrefixes: ['_'] })
+//   }
+
+//   public static fromJSON(json: Record<string, unknown>): PushNotificationsFcmDeviceInfoMessage {
+//     return plainToClass(PushNotificationsFcmDeviceInfoMessage, json, {
+//       excludePrefixes: ['_'],
+//     })
+//   }
+// }
 
 class PushNotificationsFcmApi {
   private messageSender: MessageSender
@@ -40,24 +84,32 @@ class PushNotificationsFcmApi {
     this.agentContext = agentContext
   }
 
-  /**
-   * Sends a set request with the fcm device info (token and platform) to another agent via a `connectionId`
-   *
-   * @param connectionId The connection ID string
-   * @param deviceInfo The FCM device info including deviceToken and devicePlatform
-   * @returns Promise<void>
-   */
   public async setDeviceInfo(connectionId: string, deviceInfo: FcmDeviceInfo): Promise<void> {
-    const message = new PushNotificationsFcmDeviceInfoMessage({
+    const customMessage = new PushNotificationsFcmDeviceInfoMessage({
       deviceToken: deviceInfo.deviceToken,
       devicePlatform: deviceInfo.devicePlatform,
     })
 
-    await this.messageSender.sendMessage({
-      message: message.toJSON(),
-      connection: await this.connectionService.getById(this.agentContext, connectionId),
-      agentContext: this.agentContext,
-    } as any)
+    customMessage.setReturnRouting(ReturnRouteTypes.all)
+
+    // eslint-disable-next-line no-console
+    console.log('Sending message:', JSON.stringify(customMessage, null, 2))
+
+    try {
+      const connection = await this.connectionService.getById(this.agentContext, connectionId)
+      const outboundMessageContext = new OutboundMessageContext(customMessage, {
+        agentContext: this.agentContext,
+        connection: connection,
+      })
+
+      await this.messageSender.sendMessage(outboundMessageContext)
+      // eslint-disable-next-line no-console
+      console.log('Message sent successfully')
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error sending message:', error)
+      throw error
+    }
   }
 }
 
