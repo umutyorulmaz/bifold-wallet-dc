@@ -44,16 +44,16 @@ class PushNotificationsFcmDeviceInfoMessage extends AgentMessage {
     this.id = options.id || uuidv4()
     this.deviceToken = options.deviceToken
     this.devicePlatform = options.devicePlatform
+    //this.type = PushNotificationsFcmDeviceInfoMessage.type
   }
 
-  // public get type(): string {
-  //   return PushNotificationsFcmDeviceInfoMessage.type.messageTypeUri
-  // }
-
+  protected override getMessageType(): string {
+    return PushNotificationsFcmDeviceInfoMessage.type
+  }
   public toJSON(): Record<string, unknown> {
     return {
       ...super.toJSON(),
-      '@type': PushNotificationsFcmDeviceInfoMessage.type.messageTypeUri,
+      //'@type': this.type,
       device_token: this.deviceToken,
       device_platform: this.devicePlatform,
     }
