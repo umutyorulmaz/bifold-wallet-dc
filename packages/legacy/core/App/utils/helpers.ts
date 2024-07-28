@@ -2,37 +2,34 @@ import {
   AnonCredsCredentialInfo,
   AnonCredsCredentialsForProofRequest,
   AnonCredsPredicateType,
-  AnonCredsProofFormat,
-  AnonCredsProofFormatService,
+  AnonCredsProofRequest,
   AnonCredsProofRequestRestriction,
   AnonCredsRequestedAttribute,
   AnonCredsRequestedAttributeMatch,
   AnonCredsRequestedPredicate,
   AnonCredsRequestedPredicateMatch,
-  LegacyIndyProofFormat,
-  LegacyIndyProofFormatService,
-} from '@aries-framework/anoncreds'
+  getCredentialsForAnonCredsProofRequest,
+} from '@credo-ts/anoncreds'
 import {
   Agent,
+  BasicMessageRecord,
+  BaseLogger,
   ConnectionRecord,
   CredentialExchangeRecord,
   CredentialState,
-  BasicMessageRecord,
+  HandshakeProtocol,
   ProofExchangeRecord,
   ProofState,
   parseDid,
-} from '@aries-framework/core'
-import { BasicMessageRole } from '@aries-framework/core/build/modules/basic-messages/BasicMessageRole'
-import {
-  GetCredentialsForRequestReturn,
-  ProofFormatDataMessagePayload,
-} from '@aries-framework/core/build/modules/proofs/protocol/ProofProtocolOptions'
-import { useConnectionById } from '@aries-framework/react-hooks'
+  OutOfBandRecord,
+} from '@credo-ts/core'
+import { BasicMessageRole } from '@credo-ts/core/build/modules/basic-messages/BasicMessageRole'
+import { useConnectionById } from '@credo-ts/react-hooks'
 import { CaptureBaseAttributeType } from '@hyperledger/aries-oca'
 import { Attribute, Predicate } from '@hyperledger/aries-oca/build/legacy'
 import { Buffer } from 'buffer'
 import moment from 'moment'
-import { ParsedUrl, parseUrl } from 'query-string'
+import { parseUrl } from 'query-string'
 import { ReactNode } from 'react'
 import { TFunction } from 'react-i18next'
 import { DeviceEventEmitter } from 'react-native'
@@ -41,12 +38,19 @@ import { EventTypes, domain } from '../constants'
 import { i18n } from '../localization/index'
 import { Role } from '../types/chat'
 import { BifoldError } from '../types/error'
+import { Screens, Stacks } from '../types/navigators'
 import { ProofCredentialAttributes, ProofCredentialItems, ProofCredentialPredicates } from '../types/proof-items'
 import { ChildFn } from '../types/tour'
 
-export { parsedCredDefNameFromCredential } from './cred-def'
 import { BifoldAgent } from './agent'
+import {
+  createAnonCredsProofRequest,
+  filterInvalidProofRequestMatches,
+  getDescriptorMetadata,
+} from './anonCredsProofRequestMapper'
 import { parseCredDefFromId } from './cred-def'
+
+export { parsedCredDefNameFromCredential } from './cred-def'
 
 export { parsedCredDefName } from './cred-def'
 export { parsedSchema } from './schema'
@@ -135,7 +139,7 @@ export function formatTime(
     }
     if (lessThanAnHourAgo) {
       const minutesAgo = Math.floor(millisecondsAgo / 1000 / 60)
-      return minutesAgo === 1 ? `1 ${i18n.t('Date.MinuteAgo')}` : `${minutesAgo} ${i18n.t('Date.MinutesAgo')}`
+      return minutesAgo === 1 ? `${i18n.t('Date.MinuteAgo')}` : `${i18n.t('Date.MinutesAgo', { count: minutesAgo })}`
     }
     if (sameDay) {
       return momentTime.format(hoursFormat)
@@ -197,6 +201,32 @@ export function formatTime(
     }
   }
   return formattedTime
+}
+
+// need to use rolling b64 encode/decode to prevent hermes from 2048 byte truncation
+export function b64encode(inp: string) {
+  return (
+    inp
+      .match(/.{1,3}/g)
+      ?.map((chunk) => {
+        return Buffer.from(chunk).toString('base64')
+      })
+      .join('') ?? ''
+  )
+}
+
+export function b64decode(b64: string) {
+  return (
+    b64
+      .match(/.{1,4}/g)
+      ?.map((chunk) => {
+        if (chunk.length < 4) {
+          chunk += '='.repeat(4 - chunk.length)
+        }
+        return Buffer.from(chunk, 'base64').toString()
+      })
+      .join('') ?? ''
+  )
 }
 
 export function formatIfDate(format: string | undefined, value: string | number | null) {
@@ -278,15 +308,6 @@ export function firstValidCredential(
   }
 
   return first
-}
-
-export const getOobDeepLink = async (url: string, agent: Agent | undefined): Promise<any> => {
-  const queryParams = parseUrl(url).query
-  const b64Message = queryParams['d_m'] ?? queryParams['c_i']
-  const rawmessage = Buffer.from(b64Message as string, 'base64').toString()
-  const message = JSON.parse(rawmessage)
-  await agent?.receiveMessage(message)
-  return message
 }
 
 /**
@@ -421,19 +442,17 @@ export const evaluatePredicates =
 const addMissingDisplayAttributes = (attrReq: AnonCredsRequestedAttribute) => {
   const { name, names, restrictions } = attrReq
   const credName = credNameFromRestriction(restrictions)
-  const proofCredDefId = credDefIdFromRestrictions(restrictions)
-  const proofSchemaId = schemaIdFromRestrictions(restrictions)
+  const credDefId = credDefIdFromRestrictions(restrictions)
+  const schemaId = schemaIdFromRestrictions(restrictions)
 
   //there is no credId in this context so use credName as a placeholder
   const processedAttributes: ProofCredentialAttributes = {
     credExchangeRecord: undefined,
     altCredentials: [credName],
     credId: credName,
-    schemaId: undefined,
-    credDefId: undefined,
+    schemaId,
+    credDefId,
     credName: credName,
-    proofCredDefId,
-    proofSchemaId,
     attributes: [] as Attribute[],
   }
 
@@ -450,18 +469,16 @@ const addMissingDisplayAttributes = (attrReq: AnonCredsRequestedAttribute) => {
   return processedAttributes
 }
 export const processProofAttributes = (
-  request?: ProofFormatDataMessagePayload<[LegacyIndyProofFormat, AnonCredsProofFormat], 'request'> | undefined,
-  credentials?: GetCredentialsForRequestReturn<[LegacyIndyProofFormatService, AnonCredsProofFormatService]>,
-  credentialRecords?: CredentialExchangeRecord[]
+  request?: AnonCredsProofRequest,
+  credentials?: AnonCredsCredentialsForProofRequest,
+  credentialRecords?: CredentialExchangeRecord[],
+  groupByReferent?: boolean
 ): { [key: string]: ProofCredentialAttributes } => {
   const processedAttributes = {} as { [key: string]: ProofCredentialAttributes }
 
-  const requestedProofAttributes = request?.indy?.requested_attributes ?? request?.anoncreds?.requested_attributes
-  const retrievedCredentialAttributes =
-    credentials?.proofFormats?.indy?.attributes ?? credentials?.proofFormats?.anoncreds?.attributes
-
-  // non_revoked interval can sometimes be top level
-  const requestNonRevoked = request?.indy?.non_revoked ?? request?.anoncreds?.non_revoked
+  const requestedProofAttributes = request?.requested_attributes
+  const retrievedCredentialAttributes = credentials?.attributes
+  const requestNonRevoked = request?.non_revoked // non_revoked interval can sometimes be top level
 
   if (!requestedProofAttributes || !retrievedCredentialAttributes) {
     return {}
@@ -480,10 +497,11 @@ export const processProofAttributes = (
 
     if (credentialList.length <= 0) {
       const missingAttributes = addMissingDisplayAttributes(requestedProofAttributes[key])
-      if (!processedAttributes[missingAttributes.credName]) {
-        processedAttributes[missingAttributes.credName] = missingAttributes
+      const missingCredGroupKey = groupByReferent ? key : missingAttributes.credName
+      if (!processedAttributes[missingCredGroupKey]) {
+        processedAttributes[missingCredGroupKey] = missingAttributes
       } else {
-        processedAttributes[missingAttributes.credName].attributes?.push(...(missingAttributes.attributes ?? []))
+        processedAttributes[missingCredGroupKey].attributes?.push(...(missingAttributes.attributes ?? []))
       }
     }
 
@@ -499,33 +517,30 @@ export const processProofAttributes = (
       let revoked = false
       let credExchangeRecord = undefined
       if (credential) {
-        credExchangeRecord = credentialRecords?.find((record) =>
-          record.credentials.map((cred) => cred.credentialRecordId).includes(credential.credentialId)
+        credExchangeRecord = credentialRecords?.find(
+          (record) =>
+            record.credentials.map((cred) => cred.credentialRecordId).includes(credential.credentialId) ||
+            record.id === credential.credentialId
         )
         revoked = credExchangeRecord?.revocationNotification !== undefined
       } else {
         continue
       }
       for (const attributeName of [...(names ?? (name && [name]) ?? [])]) {
-        if (!processedAttributes[credential?.credentialId]) {
+        if (!processedAttributes[credential.credentialId]) {
           // init processedAttributes object
           processedAttributes[credential.credentialId] = {
             credExchangeRecord,
             altCredentials,
             credId: credential?.credentialId,
-            schemaId: credential?.credentialInfo?.schemaId,
-            credDefId: credential?.credentialInfo?.credentialDefinitionId,
-            proofCredDefId,
-            proofSchemaId,
+            schemaId: credential?.credentialInfo?.schemaId ?? proofSchemaId,
+            credDefId: credential?.credentialInfo?.credentialDefinitionId ?? proofCredDefId,
             credName,
             attributes: [],
           }
         }
 
-        let attributeValue = ''
-        if (credential) {
-          attributeValue = credential.credentialInfo.attributes[attributeName]
-        }
+        const attributeValue = credential ? credential.credentialInfo.attributes[attributeName] : null
         processedAttributes[credential.credentialId].attributes?.push(
           new Attribute({
             ...requestedProofAttributes[key],
@@ -566,18 +581,16 @@ const addMissingDisplayPredicates = (predReq: AnonCredsRequestedPredicate) => {
   const { name, p_type: pType, p_value: pValue, restrictions } = predReq
 
   const credName = credNameFromRestriction(restrictions)
-  const proofCredDefId = credDefIdFromRestrictions(restrictions)
-  const proofSchemaId = schemaIdFromRestrictions(restrictions)
+  const credDefId = credDefIdFromRestrictions(restrictions)
+  const schemaId = schemaIdFromRestrictions(restrictions)
 
   //there is no credId in this context so use credName as a placeholder
   const processedPredicates: ProofCredentialPredicates = {
     credExchangeRecord: undefined,
     altCredentials: [credName],
     credId: credName,
-    schemaId: undefined,
-    credDefId: undefined,
-    proofCredDefId,
-    proofSchemaId,
+    schemaId,
+    credDefId,
     credName: credName,
     predicates: [] as Predicate[],
   }
@@ -594,21 +607,19 @@ const addMissingDisplayPredicates = (predReq: AnonCredsRequestedPredicate) => {
   return processedPredicates
 }
 export const processProofPredicates = (
-  request?: ProofFormatDataMessagePayload<[LegacyIndyProofFormat, AnonCredsProofFormat], 'request'> | undefined,
-  credentials?: GetCredentialsForRequestReturn<[LegacyIndyProofFormatService, AnonCredsProofFormatService]>,
-  credentialRecords?: CredentialExchangeRecord[]
+  request?: AnonCredsProofRequest,
+  credentials?: AnonCredsCredentialsForProofRequest,
+  credentialRecords?: CredentialExchangeRecord[],
+  groupByReferent?: boolean
 ): { [key: string]: ProofCredentialPredicates } => {
   const processedPredicates = {} as { [key: string]: ProofCredentialPredicates }
-  const requestedProofPredicates = request?.anoncreds?.requested_predicates ?? request?.indy?.requested_predicates
-  const retrievedCredentialPredicates =
-    credentials?.proofFormats?.anoncreds?.predicates ?? credentials?.proofFormats?.indy?.predicates
+  const requestedProofPredicates = request?.requested_predicates
+  const retrievedCredentialPredicates = credentials?.predicates
+  const requestNonRevoked = request?.non_revoked // // non_revoked interval can sometimes be top level
 
   if (!requestedProofPredicates || !retrievedCredentialPredicates) {
     return {}
   }
-
-  // non_revoked interval can sometimes be top level
-  const requestNonRevoked = request?.indy?.non_revoked ?? request?.anoncreds?.non_revoked
 
   for (const key of Object.keys(retrievedCredentialPredicates)) {
     const altCredentials = [...(retrievedCredentialPredicates[key] ?? [])]
@@ -622,10 +633,11 @@ export const processProofPredicates = (
 
     if (credentialList.length <= 0) {
       const missingPredicates = addMissingDisplayPredicates(requestedProofPredicates[key])
-      if (!processedPredicates[missingPredicates.credName]) {
-        processedPredicates[missingPredicates.credName] = missingPredicates
+      const missingCredGroupKey = groupByReferent ? key : missingPredicates.credName
+      if (!processedPredicates[missingCredGroupKey]) {
+        processedPredicates[missingCredGroupKey] = missingPredicates
       } else {
-        processedPredicates[missingPredicates.credName].predicates?.push(...(missingPredicates.predicates ?? []))
+        processedPredicates[missingCredGroupKey].predicates?.push(...(missingPredicates.predicates ?? []))
       }
     }
 
@@ -633,8 +645,10 @@ export const processProofPredicates = (
       let revoked = false
       let credExchangeRecord = undefined
       if (credential) {
-        credExchangeRecord = credentialRecords?.find((record) =>
-          record.credentials.map((cred) => cred.credentialRecordId).includes(credential.credentialId)
+        credExchangeRecord = credentialRecords?.find(
+          (record) =>
+            record.credentials.map((cred) => cred.credentialRecordId).includes(credential.credentialId) ||
+            record.id === credential.credentialId
         )
         revoked = credExchangeRecord?.revocationNotification !== undefined
       } else {
@@ -651,16 +665,13 @@ export const processProofPredicates = (
           credential?.credentialInfo?.schemaId
         )
       }
-
       if (!processedPredicates[credential.credentialId]) {
         processedPredicates[credential.credentialId] = {
           altCredentials,
           credExchangeRecord,
           credId: credential.credentialId,
-          schemaId,
-          credDefId: credentialDefinitionId,
-          proofCredDefId,
-          proofSchemaId,
+          schemaId: schemaId ?? proofSchemaId,
+          credDefId: credentialDefinitionId ?? proofCredDefId,
           credName: credName,
           predicates: [],
         }
@@ -686,16 +697,18 @@ export const retrieveCredentialsForProof = async (
   agent: BifoldAgent,
   proof: ProofExchangeRecord,
   fullCredentials: CredentialExchangeRecord[],
-  t: TFunction<'translation', undefined>
+  t: TFunction<'translation', undefined>,
+  groupByReferent?: boolean
 ) => {
   try {
     const format = await agent.proofs.getFormatData(proof.id)
+    const hasPresentationExchange = format.request?.presentationExchange !== undefined
     const hasAnonCreds = format.request?.anoncreds !== undefined
     const hasIndy = format.request?.indy !== undefined
     const credentials = await agent.proofs.getCredentialsForRequest({
       proofRecordId: proof.id,
       proofFormats: {
-        // FIXME: AFJ will try to use the format, even if the value is undefined (but the key is present)
+        // FIXME: Credo will try to use the format, even if the value is undefined (but the key is present)
         // We should ignore the key, if the value is undefined. For now this is a workaround.
         ...(hasIndy
           ? {
@@ -708,7 +721,6 @@ export const retrieveCredentialsForProof = async (
               },
             }
           : {}),
-
         ...(hasAnonCreds
           ? {
               anoncreds: {
@@ -720,6 +732,7 @@ export const retrieveCredentialsForProof = async (
               },
             }
           : {}),
+        ...(hasPresentationExchange ? { presentationExchange: {} } : {}),
       },
     })
     if (!credentials) {
@@ -734,13 +747,55 @@ export const retrieveCredentialsForProof = async (
       return
     }
 
+    if (hasPresentationExchange) {
+      // FIXME: non revocation requirements
+      const presentationExchange = format.request?.presentationExchange
+      const difPexCredentialsForRequest = credentials.proofFormats.presentationExchange
+
+      if (!difPexCredentialsForRequest || !presentationExchange) throw new Error('Invalid presentation request')
+
+      const presentationDefinition = presentationExchange.presentation_definition
+
+      const descriptorMetadata = getDescriptorMetadata(difPexCredentialsForRequest)
+      const anonCredsProofRequest = createAnonCredsProofRequest(presentationDefinition, descriptorMetadata)
+
+      const anonCredsCredentialsForRequest = await getCredentialsForAnonCredsProofRequest(
+        agent.context,
+        anonCredsProofRequest,
+        { filterByNonRevocationRequirements: false }
+      )
+
+      const filtered = filterInvalidProofRequestMatches(anonCredsCredentialsForRequest, descriptorMetadata)
+      const processedAttributes = processProofAttributes(
+        anonCredsProofRequest,
+        filtered,
+        fullCredentials,
+        groupByReferent
+      )
+      const processedPredicates = processProofPredicates(
+        anonCredsProofRequest,
+        filtered,
+        fullCredentials,
+        groupByReferent
+      )
+      const groupedProof = Object.values(mergeAttributesAndPredicates(processedAttributes, processedPredicates))
+
+      return {
+        groupedProof,
+        retrievedCredentials: filtered,
+        fullCredentials,
+        descriptorMetadata,
+      }
+    }
+
+    const proofRequest = format.request?.anoncreds ?? format.request?.indy
     const proofFormat = credentials.proofFormats.anoncreds ?? credentials.proofFormats.indy
 
-    const attributes = processProofAttributes(format.request, credentials, fullCredentials)
-    const predicates = processProofPredicates(format.request, credentials, fullCredentials)
-
+    const attributes = processProofAttributes(proofRequest, proofFormat, fullCredentials, groupByReferent)
+    const predicates = processProofPredicates(proofRequest, proofFormat, fullCredentials, groupByReferent)
     const groupedProof = Object.values(mergeAttributesAndPredicates(attributes, predicates))
-    return { groupedProof: groupedProof, retrievedCredentials: proofFormat, fullCredentials }
+
+    return { groupedProof, retrievedCredentials: proofFormat, fullCredentials }
   } catch (err: unknown) {
     const error = new BifoldError(t('Error.Title1043'), t('Error.Message1043'), (err as Error)?.message ?? err, 1043)
     DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
@@ -803,38 +858,6 @@ export const sortCredentialsForAutoSelect = (
 }
 
 /**
- *
- * @param url a redirection URL to retrieve a payload for an invite
- * @param agent an Agent instance
- * @returns payload from following the redirection
- */
-export const receiveMessageFromUrlRedirect = async (url: string, agent: Agent | undefined) => {
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  })
-  const message = await res.json()
-  await agent?.receiveMessage(message)
-  return message
-}
-
-/**
- *
- * @param url a redirection URL to retrieve a payload for an invite
- * @param agent an Agent instance
- * @returns payload from following the redirection
- */
-export const receiveMessageFromDeepLink = async (url: string, agent: Agent | undefined) => {
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  })
-  const message = await res.json()
-  await agent?.receiveMessage(message)
-  return message
-}
-
-/**
  * Useful for multi use invitations
  * @param agent an Agent instance
  * @param invitationId id of invitation
@@ -855,48 +878,104 @@ export const removeExistingInvitationIfRequired = async (
 }
 
 /**
- *
- * @param uri a URI containing a base64 encoded connection invite in the query parameter
+ * Get a oob record and connection record from a URI using built-in Credo methods
+ * @param uri a URI that is either a redirect URL or contains a base64 encoded connection invite in query params
  * @param agent an Agent instance
- * @returns a connection record from parsing and receiving the invitation
+ * @param implicitInvitations a boolean to determine if implicit invitation behavior should be used
+ * @param reuseConnection a boolean to determine if connection reuse should be allowed
+ * @returns an object containing an OOB record and, if not connectionless, a connection record
  */
 export const connectFromInvitation = async (
   uri: string,
   agent: Agent | undefined,
   implicitInvitations: boolean = false,
-  reuseConnection: boolean = false,
-  useMultUseInvitation: boolean = false
-) => {
+  reuseConnection: boolean = false
+): Promise<OutOfBandRecord> => {
   const invitation = await agent?.oob.parseInvitation(uri)
 
   if (!invitation) {
     throw new Error('Could not parse invitation from URL')
   }
 
-  let record
   if (implicitInvitations) {
     try {
       if (invitation.getDidServices().length > 0) {
         const did = parseDid(invitation.getDidServices()[0])
-        record = await agent?.oob.receiveImplicitInvitation({
+        const record = await agent?.oob.receiveImplicitInvitation({
           did: did.did,
           label: invitation.label,
-          handshakeProtocols: invitation.handshakeProtocols,
+          handshakeProtocols: invitation.handshakeProtocols as HandshakeProtocol[] | undefined,
         })
+
+        return record?.outOfBandRecord as OutOfBandRecord
       }
     } catch (e) {
       // don't throw an error, will try to connect again below
     }
   }
 
-  if (!record) {
-    if (useMultUseInvitation) {
-      await removeExistingInvitationIfRequired(agent, invitation.id)
-    }
-    record = await agent?.oob.receiveInvitation(invitation, { reuseConnection })
+  const record = await agent?.oob.receiveInvitation(invitation, { reuseConnection })
+  return record?.outOfBandRecord as OutOfBandRecord
+}
+
+const processBetaUrlIfRequired = (uri: string): string => {
+  let aUrl = uri
+
+  // _oob is a beta query param, not supported by Credo.
+  aUrl = uri.replace('_oob', 'oob')
+
+  // _url is a beta query param, not supported by Credo.
+  if (uri.includes('_url')) {
+    const queryParams = parseUrl(uri)?.query
+    const b64UrlRedirect = queryParams['_url']
+    aUrl = b64decode(b64UrlRedirect as string)
   }
 
-  return record
+  return aUrl
+}
+
+/**
+ * Receive a message from a scan or deeplink and navigate accordingly
+ * @param uri a URI either containing a base64 encoded connection invite in the query parameters or a redirect URL itself
+ * @param agent an Agent instance
+ * @param logger injected logger from DI container
+ * @param navigation a navigation object from either the Scan screen, Home screen, or PasteUrl screen
+ * @param isDeepLink a boolean to communicate where the uri is coming from
+ * @param implicitInvitations a boolean to determine if implicit invitation behavior should be used
+ * @param reuseConnection a boolean to determine if connection reuse should be allowed
+ * @throws Error with message containing the primary and beta error messages if both fail
+ */
+export const connectFromScanOrDeepLink = async (
+  uri: string,
+  agent: Agent | undefined,
+  logger: BaseLogger,
+  navigation: any,
+  isDeepLink: boolean,
+  implicitInvitations: boolean = false,
+  reuseConnection: boolean = false
+) => {
+  if (!agent) {
+    return
+  }
+
+  // TODO:(jl) Do we care if the connection is a deep link?
+  logger.info(`Attempting to connect from scan or ${isDeepLink ? 'deeplink' : 'qr scan'}`)
+
+  try {
+    const aUrl = processBetaUrlIfRequired(uri)
+    const receivedInvitation = await connectFromInvitation(aUrl, agent, implicitInvitations, reuseConnection)
+
+    if (receivedInvitation?.id) {
+      navigation.navigate(Stacks.ConnectionStack as any, {
+        screen: Screens.Connection,
+        params: { oobRecordId: receivedInvitation.id },
+      })
+    }
+  } catch (error: unknown) {
+    logger.error('Problem during connect strategy, error:', error as Error)
+
+    throw error
+  }
 }
 
 /**
@@ -929,32 +1008,6 @@ export const createConnectionInvitation = async (agent: Agent | undefined, goalC
  */
 export const createTempConnectionInvitation = async (agent: Agent | undefined, type: 'issue' | 'verify') => {
   return createConnectionInvitation(agent, `aries.vc.${type}.once`)
-}
-
-/**
- * Parse URL from provided string
- * @param urlString string to parse
- * @returns ParsedUur object if success or undefined
- */
-export const getUrl = (urlString: string): ParsedUrl | undefined => {
-  try {
-    return parseUrl(urlString)
-  } catch (e) {
-    return undefined
-  }
-}
-
-/**
- * Parse JSON from provided string
- * @param jsonString string to parse
- * @returns JSON object if success or undefined
- */
-export const getJson = (jsonString: string): Record<string, unknown> | undefined => {
-  try {
-    return JSON.parse(jsonString)
-  } catch (e) {
-    return undefined
-  }
 }
 
 /**

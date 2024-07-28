@@ -1,54 +1,58 @@
-import { DidExchangeState } from '@aries-framework/core'
-import { useConnectionById } from '@aries-framework/react-hooks'
 import { CommonActions, useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useMemo, useReducer, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AccessibilityInfo, BackHandler, Modal, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { AccessibilityInfo, BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import Button, { ButtonType } from '../components/buttons/Button'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useConfiguration } from '../contexts/configuration'
 import { useTheme } from '../contexts/theme'
-import { useOutOfBandByConnectionId } from '../hooks/connections'
+import { useConnectionByOutOfBandId, useOutOfBandById } from '../hooks/connections'
 import { useNotifications } from '../hooks/notifications'
-import { Screens, TabStacks, DeliveryStackParams, Stacks } from '../types/navigators'
+import { DeliveryStackParams, Screens, Stacks, TabStacks } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
+
+import { useContainer, TOKENS } from './../container-api'
 
 type ConnectionProps = StackScreenProps<DeliveryStackParams, Screens.Connection>
 
 type MergeFunction = (current: LocalState, next: Partial<LocalState>) => LocalState
 
 type LocalState = {
-  isVisible: boolean
+  inProgress: boolean
   isInitialized: boolean
   notificationRecord?: any
   shouldShowDelayMessage: boolean
-  connectionIsActive: boolean
 }
 
+const GoalCodes = {
+  proofRequestVerify: 'aries.vc.verify',
+  proofRequestVerifyOnce: 'aries.vc.verify.once',
+  credentialOffer: 'aries.vc.issue',
+} as const
+
 const Connection: React.FC<ConnectionProps> = ({ navigation, route }) => {
-  // TODO(jl): When implementing goal codes the `autoRedirectConnectionToHome`
-  // logic should be: if this property is set, rather than showing the
-  // delay message, the user should be redirected to the home screen.
+  const { oobRecordId } = route.params
   const { connectionTimerDelay, autoRedirectConnectionToHome } = useConfiguration()
   const connTimerDelay = connectionTimerDelay ?? 10000 // in ms
-  const { connectionId, threadId } = route.params
   const timerRef = useRef<NodeJS.Timeout | null>(null)
-  const connection = connectionId ? useConnectionById(connectionId) : undefined
   const { t } = useTranslation()
   const { notifications } = useNotifications()
   const { ColorPallet, TextTheme } = useTheme()
   const { ConnectionLoading } = useAnimatedComponents()
-  const oobRecord = useOutOfBandByConnectionId(connectionId ?? '')
-  const goalCode = oobRecord?.outOfBandInvitation.goalCode
+  const container = useContainer()
+  const logger = container.resolve(TOKENS.UTIL_LOGGER)
+  const oobRecord = useOutOfBandById(oobRecordId)
+  const connection = useConnectionByOutOfBandId(oobRecordId)
+
   const merge: MergeFunction = (current, next) => ({ ...current, ...next })
   const [state, dispatch] = useReducer(merge, {
-    isVisible: true,
+    inProgress: true,
     isInitialized: false,
     shouldShowDelayMessage: false,
-    connectionIsActive: false,
+    notificationRecord: undefined,
   })
   const styles = StyleSheet.create({
     container: {
@@ -77,26 +81,6 @@ const Connection: React.FC<ConnectionProps> = ({ navigation, route }) => {
     },
   })
 
-  const goalCodeAction = (goalCode: string): (() => void) => {
-    const codes: { [key: string]: undefined | (() => void) } = {
-      'aries.vc.verify': () => navigation.navigate(Screens.ProofRequest, { proofId: state.notificationRecord.id }),
-      'aries.vc.issue': () =>
-        navigation.navigate(Screens.CredentialOffer, { credentialId: state.notificationRecord.id }),
-    }
-    let action = codes[goalCode]
-
-    if (action === undefined) {
-      const matchCode = Object.keys(codes).find((code) => goalCode.startsWith(code))
-      action = codes[matchCode ?? '']
-
-      if (action === undefined) {
-        throw new Error('Unhandled goal code type')
-      }
-    }
-
-    return action
-  }
-
   const startTimer = () => {
     if (!state.isInitialized) {
       timerRef.current = setTimeout(() => {
@@ -116,7 +100,7 @@ const Connection: React.FC<ConnectionProps> = ({ navigation, route }) => {
   }
 
   const onDismissModalTouched = () => {
-    dispatch({ shouldShowDelayMessage: false, isVisible: false })
+    dispatch({ shouldShowDelayMessage: false, inProgress: false })
     navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
   }
 
@@ -128,7 +112,7 @@ const Connection: React.FC<ConnectionProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (state.shouldShowDelayMessage && !state.notificationRecord) {
       if (autoRedirectConnectionToHome) {
-        dispatch({ shouldShowDelayMessage: false, isVisible: false })
+        dispatch({ shouldShowDelayMessage: false, inProgress: false })
         navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
       } else {
         AccessibilityInfo.announceForAccessibility(t('Connection.TakingTooLong'))
@@ -137,46 +121,79 @@ const Connection: React.FC<ConnectionProps> = ({ navigation, route }) => {
   }, [state.shouldShowDelayMessage])
 
   useEffect(() => {
-    // for non-connectionless, invalid connections stay in the below state
-    if (connection && connection.state === DidExchangeState.RequestSent) {
+    if (!oobRecord || !state.inProgress) {
       return
     }
 
-    if (
-      !connectionId &&
-      !oobRecord &&
-      !goalCode &&
-      state.notificationRecord &&
-      state.notificationRecord.state === 'request-received'
-    ) {
-      navigation.replace(Screens.ProofRequest, { proofId: state.notificationRecord.id })
-      dispatch({ isVisible: false })
+    // If we have a connection, but no goal code, we should navigate
+    // to Chat
+    if (connection && !(Object.values(GoalCodes) as [string]).includes(oobRecord?.outOfBandInvitation.goalCode ?? '')) {
+      logger?.info('Connection: Handling connection without goal code, navigate to Chat')
 
-      return
-    }
-
-    if (
-      connectionId &&
-      oobRecord &&
-      (!goalCode || (!goalCode.startsWith('aries.vc.verify') && !goalCode.startsWith('aries.vc.issue')))
-    ) {
-      // No goal code, we don't know what to expect next,
-      // navigate to the chat screen and set home screen as only history
+      dispatch({ inProgress: false })
       navigation.getParent()?.dispatch(
         CommonActions.reset({
           index: 1,
-          routes: [{ name: Stacks.TabStack }, { name: Screens.Chat, params: { connectionId } }],
+          routes: [{ name: Stacks.TabStack }, { name: Screens.Chat, params: { connectionId: connection.id } }],
         })
       )
 
-      dispatch({ isVisible: false })
       return
     }
 
-    if (state.notificationRecord && goalCode) {
-      goalCodeAction(goalCode)()
+    // At this point we should be waiting for a notification
+    // to be processed
+    if (!state.notificationRecord) {
+      return
     }
-  }, [connection, connection?.state, oobRecord, goalCode, state.notificationRecord])
+
+    // Connectionless proof request, we don't have connectionless offers.
+    if (!connection) {
+      dispatch({ inProgress: false })
+      navigation.replace(Screens.ProofRequest, { proofId: state.notificationRecord.id })
+
+      return
+    }
+
+    // At this point, we have connection based proof or offer with
+    // a goal code.
+
+    if (!oobRecord) {
+      logger?.error(`Connection: No OOB record where one is expected`)
+
+      return
+    }
+
+    const { goalCode } = oobRecord.outOfBandInvitation
+
+    if (goalCode === GoalCodes.proofRequestVerify || goalCode === GoalCodes.proofRequestVerifyOnce) {
+      logger?.info(`Connection: Handling ${goalCode} goal code, navigate to ProofRequest`)
+
+      dispatch({ inProgress: false })
+      navigation.replace(Screens.ProofRequest, { proofId: state.notificationRecord.id })
+
+      return
+    }
+
+    if (goalCode === GoalCodes.credentialOffer) {
+      logger?.info(`Connection: Handling ${goalCode} goal code, navigate to CredentialOffer`)
+
+      dispatch({ inProgress: false })
+      navigation.replace(Screens.CredentialOffer, { credentialId: state.notificationRecord.id })
+
+      return
+    }
+
+    logger?.info(`Connection: Unable to handle ${goalCode} goal code`)
+
+    dispatch({ inProgress: false })
+    navigation.getParent()?.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{ name: Stacks.TabStack }, { name: Screens.Chat, params: { connectionId: connection.id } }],
+      })
+    )
+  }, [connection, oobRecord, state])
 
   useMemo(() => {
     startTimer()
@@ -191,68 +208,58 @@ const Connection: React.FC<ConnectionProps> = ({ navigation, route }) => {
   )
 
   useEffect(() => {
-    if (state.isVisible) {
-      for (const notification of notifications) {
-        // no action taken for BasicMessageRecords
-        if (notification.type !== 'BasicMessageRecord') {
-          if (
-            !state.notificationRecord &&
-            ((connectionId && notification.connectionId === connectionId) ||
-              (threadId && notification.threadId == threadId))
-          ) {
-            dispatch({ notificationRecord: notification, isVisible: false })
-            break
-          }
-          if (!connection && notification.state === 'request-received') {
-            dispatch({ notificationRecord: notification, isVisible: false })
-            break
-          }
-        }
+    if (!state.inProgress || state.notificationRecord) {
+      return
+    }
+
+    for (const notification of notifications) {
+      // no action taken for BasicMessageRecords
+      if (notification.type === 'BasicMessageRecord') {
+        logger?.info('Connection: BasicMessageRecord, skipping')
+        continue
+      }
+
+      if (
+        (connection && notification.connectionId === connection.id) ||
+        oobRecord?.getTags()?.invitationRequestsThreadIds?.includes(notification?.threadId)
+      ) {
+        logger?.info(`Connection: Handling notification ${notification.id}`)
+
+        dispatch({ notificationRecord: notification })
+        break
       }
     }
-  }, [notifications])
+  }, [notifications, state])
 
   return (
-    <Modal
-      visible={state.isVisible}
-      transparent={true}
-      animationType={'slide'}
-      onRequestClose={() => {
-        dispatch({ isVisible: false })
-      }}
-    >
-      <SafeAreaView style={{ backgroundColor: ColorPallet.brand.modalPrimaryBackground }}>
-        <ScrollView style={[styles.container]}>
-          <View style={[styles.messageContainer]}>
-            <Text
-              style={[TextTheme.modalHeadingThree, styles.messageText]}
-              testID={testIdWithKey('CredentialOnTheWay')}
-            >
-              {t('Connection.JustAMoment')}
-            </Text>
-          </View>
-
-          <View style={[styles.image]}>
-            <ConnectionLoading />
-          </View>
-
-          {state.shouldShowDelayMessage && (
-            <Text style={[TextTheme.modalNormal, styles.delayMessageText]} testID={testIdWithKey('TakingTooLong')}>
-              {t('Connection.TakingTooLong')}
-            </Text>
-          )}
-        </ScrollView>
-        <View style={[styles.controlsContainer]}>
-          <Button
-            title={t('Loading.BackToHome')}
-            accessibilityLabel={t('Loading.BackToHome')}
-            testID={testIdWithKey('BackToHome')}
-            onPress={onDismissModalTouched}
-            buttonType={ButtonType.ModalSecondary}
-          />
+    <SafeAreaView style={{ backgroundColor: ColorPallet.brand.modalPrimaryBackground }}>
+      <ScrollView style={styles.container}>
+        <View style={styles.messageContainer}>
+          <Text style={[TextTheme.modalHeadingThree, styles.messageText]} testID={testIdWithKey('CredentialOnTheWay')}>
+            {t('Connection.JustAMoment')}
+          </Text>
         </View>
-      </SafeAreaView>
-    </Modal>
+
+        <View style={styles.image}>
+          <ConnectionLoading />
+        </View>
+
+        {state.shouldShowDelayMessage && (
+          <Text style={[TextTheme.modalNormal, styles.delayMessageText]} testID={testIdWithKey('TakingTooLong')}>
+            {t('Connection.TakingTooLong')}
+          </Text>
+        )}
+      </ScrollView>
+      <View style={styles.controlsContainer}>
+        <Button
+          title={t('Loading.BackToHome')}
+          accessibilityLabel={t('Loading.BackToHome')}
+          testID={testIdWithKey('BackToHome')}
+          onPress={onDismissModalTouched}
+          buttonType={ButtonType.ModalSecondary}
+        />
+      </View>
+    </SafeAreaView>
   )
 }
 

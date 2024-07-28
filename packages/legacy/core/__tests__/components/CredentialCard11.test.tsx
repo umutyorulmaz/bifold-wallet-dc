@@ -1,4 +1,4 @@
-import { CredentialExchangeRecord } from '@aries-framework/core'
+import { CredentialExchangeRecord } from '@credo-ts/core'
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock'
 import '@testing-library/jest-native/extend-expect'
 import { fireEvent, render } from '@testing-library/react-native'
@@ -10,17 +10,12 @@ import CredentialCard11 from '../../App/components/misc/CredentialCard11'
 import { ConfigurationContext } from '../../App/contexts/configuration'
 import { testIdWithKey } from '../../App/utils/testable'
 import configurationContext from '../contexts/configuration'
+import { Linking } from 'react-native'
 
+jest.mock('../../App/container-api')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-jest.mock('@react-navigation/core', () => {
-  return require('../../__mocks__/custom/@react-navigation/core')
-})
-jest.mock('@react-navigation/native', () => {
-  return require('../../__mocks__/custom/@react-navigation/native')
-})
-
 jest.mock('@hyperledger/anoncreds-react-native', () => ({}))
 jest.mock('@hyperledger/aries-askar-react-native', () => ({}))
 jest.mock('@hyperledger/indy-vdr-react-native', () => ({}))
@@ -68,16 +63,14 @@ describe('CredentialCard11 component', () => {
     })
 
     test('Missing credential with help action (cred def ID)', async () => {
-      const helpAction = jest.fn()
-
+      Linking.openURL = jest.fn()
       const { findByTestId } = render(
         <ConfigurationContext.Provider
           value={{
             ...configurationContext,
-            getCredentialHelpDictionary: [{ credDefIds: ['proof_cred_def_id'], schemaIds: [], action: helpAction }],
           }}
         >
-          <CredentialCard11 proof proofCredDefId={'proof_cred_def_id'} error={true} />
+          <CredentialCard11 proof credDefId={'XUxBrVSALWHLeycAUhrNr9:3:CL:26293:Student Card'} error={true} />
         </ConfigurationContext.Provider>
       )
 
@@ -86,20 +79,19 @@ describe('CredentialCard11 component', () => {
       expect(getThisCredentialButton).toBeTruthy()
 
       fireEvent(getThisCredentialButton, 'press')
-      expect(helpAction).toBeCalled()
+      expect(Linking.openURL).toBeCalled()
     })
 
     test('Missing credential with help action (schema ID)', async () => {
-      const helpAction = jest.fn()
+      Linking.openURL = jest.fn()
 
       const { findByTestId } = render(
         <ConfigurationContext.Provider
           value={{
             ...configurationContext,
-            getCredentialHelpDictionary: [{ credDefIds: [], schemaIds: ['proof_schema_id'], action: helpAction }],
           }}
         >
-          <CredentialCard11 proof proofSchemaId={'proof_schema_id'} error={true} />
+          <CredentialCard11 proof schemaId={'XUxBrVSALWHLeycAUhrNr9:2:student_card:1.0'} error={true} />
         </ConfigurationContext.Provider>
       )
 
@@ -108,7 +100,7 @@ describe('CredentialCard11 component', () => {
       expect(getThisCredentialButton).toBeTruthy()
 
       fireEvent(getThisCredentialButton, 'press')
-      expect(helpAction).toBeCalled()
+      expect(Linking.openURL).toBeCalled()
     })
   })
 })

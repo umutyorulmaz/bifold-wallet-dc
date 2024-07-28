@@ -1,10 +1,9 @@
-// TODO: export this from @aries-framework/anoncreds
-import { AnonCredsCredentialMetadataKey } from '@aries-framework/anoncreds/build/utils/metadata'
-import { CredentialPreviewAttribute } from '@aries-framework/core'
-import { useCredentialById } from '@aries-framework/react-hooks'
+import { AnonCredsCredentialMetadataKey } from '@credo-ts/anoncreds'
+import { CredentialPreviewAttribute } from '@credo-ts/core'
+import { useCredentialById } from '@credo-ts/react-hooks'
 import { BrandingOverlay } from '@hyperledger/aries-oca'
 import { Attribute, CredentialOverlay } from '@hyperledger/aries-oca/build/legacy'
-import { useIsFocused } from '@react-navigation/core'
+import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,6 +17,7 @@ import CredentialCard from '../components/misc/CredentialCard'
 import CommonRemoveModal from '../components/modals/CommonRemoveModal'
 import Record from '../components/record/Record'
 import { EventTypes } from '../constants'
+import { TOKENS, useContainer } from '../container-api'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useConfiguration } from '../contexts/configuration'
 import { useNetwork } from '../contexts/network'
@@ -26,11 +26,13 @@ import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
 import { useTour } from '../contexts/tour/tour-context'
 import { useOutOfBandByConnectionId } from '../hooks/connections'
+import { HistoryCardType, HistoryRecord } from '../modules/history/types'
 import { BifoldError } from '../types/error'
-import { TabStacks, NotificationStackParams, Screens } from '../types/navigators'
+import { NotificationStackParams, Screens, TabStacks } from '../types/navigators'
 import { ModalUsage } from '../types/remove'
 import { TourID } from '../types/tour'
 import { useAppAgent } from '../utils/agent'
+import { parseCredDefFromId } from '../utils/cred-def'
 import { getCredentialIdentifiers, isValidAnonCredsCredential } from '../utils/credential'
 import { getCredentialConnectionLabel } from '../utils/helpers'
 import { buildFieldsFromAnonCredsCredential } from '../utils/oca'
@@ -46,13 +48,12 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
   }
 
   const { credentialId } = route.params
-
   const { agent } = useAppAgent()
   const { t, i18n } = useTranslation()
   const { TextTheme, ColorPallet } = useTheme()
   const { RecordLoading } = useAnimatedComponents()
   const { assertConnectedNetwork } = useNetwork()
-  const { OCABundleResolver, enableTours: enableToursConfig } = useConfiguration()
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
   const [loading, setLoading] = useState<boolean>(true)
   const [buttonsVisible, setButtonsVisible] = useState(true)
   const [acceptModalVisible, setAcceptModalVisible] = useState(false)
@@ -64,6 +65,9 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
   const { start } = useTour()
   const screenIsFocused = useIsFocused()
   const goalCode = useOutOfBandByConnectionId(credential?.connectionId ?? '')?.outOfBandInvitation.goalCode
+  const { enableTours: enableToursConfig } = useConfiguration()
+  const container = useContainer()
+  const logger = container.resolve(TOKENS.UTIL_LOGGER)
 
   const styles = StyleSheet.create({
     headerTextContainer: {
@@ -133,12 +137,13 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
     const resolvePresentationFields = async () => {
       const identifiers = getCredentialIdentifiers(credential)
       const attributes = buildFieldsFromAnonCredsCredential(credential)
-      const fields = await OCABundleResolver.presentationFields({ identifiers, attributes, language: i18n.language })
+      const fields = await bundleResolver.presentationFields({ identifiers, attributes, language: i18n.language })
+
       return { fields }
     }
 
     /**
-     * FIXME: Formatted data needs to be added to the record in AFJ extensions
+     * FIXME: Formatted data needs to be added to the record in Credo extensions
      * For now the order here matters. The credential preview must be updated to
      * add attributes (since these are not available in the offer).
      * Once the credential is updated the presentation fields can be correctly resolved
@@ -154,6 +159,37 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
 
   const toggleDeclineModalVisible = () => setDeclineModalVisible(!declineModalVisible)
 
+  const logHistoryRecord = async () => {
+    try {
+      if (!(agent && store.preferences.useHistoryCapability)) {
+        logger.trace(
+          `[${CredentialOffer.name}]:[logHistoryRecord] Skipping history log, either history function disabled or agent undefined!`
+        )
+        return
+      }
+      const historyManager = container.resolve(TOKENS.FN_LOAD_HISTORY)(agent)
+
+      const type = HistoryCardType.CardAccepted
+      if (!credential) {
+        logger.error(`[${CredentialOffer.name}]:[logHistoryRecord] Cannot save history, credential undefined!`)
+        return
+      }
+      const ids = getCredentialIdentifiers(credential)
+      const name = parseCredDefFromId(ids.credentialDefinitionId, ids.schemaId)
+
+      /** Save history record for card accepted */
+      const recordData: HistoryRecord = {
+        type: type,
+        message: type,
+        createdAt: credential?.createdAt,
+        correspondenceId: credentialId,
+        correspondenceName: name,
+      }
+      await historyManager.saveHistory(recordData)
+    } catch (err: unknown) {
+      logger.error(`[${CredentialOffer.name}]:[logHistoryRecord] Error saving history: ${err}`)
+    }
+  }
   const handleAcceptTouched = async () => {
     try {
       if (!(agent && credential && assertConnectedNetwork())) {
@@ -163,6 +199,7 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
       setAcceptModalVisible(true)
 
       await agent.credentials.acceptOffer({ credentialRecordId: credential.id })
+      await logHistoryRecord()
     } catch (err: unknown) {
       setButtonsVisible(true)
       const error = new BifoldError(t('Error.Title1024'), t('Error.Message1024'), (err as Error)?.message ?? err, 1024)

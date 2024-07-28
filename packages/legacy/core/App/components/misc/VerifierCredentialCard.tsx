@@ -15,9 +15,10 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import ImageModal from '../../components/modals/ImageModal'
-import { useConfiguration } from '../../contexts/configuration'
+import { TOKENS, useContainer } from '../../container-api'
 import { useTheme } from '../../contexts/theme'
 import { toImageSource } from '../../utils/credential'
 import { formatIfDate, isDataUrl, pTypeToText } from '../../utils/helpers'
@@ -56,7 +57,7 @@ const VerifierCredentialCard: React.FC<VerifierCredentialCardProps> = ({
   const [dimensions, setDimensions] = useState({ cardWidth: 0, cardHeight: 0 })
   const { i18n, t } = useTranslation()
   const { ColorPallet, TextTheme } = useTheme()
-  const { OCABundleResolver } = useConfiguration()
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
   const [overlay, setOverlay] = useState<CredentialOverlay<BrandingOverlay>>({})
 
   const attributeTypes = overlay.bundle?.captureBase.attributes
@@ -137,7 +138,7 @@ const VerifierCredentialCard: React.FC<VerifierCredentialCardProps> = ({
       attributes: displayItems,
       language: i18n.language,
     }
-    OCABundleResolver.resolveAllBundles(params).then((bundle) => {
+    bundleResolver.resolveAllBundles(params).then((bundle) => {
       setOverlay({
         ...overlay,
         ...bundle,
@@ -261,6 +262,9 @@ const VerifierCredentialCard: React.FC<VerifierCredentialCardProps> = ({
           {ylabel}
         </Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          {item.satisfied && !preview ? (
+            <Icon style={{ marginRight: 5 }} size={24} name={'check-circle'} color={ColorPallet.semantic.success} />
+          ) : null}
           <Text style={[TextTheme.bold, styles.textContainer, predicateStyles.predicateType]}>{item.pType}</Text>
           {/* Only allow editing parametrizable predicates in preview mode */}
           {item.parameterizable && preview && onChangeValue ? (

@@ -1,10 +1,7 @@
-import { DefaultOCABundleResolver } from '@hyperledger/aries-oca/build/legacy'
-
 import { ConfigurationContext } from '../../App'
 import Record from '../../App/components/record/Record'
 import { useNotifications } from '../../App/hooks/notifications'
 import { Locales } from '../../App/localization'
-import { useProofRequestTemplates } from '@hyperledger/aries-bifold-verifier'
 
 const configurationContext: ConfigurationContext = {
   pages: () => [],
@@ -16,13 +13,11 @@ const configurationContext: ConfigurationContext = {
   credentialListHeaderRight: () => null,
   credentialListOptions: () => null,
   credentialEmptyList: () => null,
-  OCABundleResolver: new DefaultOCABundleResolver(require('../../App/assets/oca-bundles.json')),
   useBiometry: () => null,
   record: Record,
   settings: [],
   developer: () => null,
   scan: () => null,
-  indyLedgers: [],
   PINSecurity: {
     rules: {
       only_numbers: true,
@@ -36,16 +31,7 @@ const configurationContext: ConfigurationContext = {
     },
     displayHelper: false,
   },
-  customNotification: {
-    component: () => null,
-    onCloseAction: () => null,
-    title: '',
-    description: '',
-    buttonTitle: '',
-    pageTitle: '',
-  },
   useCustomNotifications: useNotifications,
-  proofRequestTemplates: useProofRequestTemplates,
   supportedLanguages: [Locales.en, Locales.fr, Locales.ptBr],
   whereToUseWalletUrl: 'https://example.com',
 }

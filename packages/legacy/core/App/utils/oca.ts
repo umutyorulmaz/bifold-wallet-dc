@@ -1,5 +1,5 @@
-import { CredentialExchangeRecord } from '@aries-framework/core'
-import { CredentialSharedProofData, AnonCredsProofRequestTemplatePayloadData } from '@hyperledger/aries-bifold-verifier'
+import { CredentialExchangeRecord } from '@credo-ts/core'
+import { AnonCredsProofRequestTemplatePayloadData, CredentialSharedProofData } from '@hyperledger/aries-bifold-verifier'
 import { Attribute, Field, Predicate } from '@hyperledger/aries-oca/build/legacy'
 
 export const buildFieldsFromAnonCredsCredential = (credential: CredentialExchangeRecord): Array<Field> => {
@@ -62,6 +62,7 @@ export const buildFieldsFromSharedAnonCredsProof = (data: CredentialSharedProofD
         name: predicate.name,
         pType: predicate.predicateType,
         pValue: predicate.predicateValue,
+        satisfied: true,
       })
     )
   }

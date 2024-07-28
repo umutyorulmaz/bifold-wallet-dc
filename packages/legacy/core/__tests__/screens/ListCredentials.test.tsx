@@ -1,8 +1,7 @@
-// TODO: export this from @aries-framework/anoncreds
-import { AnonCredsCredentialMetadataKey } from '@aries-framework/anoncreds/build/utils/metadata'
-import { CredentialExchangeRecord, CredentialState } from '@aries-framework/core'
-import { useCredentialByState } from '@aries-framework/react-hooks'
-import { useNavigation } from '@react-navigation/core'
+import { AnonCredsCredentialMetadataKey } from '@credo-ts/anoncreds'
+import { CredentialExchangeRecord, CredentialRole, CredentialState } from '@credo-ts/core'
+import { useCredentialByState } from '@credo-ts/react-hooks'
+import { useNavigation } from '@react-navigation/native'
 import { act, cleanup, fireEvent, render } from '@testing-library/react-native'
 import React from 'react'
 import { ReactTestInstance } from 'react-test-renderer'
@@ -18,12 +17,7 @@ interface CredentialContextInterface {
   credentials: CredentialExchangeRecord[]
 }
 
-jest.mock('@react-navigation/core', () => {
-  return require('../../__mocks__/custom/@react-navigation/core')
-})
-jest.mock('@react-navigation/native', () => {
-  return require('../../__mocks__/custom/@react-navigation/native')
-})
+jest.mock('../../App/container-api')
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 jest.mock('react-native-localize', () => {})
 
@@ -31,6 +25,7 @@ const credentialDefinitionId = 'xxxxxxxxxxxxxxxxxx:3:CL:11111:default'
 
 describe('displays a credentials list screen', () => {
   const testOpenVPCredentialRecord = new CredentialExchangeRecord({
+    role: CredentialRole.Holder,
     threadId: '1',
     state: CredentialState.Done,
     createdAt: new Date('2020-01-01T00:00:00'),
@@ -45,12 +40,14 @@ describe('displays a credentials list screen', () => {
     credentialRecordId: '',
   })
   const testCredential1 = new CredentialExchangeRecord({
+    role: CredentialRole.Holder,
     threadId: '2',
     state: CredentialState.Done,
     createdAt: new Date('2020-01-01T00:01:00'),
     protocolVersion: 'v1',
   })
   const testCredential2 = new CredentialExchangeRecord({
+    role: CredentialRole.Holder,
     threadId: '3',
     state: CredentialState.Done,
     createdAt: new Date('2020-01-02T00:00:00'),

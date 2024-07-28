@@ -1,19 +1,27 @@
-import { CredentialExchangeRecord } from '@aries-framework/core'
+import { CredentialExchangeRecord } from '@credo-ts/core'
 import { BrandingOverlay } from '@hyperledger/aries-oca'
 import { Attribute, CredentialOverlay, Predicate } from '@hyperledger/aries-oca/build/legacy'
-import { useNavigation } from '@react-navigation/core'
-import { StackNavigationProp } from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
 import startCase from 'lodash.startcase'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useWindowDimensions, FlatList, Image, ImageBackground, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import {
+  FlatList,
+  Image,
+  ImageBackground,
+  Linking,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+  useWindowDimensions,
+} from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import { useConfiguration } from '../../contexts/configuration'
+import { TOKENS, useContainer } from '../../container-api'
 import { useTheme } from '../../contexts/theme'
 import { GenericFn } from '../../types/fn'
-import { NotificationStackParams, Screens } from '../../types/navigators'
 import { credentialTextColor, getCredentialIdentifiers, toImageSource } from '../../utils/credential'
 import { formatIfDate, getCredentialConnectionLabel, isDataUrl, pTypeToText } from '../../utils/helpers'
 import { shadeIsLightOrDark, Shade } from '../../utils/luminance'
@@ -34,8 +42,6 @@ interface CredentialCard11Props {
   credName?: string
   credDefId?: string
   schemaId?: string
-  proofCredDefId?: string
-  proofSchemaId?: string
   proof?: boolean
   hasAltCredentials?: boolean
   handleAltCredChange?: () => void
@@ -81,8 +87,6 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
   credName,
   credDefId,
   schemaId,
-  proofCredDefId,
-  proofSchemaId,
   proof,
   hasAltCredentials,
   handleAltCredChange,
@@ -94,7 +98,6 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
   const [dimensions, setDimensions] = useState({ cardWidth: 0, cardHeight: 0 })
   const { i18n, t } = useTranslation()
   const { ColorPallet, TextTheme, ListItems } = useTheme()
-  const { OCABundleResolver, getCredentialHelpDictionary } = useConfiguration()
   const [isRevoked, setIsRevoked] = useState<boolean>(credential?.revocationNotification !== undefined)
   const [flaggedAttributes, setFlaggedAttributes] = useState<string[]>()
   const [allPI, setAllPI] = useState<boolean>()
@@ -102,6 +105,7 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
   const [isProofRevoked, setIsProofRevoked] = useState<boolean>(
     credential?.revocationNotification !== undefined && !!proof
   )
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
   const [helpAction, setHelpAction] = useState<GenericFn>()
   const [overlay, setOverlay] = useState<CredentialOverlay<BrandingOverlay>>({})
 
@@ -123,6 +127,8 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
       return { ...prev, [curr.name]: curr.format }
     }, {})
   const cardData = [...(displayItems ?? []), primaryField, secondaryField]
+  const credHelpActionOverrides = useContainer().resolve(TOKENS.CRED_HELP_ACTION_OVERRIDES)
+  //const navigation = useNavigation()
 
   const getSecondaryBackgroundColor = () => {
     if (proof) {
@@ -305,7 +311,7 @@ const renderJSONAttributes = (jsonString: string) => {
 
   const parseAttribute = (item: (Attribute & Predicate) | undefined) => {
     let parsedItem = item
-    if (item && !item.value) {
+    if (item && item.pValue != null) {
       parsedItem = pTypeToText(item, t, attributeTypes) as Attribute & Predicate
     }
     const parsedValue = formatIfDate(
@@ -314,23 +320,24 @@ const renderJSONAttributes = (jsonString: string) => {
     )
     return {
       label: item?.label ?? item?.name ?? '',
-      value: item?.value ? parsedValue : `${parsedItem?.pType} ${parsedValue}`,
+      value: item?.value !== undefined && item?.value != null ? parsedValue : `${parsedItem?.pType} ${parsedValue}`,
     }
   }
 
   useEffect(() => {
     setAllPI(
-      cardData.every((item) => {
-        if (item === undefined) {
-          return true
-        } else if (item instanceof Attribute) {
-          const { label } = parseAttribute(item as Attribute & Predicate)
-          return flaggedAttributes?.includes(label)
-        } else {
-          // Predicates are not PII
-          return false
-        }
-      })
+      credential &&
+        cardData.every((item) => {
+          if (item === undefined) {
+            return true
+          } else if (item instanceof Attribute) {
+            const { label } = parseAttribute(item as Attribute & Predicate)
+            return flaggedAttributes?.includes(label)
+          } else {
+            // Predicates are not PII
+            return false
+          }
+        })
     )
   }, [flaggedAttributes])
 
@@ -345,9 +352,28 @@ const renderJSONAttributes = (jsonString: string) => {
       },
       language: i18n.language,
     }
-    OCABundleResolver.resolveAllBundles(params).then((bundle) => {
+    bundleResolver.resolveAllBundles(params).then((bundle: any) => {
       if (proof) {
         setFlaggedAttributes((bundle as any).bundle.bundle.flaggedAttributes.map((attr: any) => attr.name))
+        const credHelpUrl =
+          (bundle as any).bundle.bundle.metadata.credentialSupportUrl[params.language] ??
+          Object.values((bundle as any).bundle.bundle.metadata.credentialSupportUrl)?.[0]
+
+        // Check if there is a help action override for this credential
+        const override = credHelpActionOverrides?.find(
+          (override) =>
+            (credDefId && override.credDefIds.includes(credDefId)) ||
+            (schemaId && override.schemaIds.includes(schemaId))
+        )
+        if (override) {
+          setHelpAction(() => () => {
+            override.action(navigation)
+          })
+        } else if (credHelpUrl) {
+          setHelpAction(() => () => {
+            Linking.openURL(credHelpUrl)
+          })
+        }
       }
       setOverlay({
         ...overlay,
@@ -361,27 +387,6 @@ const renderJSONAttributes = (jsonString: string) => {
     setIsRevoked(credential?.revocationNotification !== undefined && !proof)
     setIsProofRevoked(credential?.revocationNotification !== undefined && !!proof)
   }, [credential?.revocationNotification])
-
-  useEffect(() => {
-    if (!error) {
-      return
-    }
-
-    getCredentialHelpDictionary?.some((entry) => {
-      if (proofCredDefId && entry.credDefIds.includes(proofCredDefId)) {
-        setHelpAction(() => () => {
-          entry.action(navigation)
-        })
-        return true
-      }
-      if (proofSchemaId && entry.schemaIds.includes(proofSchemaId)) {
-        setHelpAction(() => () => {
-          entry.action(navigation)
-        })
-        return true
-      }
-    })
-  }, [proofCredDefId, proofSchemaId])
 
   const CredentialCardLogo: React.FC = () => {
     return (
@@ -465,13 +470,53 @@ const renderJSONAttributes = (jsonString: string) => {
   const renderCardAttribute = (item:any) => {
     const { label, value } = parseAttribute(item); 
     return (
-      <View style={{ marginTop: 15 }}>
-        <Text style={styles.attributeLabel}>{label}:</Text>
-        {typeof value === 'string' ? renderJSONAttributes(value) : <Text style={styles.attributeValue}>{value}</Text>}
-      </View>
-    );
-  };
-  
+      item && (
+        <View style={{ marginTop: 15 }}>
+          <Text style={styles.attributeLabel}>{label}:</Text>
+          {typeof value === 'string' ? renderJSONAttributes(value) : <Text style={styles.attributeValue}>{value}</Text>}
+{/*
+          {!(item?.value || item?.satisfied) ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Icon
+                style={{ paddingTop: 2, paddingHorizontal: 2 }}
+                name="close"
+                color={ListItems.proofError.color}
+                size={ListItems.recordAttributeText.fontSize}
+              />
+              <AttributeLabel label={label} />
+            </View>
+          ) : (
+            <AttributeLabel label={label} />
+          )}
+          {!(item?.value || item?.pValue) ? null : (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {flaggedAttributes?.includes(label) && !item.pValue && !allPI && proof && (
+                <Icon
+                  style={{ paddingTop: 2, paddingHorizontal: 2 }}
+                  name="warning"
+                  color={ColorPallet.notification.warnIcon}
+                  size={ListItems.recordAttributeText.fontSize}
+                />
+              )}
+              {!error ? (
+                <AttributeValue
+                  warn={flaggedAttributes?.includes(label) && !item.pValue && proof}
+                  value={parsedValue}
+                />
+              ) : null}
+            </View>
+          )}
+          {!error && item?.satisfied != undefined && item?.satisfied === false ? (
+            <Text style={[styles.errorText]} numberOfLines={1}>
+              {t('ProofRequest.PredicateNotSatisfied')}
+            </Text>
+          ) : null}
+*/}
+        </View>
+      )
+    )
+  }
+
   const CredentialCardPrimaryBody: React.FC = () => {
     return (
       <View testID={testIdWithKey('CredentialCardPrimaryBody')} style={styles.primaryBodyContainer}>

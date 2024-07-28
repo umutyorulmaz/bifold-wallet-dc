@@ -1,9 +1,13 @@
-import { ProofState } from '@aries-framework/core'
-import { useAgent, useProofByState } from '@aries-framework/react-hooks'
+import { ProofState } from '@credo-ts/core'
+import { useAgent, useProofByState } from '@credo-ts/react-hooks'
 import { ProofCustomMetadata, ProofMetadata } from '@hyperledger/aries-bifold-verifier'
-import { useNavigation } from '@react-navigation/core'
-import { createStackNavigator, StackCardStyleInterpolator, StackNavigationProp } from '@react-navigation/stack'
-import { parseUrl } from 'query-string'
+import { useNavigation } from '@react-navigation/native'
+import {
+  CardStyleInterpolators,
+  StackCardStyleInterpolator,
+  StackNavigationProp,
+  createStackNavigator,
+} from '@react-navigation/stack'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, DeviceEventEmitter } from 'react-native'
@@ -17,12 +21,11 @@ import { DispatchAction } from '../contexts/reducers/store'
 import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
 import { useDeepLinks } from '../hooks/deep-links'
-import AttemptLockout from '../screens/AttemptLockout'
+import HistoryStack from '../modules/history/navigation/HistoryStack'
 import Chat from '../screens/Chat'
-import PINEnter from '../screens/PINEnter'
 import { BifoldError } from '../types/error'
 import { AuthenticateStackParams, Screens, Stacks, TabStacks } from '../types/navigators'
-import { connectFromInvitation, getOobDeepLink } from '../utils/helpers'
+import { connectFromScanOrDeepLink } from '../utils/helpers'
 import { testIdWithKey } from '../utils/testable'
 
 import ConnectStack from './ConnectStack'
@@ -42,22 +45,16 @@ const RootStack: React.FC = () => {
   const [backgroundTime, setBackgroundTime] = useState<number | undefined>(undefined)
   const [prevAppStateVisible, setPrevAppStateVisible] = useState<string>('')
   const [appStateVisible, setAppStateVisible] = useState<string>('')
+  const [inBackground, setInBackground] = useState<boolean>(false)
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<AuthenticateStackParams>>()
   const theme = useTheme()
   const defaultStackOptions = createDefaultStackOptions(theme)
-  const {
-    splash,
-    showPreface,
-    enableImplicitInvitations,
-    enableReuseConnections,
-    enableUseMultUseInvitation,
-    enablePushNotifications,
-  } = useConfiguration()
+  const { splash, enableImplicitInvitations, enableReuseConnections } = useConfiguration()
   const container = useContainer()
+  const logger = container.resolve(TOKENS.UTIL_LOGGER)
   const OnboardingStack = container.resolve(TOKENS.STACK_ONBOARDING)
   const loadState = container.resolve(TOKENS.LOAD_STATE)
-  const { version: TermsVersion } = container.resolve(TOKENS.SCREEN_TERMS)
   useDeepLinks()
 
   // remove connection on mobile verifier proofs if proof is rejected regardless of if it has been opened
@@ -77,8 +74,12 @@ const RootStack: React.FC = () => {
     if (agent && state.authentication.didAuthenticate) {
       // make sure agent is shutdown so wallet isn't still open
       removeSavedWalletSecret()
-      await agent.wallet.close()
-      await agent.shutdown()
+      try {
+        await agent.wallet.close()
+        await agent.shutdown()
+      } catch (error) {
+        logger?.error(`Error shutting down agent: ${error}`)
+      }
       dispatch({
         type: DispatchAction.DID_AUTHENTICATE,
         payload: [{ didAuthenticate: false }],
@@ -105,7 +106,7 @@ const RootStack: React.FC = () => {
   useEffect(() => {
     async function handleDeepLink(deepLink: string) {
       // If it's just the general link with no params, set link inactive and do nothing
-      if (deepLink.endsWith('//')) {
+      if (deepLink.search(/oob=|c_i=|d_m=|url=/) < 0) {
         dispatch({
           type: DispatchAction.ACTIVE_DEEP_LINK,
           payload: [undefined],
@@ -114,45 +115,23 @@ const RootStack: React.FC = () => {
       }
 
       try {
-        // Try connection based
-        const receivedInvitation = await connectFromInvitation(
+        await connectFromScanOrDeepLink(
           deepLink,
           agent,
+          logger,
+          navigation,
+          true, // isDeepLink
           enableImplicitInvitations,
-          enableReuseConnections,
-          enableUseMultUseInvitation
+          enableReuseConnections
         )
-        navigation.navigate(Stacks.ConnectionStack as any, {
-          screen: Screens.Connection,
-          params: { connectionId: receivedInvitation?.connectionRecord?.id },
-        })
-      } catch {
-        try {
-          // Try connectionless here
-          const queryParams = parseUrl(deepLink).query
-          const param = queryParams['d_m'] ?? queryParams['c_i']
-          // if missing both of the required params, don't attempt to open OOB
-          if (!param) {
-            dispatch({
-              type: DispatchAction.ACTIVE_DEEP_LINK,
-              payload: [undefined],
-            })
-            return
-          }
-          const message = await getOobDeepLink(deepLink, agent)
-          navigation.navigate(Stacks.ConnectionStack as any, {
-            screen: Screens.Connection,
-            params: { threadId: message['@id'] },
-          })
-        } catch (err: unknown) {
-          const error = new BifoldError(
-            t('Error.Title1039'),
-            t('Error.Message1039'),
-            (err as Error)?.message ?? err,
-            1039
-          )
-          DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
-        }
+      } catch (err: unknown) {
+        const error = new BifoldError(
+          t('Error.Title1039'),
+          t('Error.Message1039'),
+          (err as Error)?.message ?? err,
+          1039
+        )
+        DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
       }
 
       // set deeplink as inactive
@@ -162,15 +141,20 @@ const RootStack: React.FC = () => {
       })
     }
 
-    if (agent && state.deepLink.activeDeepLink && state.authentication.didAuthenticate) {
+    if (inBackground) {
+      return
+    }
+
+    if (agent && agent.isInitialized && state.deepLink.activeDeepLink && state.authentication.didAuthenticate) {
       handleDeepLink(state.deepLink.activeDeepLink)
     }
-  }, [agent, state.deepLink.activeDeepLink, state.authentication.didAuthenticate])
+  }, [agent, state.deepLink.activeDeepLink, state.authentication.didAuthenticate, inBackground])
 
   useEffect(() => {
     AppState.addEventListener('change', (nextAppState) => {
-      if (appState.current.match(/active/) && nextAppState.match(/inactive|background/)) {
+      if (appState.current === 'active' && ['inactive', 'background'].includes(nextAppState)) {
         //update time that app gets put in background
+        setInBackground(true)
         setBackgroundTime(Date.now())
       }
 
@@ -181,9 +165,7 @@ const RootStack: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (appStateVisible.match(/active/) && prevAppStateVisible.match(/inactive|background/) && backgroundTime) {
-      // prevents the user from being locked out during metro reloading
-      setPrevAppStateVisible(appStateVisible)
+    const lockoutCheck = async () => {
       //lock user out after 5 minutes
       if (
         !state.preferences.preventAutoLock &&
@@ -191,46 +173,31 @@ const RootStack: React.FC = () => {
         backgroundTime &&
         Date.now() - backgroundTime > walletTimeout
       ) {
-        lockoutUser()
+        await lockoutUser()
+        return true
       }
+
+      return false
+    }
+
+    if (appStateVisible === 'active' && ['inactive', 'background'].includes(prevAppStateVisible) && backgroundTime) {
+      // prevents the user from being locked out during metro reloading
+      setPrevAppStateVisible(appStateVisible)
+
+      lockoutCheck().then((lockoutInProgress) => {
+        if (lockoutInProgress) {
+          const unsubscribe = navigation.addListener('state', (): void => {
+            setInBackground(false)
+            unsubscribe()
+          })
+        } else {
+          setInBackground(false)
+        }
+      })
     }
   }, [appStateVisible, prevAppStateVisible, backgroundTime])
 
-  const onAuthenticated = (status: boolean): void => {
-    if (!status) {
-      return
-    }
-
-    dispatch({
-      type: DispatchAction.DID_AUTHENTICATE,
-    })
-  }
-
-  const authStack = () => {
-    const Stack = createStackNavigator()
-
-    return (
-      <Stack.Navigator initialRouteName={Screens.Splash} screenOptions={{ ...defaultStackOptions, headerShown: false }}>
-        <Stack.Screen name={Screens.Splash} component={splash} />
-        <Stack.Screen
-          name={Screens.EnterPIN}
-          options={() => ({
-            title: t('Screens.EnterPIN'),
-            headerShown: true,
-            headerLeft: () => false,
-            rightLeft: () => false,
-          })}
-        >
-          {(props) => <PINEnter {...props} setAuthenticated={onAuthenticated} />}
-        </Stack.Screen>
-        <Stack.Screen
-          name={Screens.AttemptLockout}
-          component={AttemptLockout}
-          options={{ headerShown: true, headerLeft: () => null }}
-        ></Stack.Screen>
-      </Stack.Navigator>
-    )
-  }
+  // auth stack should now be in the OnboardingStack
 
   const mainStack = () => {
     const Stack = createStackNavigator()
@@ -275,22 +242,34 @@ const RootStack: React.FC = () => {
         />
         <Stack.Screen name={Stacks.ContactStack} component={ContactStack} />
         <Stack.Screen name={Stacks.NotificationStack} component={NotificationStack} />
-        <Stack.Screen name={Stacks.ConnectionStack} component={DeliveryStack} options={{ gestureEnabled: false }} />
+        <Stack.Screen
+          name={Stacks.ConnectionStack}
+          component={DeliveryStack}
+          options={{
+            gestureEnabled: false,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            presentation: 'modal',
+          }}
+        />
         <Stack.Screen name={Stacks.ProofRequestsStack} component={ProofRequestStack} />
+        <Stack.Screen
+          name={Stacks.HistoryStack}
+          component={HistoryStack}
+          options={{
+            cardStyleInterpolator: forFade,
+          }}
+        />
       </Stack.Navigator>
     )
   }
 
   if (
-    (!showPreface || state.onboarding.didSeePreface) &&
-    state.onboarding.didAgreeToTerms === TermsVersion &&
-    state.onboarding.didCompleteTutorial &&
-    state.onboarding.didCreatePIN &&
-    (!state.preferences.enableWalletNaming || state.onboarding.didNameWallet) &&
-    (state.onboarding.didConsiderPushNotifications || !enablePushNotifications) &&
-    state.onboarding.didConsiderBiometry
+    ((state.onboarding.onboardingVersion !== 0 && state.onboarding.didCompleteOnboarding) ||
+      (state.onboarding.onboardingVersion === 0 && state.onboarding.didConsiderBiometry)) &&
+    state.authentication.didAuthenticate &&
+    state.onboarding.postAuthScreens.length === 0
   ) {
-    return state.authentication.didAuthenticate ? mainStack() : authStack()
+    return mainStack()
   }
   return <OnboardingStack />
 }

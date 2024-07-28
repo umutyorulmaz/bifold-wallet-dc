@@ -1,11 +1,5 @@
-import type {
-  BasicMessageRecord,
-  ConnectionRecord,
-  CredentialExchangeRecord,
-  ProofExchangeRecord,
-} from '@aries-framework/core'
-
-import { useBasicMessagesByConnectionId } from '@aries-framework/react-hooks'
+import type { ConnectionRecord } from '@credo-ts/core'
+import { useBasicMessagesByConnectionId } from '@credo-ts/react-hooks'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,24 +7,14 @@ import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native'
 
 import { useStore } from '../../contexts/store'
 import { useTheme } from '../../contexts/theme'
+import { useChatMessagesByConnection } from '../../hooks/chat-messages'
 import { useCredentialsByConnectionId } from '../../hooks/credentials'
 import { useProofsByConnectionId } from '../../hooks/proofs'
-import { Role } from '../../types/chat'
+
 import { ContactStackParams, Screens, Stacks } from '../../types/navigators'
-import {
-  formatTime,
-  getConnectionName,
-  getCredentialEventLabel,
-  getCredentialEventRole,
-  getProofEventLabel,
-  getProofEventRole,
-} from '../../utils/helpers'
+import { formatTime, getConnectionName } from '../../utils/helpers'
 import { testIdWithKey } from '../../utils/testable'
 
-interface CondensedMessage {
-  text: string
-  createdAt: Date
-}
 interface Props {
   contact: ConnectionRecord
   navigation: StackNavigationProp<ContactStackParams, Screens.Contacts>
@@ -194,13 +178,17 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
               <Text style={styles.contactNameText}>{contactLabel}</Text>
             </View>
             <View style={styles.timeContainer}>
-              <Text style={styles.timeText}>{formatTime(message.createdAt, { shortMonth: true, trim: true })}</Text>
+              {message && (
+                <Text style={styles.timeText}>{formatTime(message.createdAt, { shortMonth: true, trim: true })}</Text>
+              )}
             </View>
           </View>
           <View>
-            <Text style={TextTheme.normal} numberOfLines={1} ellipsizeMode={'tail'}>
-              {message.text}
-            </Text>
+            {message && !hasOnlyInitialMessage && (
+              <Text style={TextTheme.normal} numberOfLines={1} ellipsizeMode={'tail'}>
+                {message.text}
+              </Text>
+            )}
           </View>
         </View>
       </View>

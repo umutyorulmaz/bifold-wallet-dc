@@ -46,7 +46,7 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We use your location to provide navigation instructions, even when the app is in the background, enhancing routing accuracy and offering real-time updates.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We use your location to provide navigation instructions when the app is actively in use, helping you reach your destinations more efficiently.</string>
+	<string>We include this permission because a library our app uses references it, even though we don't use it directly.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>MaterialIcons.ttf</string>

@@ -1,5 +1,4 @@
-import { ParamListBase, useNavigation } from '@react-navigation/core'
-import { CommonActions } from '@react-navigation/native'
+import { CommonActions, ParamListBase, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack'
 import React, { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -100,22 +99,12 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
       dispatch({
         type: DispatchAction.DID_CREATE_PIN,
       })
-
-      if (store.preferences.enableWalletNaming) {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: Screens.NameWallet }],
-          })
-        )
-      } else {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: Screens.UseBiometry }],
-          })
-        )
-      }
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: Screens.UseBiometry }],
+        })
+      )
     } catch (err: unknown) {
       const error = new BifoldError(t('Error.Title1040'), t('Error.Message1040'), (err as Error)?.message ?? err, 1040)
       DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)

@@ -34,6 +34,17 @@ const translation = {
     "Biometrics": "Biometrics",
     "On": "On",
     "Off": "Off",
+    "History": "History",
+    "SaveSettings": "Save Settings",
+    "organization": "Organization",
+    "Issuer": "Issuer",
+    "RevokedByIssuer": "Revoked by this issuer",
+    "Verifier": "Verifier",
+    "Expired": "Expired",
+    "Revoked": "Revoked",
+    "Issued": "Issued",
+    "Requested": "Requested",
+    "Updated": "Updated",
     "Close": "Close",
     "Remove": "Remove",
   },
@@ -68,8 +79,8 @@ const translation = {
       "November": "Nov",
       "December": "Dec",
     },
-    "MinuteAgo": "minute ago",
-    "MinutesAgo": "minutes ago",
+    "MinuteAgo": "1 minute ago",
+    "MinutesAgo": "{{ count }} minutes ago",
     "JustNow": "Just now",
   },
   "Language": {
@@ -127,6 +138,12 @@ const translation = {
     "Message1044": "There was a problem while initializing onboarding.",
     "Title1045": "Unable to initialize agent.",
     "Message1045": "There was a problem while initializing agent.",
+    "Title1046": "Unable to fetch contacts.",
+    "Message1046": "There was a problem while fetching contacts.",
+  },
+  "SelectionAxs": {
+    "RadioChecked": "checked",
+    "RadioUnchecked": "unchecked"
   },
   "ActivityLog": {
     "Your": "Your",
@@ -233,8 +250,8 @@ const translation = {
     "BiometricsNotProvided": "Biometrics not provided, you may use PIN to load the wallet.",
     "BiometricsError": "Biometrics were not successful.",
     "BiometricsErrorEnterPIN": "Please enter your wallet PIN.",
-    "LoggedOut": "You're logged out",
-    "LoggedOutDescription": "To protect your information, you're logged out of your wallet if you have not used it for 5 minutes.",
+    "LockedOut": "You locked out after 5 minutes of inactivity.",
+    "ReEnterPIN": "Re-enter your wallet PIN",
     "BiometricsChanged": "Biometrics unlock has been disabled because your device biometrics changed.",
     "BiometricsChangedEnterPIN": "Please enter your wallet PIN.",
     "AttemptLockoutWarning": "Note: for your security, entering another incorrect PIN will temporarily lock the wallet."
@@ -257,6 +274,123 @@ const translation = {
     "UseToUnlock": "Use biometrics to unlock wallet?",
     "UnlockPromptTitle": "Wallet Unlock",
     "UnlockPromptDescription": "Use biometrics to unlock your wallet"
+  },
+  "ActivityHistory": {
+    "Header": "Activity history",
+    "Title": "Manage activity history",
+    "Description": "Set how long you want to keep your activity history before it is deleted from your device (it is not stored anywhere else).",
+    "DeleteActivity": "Delete activity history after:",
+    "DeleteActivityAfter": {
+      "1month":"1 month",
+      "6month":"6 month",
+      "1year":"1 year",
+      "Always":"Always",
+    },
+    "WarningDisclaimerAlert": {
+      "Title": "Past activity will be deleted",
+      "Description": "Any activity before the period you've just selected will be deleted as soon as you save."
+    },
+    "SettingsSaved": "History settings saved",
+    "NoOptionSelectedError": "No option selected",
+    "StopKeepingHistory": "Stop keeping activity history",
+    "StoppedLoggingAlert": "You are not logging your activity history.",
+    "StoppedLoggingAlertYes": "Turn on activity history",
+    "DeleteActivityHistory": {
+      "Title": "Delete activity history",
+      "Description": "Individual history can be deleted in the history tab or you can delete all activity history. This action cannot be undone.",
+      "Link": "Delete all activity history"
+    },
+    "StopActivityHistoryScreen": {
+      "Header": "Turn off activity history?",
+      "Title": "Are you sure you want to turn off history?",
+      "Description": "No further activity history will be kept in the Ontario Wallet. All previous history will remain.",
+      "Yes": "Yes turn off activity history",
+      "No": "No, go back"
+    },
+    "StopActivityHistoryScreenConfirmed": {
+      "Header": "Activity history turned off",
+      "Title": "History turned off",
+      "Description": "The Ontario Wallet is no longer storing your activity history",
+      "Back": "Back to settings",
+    },
+    "DeleteActivityHistoryScreen": {
+      "Header": "Delete all activity history?",
+      "Title": "Are you sure you want to delete all history?",
+      "Description": "You will not be able to get your activity history back after you delete it.",
+      "Yes": "Yes, delete all activity history",
+      "No": "No, go back"
+    },
+    "DeleteActivityHistoryScreenConfirmed": {
+      "Header": "History activty deleted",
+      "Title": "All history activity deleted",
+      "Description": "The Ontario Wallet deleted all your activity history.",
+      "Continue": "Continue",
+    },
+    "NoHistory": "No History",
+  },
+  "History": {
+    "SortFilterButton":"Sort/Filter",
+    "SortBy": "Sort by",
+    "Sort": {
+      "Newest": "Newest to oldest",
+      "Oldest": "Oldest to Newest"
+    },
+    "Filter": {
+      "FilterByDate": "Filter by date range",
+      "Select": "Select",
+      "Today": "Today",
+      "Week": "Last week",
+      "Month": "Last 30 days",
+      "TwoMonth": "Last 60 days",
+      "ThreeMonth": "Last 90 days",
+      "Year": "This year",
+      "AllTime": "All time",
+      "FilterByActivity": "Filter by activity type",
+      "CardUpdates": "Card updates",
+      "InformationRequests": "Information requests",
+      "WalletPinUpdates": "Wallet PIN updates",
+      "Buttons": {
+        "Apply": "Apply filters",
+        "Close": "Close"
+      }
+    },
+    "Initial":{
+      "Title": "Do you want to log your wallet activity?",
+      "Description": {
+        "Header": "This History section can list when:\n",
+        "PointA": "You have <b>shared information</b> with a verifier",
+        "PointAAxs": "You have shared information with a verifier",
+        "PointB": "A card is <b>accepted, revoked or expired</b>",
+        "PointBAxs": "A card is accepted, revoked or expired",
+        "PointC": "You have updated your <b>PIN</b>",
+        "PointCAxs": "You have updated your PIN",
+        "Footer": "\nYour wallet activity will <b>only be stored on your device</b>, and you can choose how often it is automatically deleted.",
+        "FooterAxs": "Your wallet activity will only be stored on your device, and you can choose how often it is automatically deleted."
+      },
+      "Button": {
+        "SetUpHistoryLog": "Set up your History log",
+        "StartLoggingWalletActivity": "Start logging wallet activity",
+        "DoNotLogWalletActivity": "Do not log any wallet activity"
+      }
+    },
+    "Button":"Sort/Filter",
+    "NoHistory": "You haven't used any cards yet.\n\nEach time you add or use a card, that activity will be saved here.",
+    "CardTitle":{
+      "CardAccepted": "Card accepted:",
+      "CardDeclined": "Card declined:",
+      "CardExpired": "Card expired",
+      "CardRevoked": "Card revoked",
+      "InformationSent": "Information sent to:",
+      "WalletPinUpdated": "Wallet PIN updated",
+    },
+    "CardDescription":{
+      "CardExpired": "{{cardName}} expired",
+      "CardRevoked": "{{cardName}} revoked",
+      "WalletPinUpdated": "New PIN set",
+    },
+    "Today": "Today",
+    "UseHistoryCapability": "Enable history",
+    "UseHistoryCapabilityToggle": "Toggle Enable history",
   },
   "Contacts": {
     "EmptyList": "Your Contacts is empty!",
@@ -379,6 +513,19 @@ const translation = {
     "WhereToUseLink": "See where you can use Bifold Wallet",
     "BadQRCode": "QR Code Not Recognized",
     "BadQRCodeDescription": "Ths QR code scanned doesn't work with Bifold Wallet. Bifold Wallet only works with participating services.\n\nIt currently can't add digital credentials by taking photos of physical ones.",
+    "ErrorDetails": "Scan error details",
+    "ShowDetails": "Show error details",
+    "NoDetails": "No error details available",
+  },
+  "PasteUrl": {
+    "PasteUrl": "Paste a URL",
+    "PasteUrlDescription": "Paste a URL below to receive a proof request, add a credential or add a Contact.",
+    "Clear": "Clear",
+    "UseShareableLink": "Use shareable links",
+    "ErrorTextboxEmpty": "Textbox Empty",
+    "ErrorTextboxEmptyDescription": "Please add a URL intended for digital wallets and try again.",
+    "ErrorInvalidUrl": "URL not recognized",
+    "ErrorInvalidUrlDescription": "Check if the URL is intended for digital wallets and if it was copied correctly, then try again.",
   },
   "Connection": {
     "JustAMoment": "Just a moment while we make a secure connection...",
@@ -439,6 +586,7 @@ const translation = {
     "DeleteOfferDescription": "Don't recognize the organization? Check your Contacts list. You only receive notifications from Contacts you've initiated",
   },
   "ProofRequest": {
+    "RequestForProof": "Request for proof",
     "JustAMoment": "Just a moment while we prepare things for you...",
     "FromYourWallet": "From your wallet",
     "MissingCredentials": "Missing credentials",
@@ -464,6 +612,8 @@ const translation = {
     "ProofAccepted": "Proof Accepted",
     "ProofRejected": "Proof Rejected",
     "RequestedCredentialsCouldNotBeFound": "Requested credentials could not be found",
+    "PresentationMetadataNotFound": "Could not find presentation metadata",
+    "CredentialMetadataNotFound": "Could not find credential metadata",
     "NewProofRequest": "New Proof Request",
     "NotAvailableInYourWallet": "Not in your wallet",
     "PredicateNotSatisfied": "Requirement not met",
@@ -496,6 +646,7 @@ const translation = {
     "DeclineBulletPoint3": "Are you sure you want to decline this proof request?",
     "NoInfoShared": "No information was shared",
     "YourInfo": "Your information was not shared",
+    "YouCantRespond": "You can't respond due to the following reasons. Please address them before continuing.",
   },
   "Settings": {
     "Version": "Version",
@@ -670,8 +821,7 @@ const translation = {
     "GenerateNewQR": "Request another proof",
     "BackToList": "Back to list",
     "ShareLink": "Share link",
-    "ScanQR": "Show this QR code to the other person",
-    "ScanQRComment": "After the QR code is scanned, a proof request will be sent.",
+    "ScanQR": "Show this QR code to the other person to verify:",
     "InformationReceived": "Information received.",
     "InformationReceivedDetails": "Review the information below.",
     "ProofVerificationFailed": "Proof verification failed",
@@ -695,6 +845,7 @@ const translation = {
     "InvalidPredicateValueTitle": "Invalid value for {{ predicate }}",
     "InvalidPredicateValueDetails": "Must be a number",
     "ConnectionLessLabel": "Anonymous",
+    "WaitingForResponse": "Waiting for response..."
   }
 }
 

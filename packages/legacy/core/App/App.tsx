@@ -1,4 +1,4 @@
-import AgentProvider from '@aries-framework/react-hooks'
+import AgentProvider from '@credo-ts/react-hooks'
 import * as React from 'react'
 import { useEffect, useMemo } from 'react'
 import { StatusBar } from 'react-native'
@@ -16,7 +16,6 @@ import { proofRequestTourSteps } from './components/tour/ProofRequestTourSteps'
 import { Container, ContainerProvider } from './container-api'
 import { AnimatedComponentsProvider } from './contexts/animated-components'
 import { AuthProvider } from './contexts/auth'
-import { CommonUtilProvider } from './contexts/commons'
 import { ConfigurationProvider } from './contexts/configuration'
 import { NetworkProvider } from './contexts/network'
 import { StoreProvider } from './contexts/store'
@@ -45,35 +44,33 @@ function App(sytem: Container) {
     return (
       <ContainerProvider value={sytem}>
         <StoreProvider>
-          <AgentProvider>
+          <AgentProvider agent={undefined}>
             <ThemeProvider value={theme}>
               <AnimatedComponentsProvider value={animatedComponents}>
                 <ConfigurationProvider value={defaultConfiguration}>
-                  <CommonUtilProvider>
-                    <AuthProvider>
-                      <NetworkProvider>
-                        <StatusBar
-                          hidden={false}
-                          barStyle="light-content"
-                          backgroundColor={theme.ColorPallet.brand.primary}
-                          translucent={false}
-                        />
-                        <NetInfo />
-                        <ErrorModal />
-                        <TourProvider
-                          homeTourSteps={homeTourSteps}
-                          credentialsTourSteps={credentialsTourSteps}
-                          credentialOfferTourSteps={credentialOfferTourSteps}
-                          proofRequestTourSteps={proofRequestTourSteps}
-                          overlayColor={'gray'}
-                          overlayOpacity={0.7}
-                        >
-                          <RootStack />
-                        </TourProvider>
-                        <Toast topOffset={15} config={toastConfig} />
-                      </NetworkProvider>
-                    </AuthProvider>
-                  </CommonUtilProvider>
+                  <AuthProvider>
+                    <NetworkProvider>
+                      <StatusBar
+                        hidden={false}
+                        barStyle="light-content"
+                        backgroundColor={theme.ColorPallet.brand.primary}
+                        translucent={false}
+                      />
+                      <NetInfo />
+                      <ErrorModal />
+                      <TourProvider
+                        homeTourSteps={homeTourSteps}
+                        credentialsTourSteps={credentialsTourSteps}
+                        credentialOfferTourSteps={credentialOfferTourSteps}
+                        proofRequestTourSteps={proofRequestTourSteps}
+                        overlayColor={'gray'}
+                        overlayOpacity={0.7}
+                      >
+                        <RootStack />
+                      </TourProvider>
+                      <Toast topOffset={15} config={toastConfig} />
+                    </NetworkProvider>
+                  </AuthProvider>
                 </ConfigurationProvider>
               </AnimatedComponentsProvider>
             </ThemeProvider>

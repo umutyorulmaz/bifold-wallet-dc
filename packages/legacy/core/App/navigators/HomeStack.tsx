@@ -10,13 +10,14 @@ import InstitutionDetailScreen from '../screens/InstitutionDetailScreen'
 import MilitaryList from '../screens/MilitaryList'
 import StateGovernmentList from '../screens/StateGovernmentList'
 import { HomeStackParams, Screens } from '../types/navigators'
-
+import { useStore } from '../contexts/store'
 import { createDefaultStackOptions } from './defaultStackOptions'
 
 const HomeStack: React.FC = () => {
   const Stack = createStackNavigator<HomeStackParams>()
   const theme = useTheme()
   const { t } = useTranslation()
+  const [store] = useStore()
   const defaultStackOptions = createDefaultStackOptions(theme)
 
   return (

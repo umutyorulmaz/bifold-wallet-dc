@@ -1,6 +1,6 @@
-import { BaseLogger } from '@aries-framework/core'
+import { BaseLogger } from '@credo-ts/core'
 import { DeviceEventEmitter, EmitterSubscription } from 'react-native'
-import { logger, consoleTransport } from 'react-native-logs'
+import { consoleTransport, logger } from 'react-native-logs'
 
 import { RemoteLoggerOptions, lokiTransport } from './transports'
 
@@ -50,6 +50,12 @@ export class RemoteLogger extends BaseLogger {
     }
 
     return this._sessionId
+  }
+
+  set sessionId(value: number) {
+    this._sessionId = value
+
+    this.configureLogger()
   }
 
   get autoDisableRemoteLoggingIntervalInMinutes(): number {
@@ -108,6 +114,20 @@ export class RemoteLogger extends BaseLogger {
 
   public stopEventListeners() {
     this.eventListener = undefined
+  }
+
+  public overrideCurrentAutoDisableExpiration(expirationInMinutes: number) {
+    if (expirationInMinutes <= 0) {
+      return
+    }
+
+    if (this.remoteLoggingAutoDisableTimer) {
+      clearTimeout(this.remoteLoggingAutoDisableTimer)
+    }
+
+    this.remoteLoggingAutoDisableTimer = setTimeout(() => {
+      this.remoteLoggingEnabled = false
+    }, expirationInMinutes * 60000)
   }
 
   public test(message: string, data?: object | undefined): void {

@@ -546,19 +546,24 @@ export const ListItems = StyleSheet.create({
   requestTemplateTitle: {
     color: ColorPallet.grayscale.black,
     fontWeight: 'bold',
+    fontSize: 16,
   },
   requestTemplateDetails: {
     color: ColorPallet.grayscale.black,
     fontWeight: 'normal',
+    fontSize: 16,
   },
   requestTemplateZkpLabel: {
     color: ColorPallet.grayscale.mediumGrey,
+    fontSize: 12,
   },
   requestTemplateIcon: {
     color: ColorPallet.grayscale.black,
+    fontSize: 36,
   },
   requestTemplateDate: {
     color: ColorPallet.grayscale.mediumGrey,
+    fontSize: 10,
   },
 })
 
@@ -764,7 +769,7 @@ export const OnboardingTheme = {
   },
   headerTintColor: ColorPallet.grayscale.white,
   headerText: {
-    ...TextTheme.headingTwo,
+    ...TextTheme.bold,
   },
   bodyText: {
     ...TextTheme.normal,
