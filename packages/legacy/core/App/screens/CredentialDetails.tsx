@@ -211,10 +211,10 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
             }}
           />
         ) : (
-            <Text style={[TextTheme.title, { fontSize: 0.5 * logoHeight, color: '#000' }]}>
-              {(overlay.metaOverlay?.name ?? overlay.metaOverlay?.issuer ?? 'C')?.charAt(0).toUpperCase()}
-            </Text>
-          )}
+          <Text style={[TextTheme.title, { fontSize: 0.5 * logoHeight, color: '#000' }]}>
+            {(overlay.metaOverlay?.name ?? overlay.metaOverlay?.issuer ?? 'C')?.charAt(0).toUpperCase()}
+          </Text>
+        )}
       </View>
     )
   }
@@ -239,7 +239,6 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
                 paddingBottom: paddingVertical,
                 lineHeight: 19,
                 opacity: 0.8,
-
               },
             ]}
             numberOfLines={1}
@@ -254,7 +253,6 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
 
               {
                 lineHeight: 24,
-
               },
             ]}
           >
@@ -273,14 +271,13 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
             source={toImageSource(overlay.brandingOverlay?.backgroundImage)}
             imageStyle={{
               resizeMode: 'cover',
-
             }}
           >
             <View testID={testIdWithKey('CredentialDetailsSecondaryHeader')} style={styles.secondaryHeaderContainer} />
           </ImageBackground>
         ) : (
-            <View testID={testIdWithKey('CredentialDetailsSecondaryHeader')} style={styles.secondaryHeaderContainer} />
-          )}
+          <View testID={testIdWithKey('CredentialDetailsSecondaryHeader')} style={styles.secondaryHeaderContainer} />
+        )}
       </>
     )
   }
@@ -312,18 +309,18 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
         {credential && <CredentialCard credential={credential} style={{ margin: 16 }} />}
       </View>
     ) : (
-        <View style={styles.container}>
-          <CredentialDetailSecondaryHeader />
-          <CredentialCardLogo />
-          <CredentialDetailPrimaryHeader />
+      <View style={styles.container}>
+        <CredentialDetailSecondaryHeader />
+        <CredentialCardLogo />
+        <CredentialDetailPrimaryHeader />
 
-          {isRevoked && !isRevokedMessageHidden ? (
-            <View style={{ padding: paddingVertical, paddingTop: 0 }}>
-              {credential && <CredentialRevocationMessage credential={credential} />}
-            </View>
-          ) : null}
-        </View>
-      )
+        {isRevoked && !isRevokedMessageHidden ? (
+          <View style={{ padding: paddingVertical, paddingTop: 0 }}>
+            {credential && <CredentialRevocationMessage credential={credential} />}
+          </View>
+        ) : null}
+      </View>
+    )
   }
 
   const footer = () => {

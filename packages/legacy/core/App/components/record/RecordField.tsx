@@ -40,33 +40,6 @@ export const AttributeValue: React.FC<AttributeValueParams> = ({ field, style, s
     },
   })
 
-  const renderTranscript = (value: string) => {
-    try {
-      const data = JSON.parse(value)
-      if (Array.isArray(data)) {
-        return (
-          <View style={transcriptStyles.transcriptContainer}>
-            {data.map((item, index) => (
-              <View key={index} style={transcriptStyles.courseContainer}>
-                {Object.entries(item).map(([key, value]) => (
-                  <View key={key} style={transcriptStyles.detailContainer}>
-                    <Text style={transcriptStyles.detailLabel}>{startCase(key)}:</Text>
-                    <Text style={transcriptStyles.detailValue}>
-                      {typeof value === 'string' || typeof value === 'number' ? value : JSON.stringify(value)}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            ))}
-          </View>
-        )
-      }
-    } catch (error) {
-      console.error('Failed to parse transcript data:', error)
-    }
-    return <Text style={transcriptStyles.text}>{value}</Text>
-  }
-
   // Stylesheet for transcript display
   const transcriptStyles = StyleSheet.create({
     transcriptContainer: {
@@ -98,10 +71,39 @@ export const AttributeValue: React.FC<AttributeValueParams> = ({ field, style, s
     },
   })
 
+  const renderTranscript = (value: string) => {
+    try {
+      const data = JSON.parse(value)
+      if (Array.isArray(data)) {
+        return (
+          <View style={transcriptStyles.transcriptContainer}>
+            {data.map((item, index) => (
+              <View key={index} style={transcriptStyles.courseContainer}>
+                {Object.entries(item).map(([key, value]) => (
+                  <View key={key} style={transcriptStyles.detailContainer}>
+                    <Text style={transcriptStyles.detailLabel}>{startCase(key)}:</Text>
+                    <Text style={transcriptStyles.detailValue}>
+                      {typeof value === 'string' || typeof value === 'number' ? value : JSON.stringify(value)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            ))}
+          </View>
+        )
+      }
+    } catch (error) {
+      //eslint-disable-next-line no-console
+      console.error('Failed to parse transcript data:', error)
+    }
+    return <Text style={transcriptStyles.text}>{value}</Text>
+  }
+
   if (shown) {
     if (typeof field.value === 'string') {
       return renderTranscript(field.value)
     } else {
+      //eslint-disable-next-line no-console
       console.error('Expected string for transcript data, received:', typeof field.value)
       return <Text style={style || styles.text}>Invalid transcript data</Text>
     }
