@@ -9,7 +9,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Button, { ButtonType } from '../components/buttons/Button'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useTheme } from '../contexts/theme'
-import { Screens, TabStacks } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
 
 export interface ProofRequestAcceptProps {

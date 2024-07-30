@@ -312,21 +312,19 @@ const NotificationListItem: React.FC<NotificationListItemProps> = ({
         break
       case NotificationType.ProofRequest:
         if (isReceivedProof) {
-          onPress = () => 
-            {
+          onPress = () => {
             navigation.getParent()?.navigate(Stacks.ContactStack, {
               screen: Screens.ProofDetails,
               params: { recordId: notification.id, isHistory: true },
             })
           }
         } else {
-          onPress = () => 
-            {
-              navigation.getParent()?.navigate(Stacks.ContactStack, {
-                screen: Screens.Chat,
-                params: { connectionId: notification.connectionId },
-              })
-            }
+          onPress = () => {
+            navigation.getParent()?.navigate(Stacks.ContactStack, {
+              screen: Screens.Chat,
+              params: { connectionId: notification.connectionId },
+            })
+          }
         }
         onClose = dismissBasicMessage
         break

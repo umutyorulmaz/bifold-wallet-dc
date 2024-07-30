@@ -25,7 +25,7 @@ import { useTheme } from '../../contexts/theme'
 import { GenericFn } from '../../types/fn'
 import { NotificationStackParams, Screens } from '../../types/navigators'
 import { credentialTextColor, getCredentialIdentifiers, toImageSource } from '../../utils/credential'
-import { formatIfDate, getCredentialConnectionLabel, isDataUrl, pTypeToText } from '../../utils/helpers'
+import { formatIfDate, getCredentialConnectionLabel, pTypeToText } from '../../utils/helpers'
 import { shadeIsLightOrDark, Shade } from '../../utils/luminance'
 import { testIdWithKey } from '../../utils/testable'
 
@@ -423,49 +423,49 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
     )
   }
 
-  const AttributeLabel: React.FC<{ label: string }> = ({ label }) => {
-    const ylabel = overlay.bundle?.labelOverlay?.attributeLabels[label] ?? startCase(label)
+  // const AttributeLabel: React.FC<{ label: string }> = ({ label }) => {
+  //   const ylabel = overlay.bundle?.labelOverlay?.attributeLabels[label] ?? startCase(label)
 
-    return (
-      <Text
-        style={[
-          TextTheme.labelSubtitle,
-          styles.textContainer,
-          {
-            lineHeight: 19,
-            opacity: 0.8,
-          },
-        ]}
-        testID={testIdWithKey('AttributeName')}
-      >
-        {ylabel}
-      </Text>
-    )
-  }
+  //   return (
+  //     <Text
+  //       style={[
+  //         TextTheme.labelSubtitle,
+  //         styles.textContainer,
+  //         {
+  //           lineHeight: 19,
+  //           opacity: 0.8,
+  //         },
+  //       ]}
+  //       testID={testIdWithKey('AttributeName')}
+  //     >
+  //       {ylabel}
+  //     </Text>
+  //   )
+  // }
 
-  const AttributeValue: React.FC<{ value: string | number | null; warn?: boolean }> = ({ value, warn }) => {
-    return (
-      <>
-        {isDataUrl(value) ? (
-          <Image style={styles.imageAttr} source={{ uri: value as string }}></Image>
-        ) : (
-          <Text
-            style={[
-              TextTheme.bold,
-              styles.textContainer,
-              {
-                lineHeight: 24,
-              },
-              { color: warn ? ColorPallet.notification.warnText : styles.textContainer.color },
-            ]}
-            testID={testIdWithKey('AttributeValue')}
-          >
-            {value}
-          </Text>
-        )}
-      </>
-    )
-  }
+  // const AttributeValue: React.FC<{ value: string | number | null; warn?: boolean }> = ({ value, warn }) => {
+  //   return (
+  //     <>
+  //       {isDataUrl(value) ? (
+  //         <Image style={styles.imageAttr} source={{ uri: value as string }}></Image>
+  //       ) : (
+  //         <Text
+  //           style={[
+  //             TextTheme.bold,
+  //             styles.textContainer,
+  //             {
+  //               lineHeight: 24,
+  //             },
+  //             { color: warn ? ColorPallet.notification.warnText : styles.textContainer.color },
+  //           ]}
+  //           testID={testIdWithKey('AttributeValue')}
+  //         >
+  //           {value}
+  //         </Text>
+  //       )}
+  //     </>
+  //   )
+  // }
 
   const renderCardAttribute = (item: any) => {
     const { label, value } = parseAttribute(item)

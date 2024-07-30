@@ -1,5 +1,3 @@
-import DateTimePicker from '@react-native-community/datetimepicker'
-import { Picker } from '@react-native-picker/picker'
 import React, { useState } from 'react'
 import { View, Text, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 

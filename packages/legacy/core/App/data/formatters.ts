@@ -5,5 +5,5 @@ export const formatDate = (date: Date): string => {
     date.getDate().toString().padStart(2, '0') +
     '/' +
     date.getFullYear()
-  );
-};
+  )
+}

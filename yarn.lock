@@ -4461,7 +4461,6 @@ __metadata:
     "@hyperledger/indy-vdr-react-native": 0.2.2
     "@hyperledger/indy-vdr-shared": 0.2.2
     "@react-native-async-storage/async-storage": 1.15.11
-    "@react-native-community/datetimepicker": ^8.2.0
     "@react-native-community/eslint-config": ^3.2.0
     "@react-native-community/eslint-plugin": ^1.3.0
     "@react-native-community/masked-view": 0.1.11
@@ -6650,25 +6649,6 @@ __metadata:
   bin:
     react-native: build/bin.js
   checksum: aab22f10eda679050e7eb556ded0a6b0dc57ce44ffe1c423d4202295cbc913d93a4ec510d34644bd23971e67f2800de75583b0125f9a949da55586f48f08dac0
-  languageName: node
-  linkType: hard
-
-"@react-native-community/datetimepicker@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "@react-native-community/datetimepicker@npm:8.2.0"
-  dependencies:
-    invariant: ^2.2.4
-  peerDependencies:
-    expo: ">=50.0.0"
-    react: "*"
-    react-native: "*"
-    react-native-windows: "*"
-  peerDependenciesMeta:
-    expo:
-      optional: true
-    react-native-windows:
-      optional: true
-  checksum: 3adc9346f8948abed246da3bfa3a223e44c2c5903070178a82e583ce6f8273607fe5a542af834b3a27aff81980c555e5f72bf0e87c85e3f00856a0de21525374
   languageName: node
   linkType: hard
 
@@ -11433,7 +11413,6 @@ __metadata:
     "@hyperledger/aries-oca": ^1.0.0
     "@hyperledger/indy-vdr-react-native": 0.2.2
     "@react-native-async-storage/async-storage": 1.15.11
-    "@react-native-community/datetimepicker": ^8.2.0
     "@react-native-community/masked-view": 0.1.11
     "@react-native-community/netinfo": ^9.3.0
     "@react-native-picker/picker": ^2.7.7

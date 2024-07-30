@@ -58,9 +58,9 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
         return
       }
 
-      await agent.connections.deleteById(connection.id);
-      navigation.pop();
-      navigation.pop();
+      await agent.connections.deleteById(connection.id)
+      navigation.pop()
+      navigation.pop()
 
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
@@ -68,10 +68,8 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
         type: ToastType.Success,
         text1: t('ContactDetails.ContactRemoved'),
       })
-
-   
     } catch (err) {
-      setIsRemoveModalDisplayed(false); 
+      setIsRemoveModalDisplayed(false)
       const error = new BifoldError(t('Error.Title1037'), t('Error.Message1037'), (err as Error)?.message ?? err, 1037)
       DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
     }

@@ -273,8 +273,8 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
                         title: t('PINCreate.PinChangeSuccessTitle'),
                         message: t('PINCreate.PinChangeSuccessMessage'),
                         onModalDismiss: () => {
-                          navigation.pop();
-                          navigation.pop();
+                          navigation.pop()
+                          navigation.pop()
                           // navigation.navigate(Screens.Settings as never)
                         },
                       })
