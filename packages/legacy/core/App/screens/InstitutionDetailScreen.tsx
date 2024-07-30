@@ -44,36 +44,29 @@ const InstitutionDetailScreen: React.FC<ScanProps> = ({ navigation }) => {
     //const defaultInvitationURL =
     //'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICIzNTdlYjE3YS1jZTgzLTQwMTMtOTdiNy1iYmY3ZTYzYzMyOGUiLCAibGFiZWwiOiAiRGlnaUNyZWRBIiwgInJlY2lwaWVudEtleXMiOiBbIkVIOUQ2U3V0RGlFbkoxRkNkeVdGbmhHRHZabXpWeHd2ZzljZERnd3ZCQlNBIl0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovL2NybXMuZGlnaWNyZWQuc2VydmljZXM6ODAzMCJ9'
     try {
-      const record = await connectFromInvitation(
-        institution.invitationLink!,
-        agent, // Make sure 'agent' is properly initialized
-        false,
-        false,
-        true //true for multi-use invitation
-      )
+      const record = await connectFromInvitation(institution.invitationLink!, agent, false, true)
 
-      if (record?.connectionRecord?.id) {
-        // eslint-disable-next-line no-console
-        //console.log('Navigating to Chat with connectionId:', record.connectionRecord.id)
-        navigation.navigate(Stacks.ContactStack as any, {
-          screen: Screens.Chat,
-          params: { connectionId: record.connectionRecord.id },
-        })
+      if (record) {
+        const tags = record.getTags()
+        if (tags.threadId) {
+          navigation.navigate(Stacks.ContactStack as any, {
+            screen: Screens.Chat,
+            params: { threadId: tags.threadId },
+          })
+        } else {
+          // eslint-disable-next-line no-console
+          console.error('ThreadId not found in the record')
+          // You might want to navigate to a different screen or show an error message
+        }
       } else {
-        // Handling for connectionless scenarios
-        navigation.navigate(Stacks.ContactStack as any, {
-          screen: Screens.Chat,
-          params: { threadId: record?.outOfBandRecord.outOfBandInvitation.threadId },
-        })
-      } //else {
-      //   // Fallback navigation
-      //   navigation.navigate('DefaultRoute')
-      // }
+        //eslint-disable-next-line no-console
+        console.error('No record returned from connectFromInvitation')
+        // Handle this case appropriately
+      }
     } catch (error) {
-      // eslint-disable-next-line no-console
+      //eslint-disable-next-line no-console
       console.error('Error processing the invitation:', error)
       setButtonDisabled(false)
-      // Handle error appropriately
     }
   }
 

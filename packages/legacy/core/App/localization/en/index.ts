@@ -745,6 +745,8 @@ const translation = {
     "MilitaryList": "Military",
     "EmployersList": "Employers",
     "StateGovernmentList": "State Government",
+    "History": "History",
+    "HistorySettings": "History Settings",
   },
   "Loading": {
     "TakingTooLong": "This is taking longer than usual. You can return to home or continue waiting.",

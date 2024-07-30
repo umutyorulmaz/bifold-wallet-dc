@@ -5,6 +5,7 @@ import {
   CredentialState,
   ProofExchangeRecord,
   ProofState,
+  ConnectionRecord,
 } from '@credo-ts/core'
 import { useAgent, useBasicMessagesByConnectionId, useConnectionById } from '@credo-ts/react-hooks'
 import { isPresentationReceived } from '@hyperledger/aries-bifold-verifier'
@@ -26,7 +27,7 @@ import { ChatMessage, ExtendedChatMessage, CallbackType } from '../components/ch
 import { useNetwork } from '../contexts/network'
 import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
-import { useChatMessagesByConnection } from '../hooks/chat-messages'
+//import { useChatMessagesByConnection } from '../hooks/chat-messages'
 import { useCredentialsByConnectionId } from '../hooks/credentials'
 import { useProofsByConnectionId } from '../hooks/proofs'
 import { Role } from '../types/chat'
@@ -55,7 +56,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams | ContactStackParams>>()
   const connection = useConnectionById(connectionId) as ConnectionRecord
   const basicMessages = useBasicMessagesByConnectionId(connectionId)
-//  const chatMessages = useChatMessagesByConnection(connection)
+  //  const chatMessages = useChatMessagesByConnection(connection)
   const credentials = useCredentialsByConnectionId(connectionId)
   const proofs = useProofsByConnectionId(connectionId)
   const isFocused = useIsFocused()
@@ -381,4 +382,4 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   )
 }
 
-export default Chat;
+export default Chat

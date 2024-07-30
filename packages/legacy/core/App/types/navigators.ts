@@ -50,6 +50,8 @@ export enum Screens {
   MilitaryList = 'Military List',
   EmployersList = 'Employers',
   StateGovernmentList = 'State Government',
+  HistoryPage = 'HistoryPage',
+  HistorySettings = 'HistorySettings',
 }
 
 export enum Stacks {

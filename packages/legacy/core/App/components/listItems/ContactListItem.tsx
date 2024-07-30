@@ -1,4 +1,10 @@
-import type { ConnectionRecord } from '@credo-ts/core'
+import type {
+  BasicMessageRecord,
+  ConnectionRecord,
+  CredentialExchangeRecord,
+  ProofExchangeRecord,
+} from '@credo-ts/core'
+
 import { useBasicMessagesByConnectionId } from '@credo-ts/react-hooks'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -7,13 +13,25 @@ import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native'
 
 import { useStore } from '../../contexts/store'
 import { useTheme } from '../../contexts/theme'
-import { useChatMessagesByConnection } from '../../hooks/chat-messages'
+//import { useChatMessagesByConnection } from '../../hooks/chat-messages'
 import { useCredentialsByConnectionId } from '../../hooks/credentials'
 import { useProofsByConnectionId } from '../../hooks/proofs'
-
+import { Role } from '../../types/chat'
 import { ContactStackParams, Screens, Stacks } from '../../types/navigators'
-import { formatTime, getConnectionName } from '../../utils/helpers'
+import {
+  formatTime,
+  getConnectionName,
+  getCredentialEventLabel,
+  getCredentialEventRole,
+  getProofEventLabel,
+  getProofEventRole,
+} from '../../utils/helpers'
 import { testIdWithKey } from '../../utils/testable'
+
+interface CondensedMessage {
+  text: string
+  createdAt: Date
+}
 
 interface Props {
   contact: ConnectionRecord
@@ -184,7 +202,7 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
             </View>
           </View>
           <View>
-            {message && !hasOnlyInitialMessage && (
+            {message && (
               <Text style={TextTheme.normal} numberOfLines={1} ellipsizeMode={'tail'}>
                 {message.text}
               </Text>
