@@ -26,6 +26,9 @@ enum OnboardingDispatchAction {
   DID_AGREE_TO_TERMS = 'onboarding/didAgreeToTerms',
   DID_CREATE_PIN = 'onboarding/didCreatePIN',
   DID_NAME_WALLET = 'onboarding/didNameWallet',
+  DID_COMPLETE_ONBOARDING = 'onboarding/didCompleteOnboarding',
+  ONBOARDING_VERSION = 'onboarding/onboardingVersion',
+  SET_POST_AUTH_SCREENS = 'onboarding/postAuthScreens',
 }
 
 enum MigrationDispatchAction {
@@ -48,12 +51,14 @@ enum PreferencesDispatchAction {
   PREFERENCES_UPDATED = 'preferences/preferencesStateLoaded',
   USE_VERIFIER_CAPABILITY = 'preferences/useVerifierCapability',
   USE_CONNECTION_INVITER_CAPABILITY = 'preferences/useConnectionInviterCapability',
+  HISTORY_CAPABILITY = 'preferences/historyCapability',
   USE_DEV_VERIFIER_TEMPLATES = 'preferences/useDevVerifierTemplates',
   ENABLE_WALLET_NAMING = 'preferences/enableWalletNaming',
   UPDATE_WALLET_NAME = 'preferences/updateWalletName',
   ACCEPT_DEV_CREDENTIALS = 'preferences/acceptDevCredentials',
   USE_DATA_RETENTION = 'preferences/useDataRetention',
   PREVENT_AUTO_LOCK = 'preferences/preventAutoLock',
+  USE_SHAREABLE_LINK = 'preferences/useShareableLink',
   UPDATE_ALTERNATE_CONTACT_NAMES = 'preferences/updateAlternateContactNames',
 }
 
@@ -195,6 +200,21 @@ export const reducer = <S extends State>(state: S, action: ReducerAction<Dispatc
 
       return newState
     }
+    case PreferencesDispatchAction.HISTORY_CAPABILITY: {
+      const choice = (action?.payload ?? []).pop() ?? false
+      const preferences = {
+        ...state.preferences,
+        useHistoryCapability: choice,
+      }
+      const newState = {
+        ...state,
+        preferences,
+      }
+
+      AsyncStorage.setItem(LocalStorageKeys.Preferences, JSON.stringify(preferences))
+
+      return newState
+    }
     case PreferencesDispatchAction.USE_DEV_VERIFIER_TEMPLATES: {
       const choice = (action?.payload ?? []).pop() ?? false
       const preferences = {
@@ -290,6 +310,17 @@ export const reducer = <S extends State>(state: S, action: ReducerAction<Dispatc
     case PreferencesDispatchAction.PREVENT_AUTO_LOCK: {
       const choice = (action?.payload ?? []).pop() ?? false
       const preferences = { ...state.preferences, preventAutoLock: choice }
+
+      AsyncStorage.setItem(LocalStorageKeys.Preferences, JSON.stringify(preferences))
+
+      return {
+        ...state,
+        preferences,
+      }
+    }
+    case PreferencesDispatchAction.USE_SHAREABLE_LINK: {
+      const choice = (action?.payload ?? []).pop() ?? false
+      const preferences = { ...state.preferences, enableShareableLink: choice }
 
       AsyncStorage.setItem(LocalStorageKeys.Preferences, JSON.stringify(preferences))
 
@@ -462,6 +493,31 @@ export const reducer = <S extends State>(state: S, action: ReducerAction<Dispatc
         lockout,
       }
     }
+    case OnboardingDispatchAction.ONBOARDING_VERSION: {
+      const version = (action?.payload || []).pop()
+      const onboarding = {
+        ...state.onboarding,
+        onboardingVersion: version,
+      }
+      const newState = {
+        ...state,
+        onboarding,
+      }
+      AsyncStorage.setItem(LocalStorageKeys.Onboarding, JSON.stringify(newState.onboarding))
+      return newState
+    }
+    case OnboardingDispatchAction.DID_COMPLETE_ONBOARDING: {
+      const onboarding = {
+        ...state.onboarding,
+        didCompleteOnboarding: true,
+      }
+      const newState = {
+        ...state,
+        onboarding,
+      }
+      AsyncStorage.setItem(LocalStorageKeys.Onboarding, JSON.stringify(newState.onboarding))
+      return newState
+    }
     case OnboardingDispatchAction.ONBOARDING_UPDATED: {
       const onboarding: OnboardingState = (action?.payload || []).pop()
       return {
@@ -541,6 +597,18 @@ export const reducer = <S extends State>(state: S, action: ReducerAction<Dispatc
 
       AsyncStorage.setItem(LocalStorageKeys.Onboarding, JSON.stringify(onboarding))
 
+      return newState
+    }
+    case OnboardingDispatchAction.SET_POST_AUTH_SCREENS: {
+      const value = (action?.payload || []).pop()
+      const onboarding = {
+        ...state.onboarding,
+        postAuthScreens: value,
+      }
+      const newState = {
+        ...state,
+        onboarding,
+      }
       return newState
     }
     case MigrationDispatchAction.DID_MIGRATE_TO_ASKAR: {

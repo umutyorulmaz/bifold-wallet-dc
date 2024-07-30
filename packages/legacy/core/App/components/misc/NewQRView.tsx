@@ -1,9 +1,9 @@
-import { DidExchangeState } from '@aries-framework/core'
-import { useAgent } from '@aries-framework/react-hooks'
+import { DidExchangeState } from '@credo-ts/core'
+import { useAgent } from '@credo-ts/react-hooks'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { View, Modal, StyleSheet, Text, ScrollView, useWindowDimensions, Pressable } from 'react-native'
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions, Share } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -13,12 +13,13 @@ import { useStore } from '../../contexts/store'
 import { useTheme } from '../../contexts/theme'
 import { useConnectionByOutOfBandId } from '../../hooks/connections'
 import { QrCodeScanError } from '../../types/error'
-import { Screens, Stacks, ConnectStackParams } from '../../types/navigators'
+import { ConnectStackParams, Screens, Stacks } from '../../types/navigators'
 import { createConnectionInvitation } from '../../utils/helpers'
 import { testIdWithKey } from '../../utils/testable'
 import LoadingIndicator from '../animated/LoadingIndicator'
 import HeaderButton, { ButtonLocation } from '../buttons/HeaderButton'
 import InfoBox, { InfoBoxType } from '../misc/InfoBox'
+import DismissiblePopupModal from '../modals/DismissiblePopupModal'
 
 import QRRenderer from './QRRenderer'
 import QRScannerTorch from './QRScannerTorch'
@@ -41,6 +42,7 @@ const NewQRView: React.FC<Props> = ({ defaultToConnect, handleCodeScan, error, e
   const { showScanHelp, showScanButton } = useConfiguration()
   const [showInfoBox, setShowInfoBox] = useState(false)
   const [torchActive, setTorchActive] = useState(false)
+  const [showErrorDetailsModal, setShowErrorDetailsModal] = useState(false)
   const [firstTabActive, setFirstTabActive] = useState(!defaultToConnect)
   const [invitation, setInvitation] = useState<string | undefined>(undefined)
   const [recordId, setRecordId] = useState<string | undefined>(undefined)
@@ -133,9 +135,44 @@ const NewQRView: React.FC<Props> = ({ defaultToConnect, handleCodeScan, error, e
   const handleEdit = () => {
     navigation.navigate(Screens.NameWallet)
   }
+  const scanPasteUrl = () => (
+    <HeaderButton
+      buttonLocation={ButtonLocation.Right}
+      accessibilityLabel={t('Global.Share')}
+      testID={testIdWithKey('ShareButton')}
+      onPress={() => {
+        navigation.navigate(Screens.PasteUrl)
+      }}
+      icon="link"
+    />
+  )
+
+  const scanShareUrl = () => (
+    <HeaderButton
+      buttonLocation={ButtonLocation.Right}
+      accessibilityLabel={t('Global.Share')}
+      testID={testIdWithKey('ShareButton')}
+      onPress={() => {
+        Share.share({ message: invitation ?? '' })
+      }}
+      icon="share-variant"
+    />
+  )
 
   useEffect(() => {
-    navigation.setOptions({ title: firstTabActive ? 'Scan QR code' : 'My QR code' })
+    let headerRight = invitation ? scanShareUrl : undefined
+    let title = t('Scan.MyQRCode')
+    if (firstTabActive) {
+      headerRight = scanPasteUrl
+      title = t('Scan.ScanQRCode')
+    }
+    if (!store.preferences.enableShareableLink) {
+      headerRight = undefined
+    }
+    navigation.setOptions({ title, headerRight })
+  }, [firstTabActive, invitation, store.preferences.enableShareableLink])
+
+  useEffect(() => {
     if (!firstTabActive) {
       createInvitation()
     }
@@ -147,7 +184,7 @@ const NewQRView: React.FC<Props> = ({ defaultToConnect, handleCodeScan, error, e
     if (record?.state === DidExchangeState.Completed) {
       navigation.getParent()?.navigate(Stacks.ConnectionStack, {
         screen: Screens.Connection,
-        params: { connectionId: record.id },
+        params: { oobRecordId: recordId },
       })
     }
   }, [record])
@@ -179,6 +216,15 @@ const NewQRView: React.FC<Props> = ({ defaultToConnect, handleCodeScan, error, e
                 />
               </View>
             </Modal>
+            {showErrorDetailsModal && (
+              <DismissiblePopupModal
+                title={t('Scan.ErrorDetails')}
+                description={error?.details || t('Scan.NoDetails')}
+                onCallToActionLabel={t('Global.Dismiss')}
+                onCallToActionPressed={() => setShowErrorDetailsModal(false)}
+                onDismissPressed={() => setShowErrorDetailsModal(false)}
+              />
+            )}
             <ScanCamera
               handleCodeScan={handleCodeScan}
               enableCameraOnError={enableCameraOnError}
@@ -193,6 +239,15 @@ const NewQRView: React.FC<Props> = ({ defaultToConnect, handleCodeScan, error, e
                     <Text testID={testIdWithKey('ErrorMessage')} style={styles.textStyle}>
                       {error.message}
                     </Text>
+                    <Pressable
+                      onPress={() => setShowErrorDetailsModal(true)}
+                      accessibilityLabel={t('Scan.ShowDetails')}
+                      accessibilityRole={'button'}
+                      testID={testIdWithKey('ShowDetails')}
+                      hitSlop={hitSlop}
+                    >
+                      <Icon name="information-outline" size={40} style={styles.icon} />
+                    </Pressable>
                   </>
                 ) : (
                   <>

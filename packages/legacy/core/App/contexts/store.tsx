@@ -21,11 +21,14 @@ export const defaultState: State = {
     didConsiderPushNotifications: false,
     didConsiderBiometry: false,
     didNameWallet: false,
+    onboardingVersion: 0,
+    didCompleteOnboarding: false,
+    postAuthScreens: [],
   },
   authentication: {
     didAuthenticate: false,
   },
-  // NOTE: from AFJ 0.4.0 on we use Aries Askar. New wallets will be created with Askar from the start
+  // NOTE: from Credo 0.4.0 on we use Aries Askar. New wallets will be created with Askar from the start
   // which we will know when we create the pin while using askar as a dependency.
   migration: {
     didMigrateToAskar: false,
@@ -44,12 +47,14 @@ export const defaultState: State = {
     usePushNotifications: false,
     useVerifierCapability: false,
     useConnectionInviterCapability: false,
+    useHistoryCapability: false,
     useDevVerifierTemplates: false,
     acceptDevCredentials: false,
     useDataRetention: true,
     enableWalletNaming: false,
     walletName: generateRandomWalletName(),
     preventAutoLock: false,
+    enableShareableLink: false,
     alternateContactNames: {},
   },
   tours: {

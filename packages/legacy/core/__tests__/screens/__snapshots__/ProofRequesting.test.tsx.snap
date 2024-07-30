@@ -77,8 +77,8 @@ exports[`ProofRequesting Component generate new qr works correctly 1`] = `
         style={
           Object {
             "alignItems": "center",
-            "marginHorizontal": 30,
-            "padding": 16,
+            "marginHorizontal": 20,
+            "paddingVertical": 16,
             "textAlign": "center",
           }
         }
@@ -87,8 +87,9 @@ exports[`ProofRequesting Component generate new qr works correctly 1`] = `
           style={
             Object {
               "color": "#000000",
-              "fontSize": 28,
-              "fontWeight": "bold",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "marginTop": 8,
               "textAlign": "center",
             }
           }
@@ -98,15 +99,15 @@ exports[`ProofRequesting Component generate new qr works correctly 1`] = `
         <Text
           style={
             Object {
-              "color": "#000000",
-              "fontSize": 20,
-              "fontWeight": "normal",
-              "marginTop": 8,
+              "color": "#FFFFFF",
+              "fontSize": 26,
+              "fontWeight": "bold",
+              "marginTop": 20,
               "textAlign": "center",
             }
           }
         >
-          Verifier.ScanQRComment
+          Student full name
         </Text>
       </View>
     </View>
@@ -274,8 +275,8 @@ exports[`ProofRequesting Component renders correctly 1`] = `
         style={
           Object {
             "alignItems": "center",
-            "marginHorizontal": 30,
-            "padding": 16,
+            "marginHorizontal": 20,
+            "paddingVertical": 16,
             "textAlign": "center",
           }
         }
@@ -284,8 +285,9 @@ exports[`ProofRequesting Component renders correctly 1`] = `
           style={
             Object {
               "color": "#000000",
-              "fontSize": 28,
-              "fontWeight": "bold",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "marginTop": 8,
               "textAlign": "center",
             }
           }
@@ -295,15 +297,15 @@ exports[`ProofRequesting Component renders correctly 1`] = `
         <Text
           style={
             Object {
-              "color": "#000000",
-              "fontSize": 20,
-              "fontWeight": "normal",
-              "marginTop": 8,
+              "color": "#FFFFFF",
+              "fontSize": 26,
+              "fontWeight": "bold",
+              "marginTop": 20,
               "textAlign": "center",
             }
           }
         >
-          Verifier.ScanQRComment
+          Student full name
         </Text>
       </View>
     </View>
@@ -427,8 +429,8 @@ exports[`ProofRequesting Component renders correctly 2`] = `
         style={
           Object {
             "alignItems": "center",
-            "marginHorizontal": 30,
-            "padding": 16,
+            "marginHorizontal": 20,
+            "paddingVertical": 16,
             "textAlign": "center",
           }
         }
@@ -437,8 +439,9 @@ exports[`ProofRequesting Component renders correctly 2`] = `
           style={
             Object {
               "color": "#000000",
-              "fontSize": 28,
-              "fontWeight": "bold",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "marginTop": 8,
               "textAlign": "center",
             }
           }
@@ -448,15 +451,15 @@ exports[`ProofRequesting Component renders correctly 2`] = `
         <Text
           style={
             Object {
-              "color": "#000000",
-              "fontSize": 20,
-              "fontWeight": "normal",
-              "marginTop": 8,
+              "color": "#FFFFFF",
+              "fontSize": 26,
+              "fontWeight": "bold",
+              "marginTop": 20,
               "textAlign": "center",
             }
           }
         >
-          Verifier.ScanQRComment
+          Student full name
         </Text>
       </View>
     </View>

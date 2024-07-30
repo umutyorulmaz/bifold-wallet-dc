@@ -1,38 +1,38 @@
 import type { StackScreenProps } from '@react-navigation/stack'
 
-import { DidExchangeState } from '@aries-framework/core'
-import { useAgent, useProofById } from '@aries-framework/react-hooks'
+import { DidExchangeState, ProofState } from '@credo-ts/core'
+import { useAgent, useProofById } from '@credo-ts/react-hooks'
 import {
   ProofCustomMetadata,
   ProofMetadata,
-  isPresentationFailed,
-  isPresentationReceived,
   linkProofWithTemplate,
   sendProofRequest,
 } from '@hyperledger/aries-bifold-verifier'
-import { useIsFocused } from '@react-navigation/core'
-import { useFocusEffect } from '@react-navigation/native'
+import { useIsFocused, useFocusEffect } from '@react-navigation/native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   BackHandler,
   DeviceEventEmitter,
-  useWindowDimensions,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
-  View,
   Vibration,
+  View,
+  useWindowDimensions,
 } from 'react-native'
 import { isTablet } from 'react-native-device-info'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import LoadingIndicator from '../components/animated/LoadingIndicator'
 import Button, { ButtonType } from '../components/buttons/Button'
+import HeaderButton, { ButtonLocation } from '../components/buttons/HeaderButton'
 import QRRenderer from '../components/misc/QRRenderer'
 import { EventTypes } from '../constants'
+import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
-import { useConnectionByOutOfBandId, useOutOfBandByConnectionId } from '../hooks/connections'
+import { useConnectionByOutOfBandId } from '../hooks/connections'
 import { useTemplate } from '../hooks/proof-request-templates'
 import { BifoldError } from '../types/error'
 import { ProofRequestsStackParams, Screens } from '../types/navigators'
@@ -57,12 +57,13 @@ const ProofRequesting: React.FC<ProofRequestingProps> = ({ route, navigation }) 
   const { templateId, predicateValues } = route?.params
   const { agent } = useAgent()
   if (!agent) {
-    throw new Error('Unable to fetch agent from AFJ')
+    throw new Error('Unable to fetch agent from Credo')
   }
 
   const { t } = useTranslation()
   const { ColorPallet, TextTheme } = useTheme()
   const isFocused = useIsFocused()
+  const [store] = useStore()
   const [generating, setGenerating] = useState(true)
   const [message, setMessage] = useState<string | undefined>(undefined)
   const [connectionRecordId, setConnectionRecordId] = useState<string | undefined>(undefined)
@@ -70,7 +71,6 @@ const ProofRequesting: React.FC<ProofRequestingProps> = ({ route, navigation }) 
   const record = useConnectionByOutOfBandId(connectionRecordId ?? '')
   const proofRecord = useProofById(proofRecordId ?? '')
   const template = useTemplate(templateId)
-  const goalCode = useOutOfBandByConnectionId(record?.id ?? '')?.outOfBandInvitation.goalCode
   const { qrSize, qrContainerSize } = useQrSizeForDevice()
 
   const styles = StyleSheet.create({
@@ -80,18 +80,17 @@ const ProofRequesting: React.FC<ProofRequestingProps> = ({ route, navigation }) 
     },
     headerContainer: {
       alignItems: 'center',
-      padding: 16,
-      marginHorizontal: 30,
+      paddingVertical: 16,
+      marginHorizontal: 20,
       textAlign: 'center',
     },
     primaryHeaderText: {
-      ...TextTheme.headerTitle,
+      ...TextTheme.headingThree,
       textAlign: 'center',
-      color: ColorPallet.grayscale.black,
+      marginTop: 20,
     },
     secondaryHeaderText: {
-      fontWeight: TextTheme.normal.fontWeight,
-      fontSize: 20,
+      ...TextTheme.normal,
       textAlign: 'center',
       marginTop: 8,
       color: ColorPallet.grayscale.black,
@@ -153,6 +152,23 @@ const ProofRequesting: React.FC<ProofRequestingProps> = ({ route, navigation }) 
   )
 
   useEffect(() => {
+    if (message && store.preferences.enableShareableLink) {
+      const scanShareUrl = () => (
+        <HeaderButton
+          buttonLocation={ButtonLocation.Right}
+          accessibilityLabel={t('Global.Share')}
+          testID={testIdWithKey('ShareButton')}
+          onPress={() => {
+            Share.share({ message })
+          }}
+          icon="share-variant"
+        />
+      )
+      navigation.setOptions({ headerRight: scanShareUrl })
+    }
+  }, [message, store.preferences.enableShareableLink])
+
+  useEffect(() => {
     if (isFocused) {
       createProofRequest()
     }
@@ -181,11 +197,8 @@ const ProofRequesting: React.FC<ProofRequestingProps> = ({ route, navigation }) 
   }, [record, template])
 
   useEffect(() => {
-    if (proofRecord && (isPresentationReceived(proofRecord) || isPresentationFailed(proofRecord))) {
-      if (goalCode?.endsWith('verify.once')) {
-        agent.connections.deleteById(record?.id ?? '')
-      }
-      navigation.navigate(Screens.ProofDetails, { recordId: proofRecord.id })
+    if (proofRecord && proofRecord.state === ProofState.RequestSent) {
+      navigation.navigate(Screens.MobileVerifierLoading, { proofId: proofRecord.id, connectionId: record?.id ?? '' })
     }
   }, [proofRecord])
 
@@ -197,8 +210,8 @@ const ProofRequesting: React.FC<ProofRequestingProps> = ({ route, navigation }) 
           {message && <QRRenderer value={message} size={qrSize} />}
         </View>
         <View style={styles.headerContainer}>
-          <Text style={styles.primaryHeaderText}>{t('Verifier.ScanQR')}</Text>
-          <Text style={styles.secondaryHeaderText}>{t('Verifier.ScanQRComment')}</Text>
+          <Text style={styles.secondaryHeaderText}>{t('Verifier.ScanQR')}</Text>
+          <Text style={styles.primaryHeaderText}>{template?.name}</Text>
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>

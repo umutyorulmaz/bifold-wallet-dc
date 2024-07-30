@@ -1,9 +1,9 @@
-import { CredentialExchangeRecord } from '@aries-framework/core'
+import { CredentialExchangeRecord } from '@credo-ts/core'
 import { Attribute, BrandingOverlayType, Predicate } from '@hyperledger/aries-oca/build/legacy'
 import React from 'react'
 import { ViewStyle } from 'react-native'
 
-import { useConfiguration } from '../../contexts/configuration'
+import { TOKENS, useContainer } from '../../container-api'
 import { useTheme } from '../../contexts/theme'
 import { GenericFn } from '../../types/fn'
 
@@ -14,8 +14,6 @@ interface CredentialCardProps {
   credential?: CredentialExchangeRecord
   credDefId?: string
   schemaId?: string
-  proofCredDefId?: string
-  proofSchemaId?: string
   credName?: string
   onPress?: GenericFn
   style?: ViewStyle
@@ -31,8 +29,6 @@ const CredentialCard: React.FC<CredentialCardProps> = ({
   credential,
   credDefId,
   schemaId,
-  proofCredDefId,
-  proofSchemaId,
   proof,
   displayItems,
   credName,
@@ -44,7 +40,7 @@ const CredentialCard: React.FC<CredentialCardProps> = ({
   onPress = undefined,
 }) => {
   // add ability to reference credential by ID, allows us to get past react hook restrictions
-  const { OCABundleResolver } = useConfiguration()
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
   const { ColorPallet } = useTheme()
   const getCredOverlayType = (type: BrandingOverlayType) => {
     if (proof) {
@@ -57,14 +53,12 @@ const CredentialCard: React.FC<CredentialCardProps> = ({
           credName={credName}
           credDefId={credDefId}
           schemaId={schemaId}
-          proofCredDefId={proofCredDefId}
-          proofSchemaId={proofSchemaId}
           credential={credential}
           handleAltCredChange={handleAltCredChange}
           hasAltCredentials={hasAltCredentials}
           proof
           elevated
-        ></CredentialCard11>
+        />
       )
     }
 
@@ -87,7 +81,8 @@ const CredentialCard: React.FC<CredentialCardProps> = ({
       )
     }
   }
-  return getCredOverlayType(OCABundleResolver.getBrandingOverlayType())
+
+  return getCredOverlayType(bundleResolver.getBrandingOverlayType())
 }
 
 export default CredentialCard

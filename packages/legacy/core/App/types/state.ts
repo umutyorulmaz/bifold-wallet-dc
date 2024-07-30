@@ -6,6 +6,9 @@ export interface Onboarding {
   didConsiderBiometry: boolean
   didConsiderPushNotifications: boolean
   didNameWallet: boolean
+  onboardingVersion: number
+  didCompleteOnboarding: boolean
+  postAuthScreens: string[]
 }
 
 export interface Migration {
@@ -19,12 +22,14 @@ export interface Preferences {
   developerModeEnabled: boolean
   useVerifierCapability?: boolean
   useConnectionInviterCapability?: boolean
+  useHistoryCapability?: boolean
   useDevVerifierTemplates?: boolean
   enableWalletNaming: boolean
   walletName: string
   acceptDevCredentials: boolean
   useDataRetention: boolean
   preventAutoLock: boolean
+  enableShareableLink: boolean
   alternateContactNames: Record<string, string>
 }
 

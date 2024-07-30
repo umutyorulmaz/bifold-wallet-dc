@@ -5,8 +5,9 @@ import {
   CredentialState,
   ProofExchangeRecord,
   ProofState,
-} from '@aries-framework/core'
-import { useAgent, useBasicMessagesByConnectionId, useConnectionById } from '@aries-framework/react-hooks'
+  ConnectionRecord,
+} from '@credo-ts/core'
+import { useAgent, useBasicMessagesByConnectionId, useConnectionById } from '@credo-ts/react-hooks'
 import { isPresentationReceived } from '@hyperledger/aries-bifold-verifier'
 import { useIsFocused, useNavigation } from '@react-navigation/core'
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack'
@@ -26,6 +27,7 @@ import { ChatMessage, ExtendedChatMessage, CallbackType } from '../components/ch
 import { useNetwork } from '../contexts/network'
 import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
+//import { useChatMessagesByConnection } from '../hooks/chat-messages'
 import { useCredentialsByConnectionId } from '../hooks/credentials'
 import { useProofsByConnectionId } from '../hooks/proofs'
 import { Role } from '../types/chat'
@@ -52,14 +54,15 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   const { t } = useTranslation()
   const { agent } = useAgent()
   const navigation = useNavigation<StackNavigationProp<RootStackParams | ContactStackParams>>()
-  const connection = useConnectionById(connectionId)
+  const connection = useConnectionById(connectionId) as ConnectionRecord
   const basicMessages = useBasicMessagesByConnectionId(connectionId)
+  //  const chatMessages = useChatMessagesByConnection(connection)
   const credentials = useCredentialsByConnectionId(connectionId)
   const proofs = useProofsByConnectionId(connectionId)
   const isFocused = useIsFocused()
   const { assertConnectedNetwork, silentAssertConnectedNetwork } = useNetwork()
-  const [messages, setMessages] = useState<Array<ExtendedChatMessage>>([])
   const [showActionSlider, setShowActionSlider] = useState(false)
+  const [messages, setMessages] = useState<Array<ExtendedChatMessage>>([])
   const { ChatTheme: theme, Assets } = useTheme()
   // const { ColorPallet } = useTheme()
   const [theirLabel, setTheirLabel] = useState(getConnectionName(connection, store.preferences.alternateContactNames))
@@ -379,4 +382,4 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   )
 }
 
-export default Chat;
+export default Chat

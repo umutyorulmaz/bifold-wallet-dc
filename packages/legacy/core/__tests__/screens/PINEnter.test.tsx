@@ -2,18 +2,12 @@ import { render } from '@testing-library/react-native'
 import React from 'react'
 
 import { AuthContext } from '../../App/contexts/auth'
+import { useConfiguration } from '../../App/contexts/configuration'
 import { StoreProvider, defaultState } from '../../App/contexts/store'
 import PINEnter from '../../App/screens/PINEnter'
 import { testIdWithKey } from '../../App/utils/testable'
 import authContext from '../contexts/auth'
-import { useConfiguration } from '../../App/contexts/configuration'
 
-jest.mock('@react-navigation/core', () => {
-  return require('../../__mocks__/custom/@react-navigation/core')
-})
-jest.mock('@react-navigation/native', () => {
-  return require('../../__mocks__/custom/@react-navigation/native')
-})
 jest.mock('react-native-fs', () => ({}))
 jest.mock('@hyperledger/anoncreds-react-native', () => ({}))
 jest.mock('@hyperledger/aries-askar-react-native', () => ({}))
@@ -54,8 +48,8 @@ describe('displays a PIN Enter screen', () => {
         </AuthContext.Provider>
       </StoreProvider>
     )
-    const ModalHeader = await tree.getByTestId(testIdWithKey('HeaderText'))
-    expect(ModalHeader).not.toBeNull()
+    const textNotice = await tree.findByText('PINEnter.LockedOut')
+    expect(textNotice).not.toBeNull()
     expect(tree).toMatchSnapshot()
   })
 
@@ -80,5 +74,4 @@ describe('displays a PIN Enter screen', () => {
     useConfiguration.mockReturnValue({ showDetailsInfo: true })
     jest.clearAllMocks()
   })
-
 })

@@ -1,11 +1,14 @@
+import { BaseLogger } from '@credo-ts/core'
 import {
   AnonCredsProofRequestTemplatePayload,
   ProofRequestTemplate,
   useProofRequestTemplates,
 } from '@hyperledger/aries-bifold-verifier'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
-import { useConfiguration } from '../contexts/configuration'
+import { TOKENS, useContainer } from '../container-api'
+
+type ProofRequestTemplateFn = (useDevTemplates: boolean) => Array<ProofRequestTemplate>
 
 const calculatePreviousYear = (yearOffset: number) => {
   const pastDate = new Date()
@@ -65,70 +68,100 @@ export interface ProofBundleResolverType {
   resolveById: (templateId: string, acceptDevRestrictions: boolean) => Promise<ProofRequestTemplate | undefined>
 }
 
-export const useRemoteProofBundleResolver = (indexFileBaseUrl: string | undefined): ProofBundleResolverType => {
+export const useRemoteProofBundleResolver = (
+  indexFileBaseUrl: string | undefined,
+  log?: BaseLogger
+): ProofBundleResolverType => {
   if (indexFileBaseUrl) {
-    return new RemoteProofBundleResolver(indexFileBaseUrl)
+    return new RemoteProofBundleResolver(indexFileBaseUrl, log)
   } else {
-    return new DefaultProofBundleResolver()
+    const container = useContainer()
+    const proofRequestTemplates = container.resolve(TOKENS.UTIL_PROOF_TEMPLATE)
+
+    return new DefaultProofBundleResolver(proofRequestTemplates)
   }
 }
 
 export class RemoteProofBundleResolver implements ProofBundleResolverType {
   private remoteServer
   private templateData: ProofRequestTemplate[] | undefined
+  private log?: BaseLogger
 
-  public constructor(indexFileBaseUrl: string) {
+  public constructor(indexFileBaseUrl: string, log?: BaseLogger) {
     this.remoteServer = axios.create({
       baseURL: indexFileBaseUrl,
     })
+    this.log = log
   }
+
   public async resolve(acceptDevRestrictions: boolean): Promise<ProofRequestTemplate[] | undefined> {
     if (this.templateData) {
       let templateData = this.templateData
+
       if (acceptDevRestrictions) {
         templateData = applyDevRestrictions(templateData)
       }
+
       return Promise.resolve(templateData)
     }
-    return this.remoteServer.get('proof-templates.json').then((response) => {
-      try {
-        let templateData: ProofRequestTemplate[] = response.data
-        this.templateData = templateData
-        if (acceptDevRestrictions) {
-          templateData = applyDevRestrictions(templateData)
+
+    return this.remoteServer
+      .get('proof-templates.json')
+      .then((response) => {
+        this.log?.info('Fetched proof templates')
+
+        try {
+          let templateData: ProofRequestTemplate[] = response.data
+          this.templateData = templateData
+
+          if (acceptDevRestrictions) {
+            templateData = applyDevRestrictions(templateData)
+          }
+
+          return templateData
+        } catch (error: unknown) {
+          this.log?.error('Failed to parse proof templates', error as Error)
+
+          return undefined
         }
-        return templateData
-      } catch (error) {
+      })
+      .catch((error: AxiosError) => {
+        this.log?.error('Failed to fetch proof templates', error)
+
         return undefined
-      }
-    })
+      })
   }
+
   public async resolveById(
     templateId: string,
     acceptDevRestrictions: boolean
   ): Promise<ProofRequestTemplate | undefined> {
     if (!this.templateData) {
       return (await this.resolve(acceptDevRestrictions))?.find((template) => template.id === templateId)
-    } else {
-      let templateData = this.templateData
-      if (acceptDevRestrictions) {
-        templateData = applyDevRestrictions(templateData)
-      }
-      const template = templateData.find((template) => template.id === templateId)
-      return template
     }
+
+    let templateData = this.templateData
+
+    if (acceptDevRestrictions) {
+      templateData = applyDevRestrictions(templateData)
+    }
+    const template = templateData.find((template) => template.id === templateId)
+
+    return template
   }
 }
 
 export class DefaultProofBundleResolver implements ProofBundleResolverType {
   private proofRequestTemplates
-  public constructor() {
-    const { proofRequestTemplates } = useConfiguration()
+
+  public constructor(proofRequestTemplates: ProofRequestTemplateFn | undefined) {
     this.proofRequestTemplates = proofRequestTemplates ?? useProofRequestTemplates
   }
+
   public async resolve(acceptDevRestrictions: boolean): Promise<ProofRequestTemplate[]> {
     return Promise.resolve(this.proofRequestTemplates(acceptDevRestrictions))
   }
+
   public async resolveById(
     templateId: string,
     acceptDevRestrictions: boolean

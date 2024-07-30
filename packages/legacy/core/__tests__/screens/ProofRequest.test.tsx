@@ -1,13 +1,19 @@
-import { INDY_PROOF_REQUEST_ATTACHMENT_ID, V1RequestPresentationMessage } from '@aries-framework/anoncreds'
-import { CredentialExchangeRecord, CredentialState, ProofExchangeRecord, ProofState } from '@aries-framework/core'
-import { Attachment, AttachmentData } from '@aries-framework/core/build/decorators/attachment/Attachment'
-import { useAgent, useProofById } from '@aries-framework/react-hooks'
+import { INDY_PROOF_REQUEST_ATTACHMENT_ID, V1RequestPresentationMessage } from '@credo-ts/anoncreds'
+import {
+  CredentialExchangeRecord,
+  CredentialRole,
+  CredentialState,
+  ProofExchangeRecord,
+  ProofRole,
+  ProofState,
+} from '@credo-ts/core'
+import { Attachment, AttachmentData } from '@credo-ts/core/build/decorators/attachment/Attachment'
+import { useAgent, useProofById } from '@credo-ts/react-hooks'
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/native'
 import '@testing-library/jest-native/extend-expect'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react-native'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { ConfigurationContext } from '../../App/contexts/configuration'
 import { NetworkContext, NetworkProvider } from '../../App/contexts/network'
@@ -16,17 +22,12 @@ import { testIdWithKey } from '../../App/utils/testable'
 import configurationContext from '../contexts/configuration'
 import networkContext from '../contexts/network'
 import timeTravel from '../helpers/timetravel'
+import { useCredentials } from '../../__mocks__/@credo-ts/react-hooks'
 
+jest.mock('../../App/container-api')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
-jest.mock('@react-navigation/core', () => {
-  return require('../../__mocks__/custom/@react-navigation/core')
-})
-jest.mock('@react-navigation/native', () => {
-  return require('../../__mocks__/custom/@react-navigation/native')
-})
-
 jest.mock('@hyperledger/anoncreds-react-native', () => ({}))
 jest.mock('@hyperledger/aries-askar-react-native', () => ({}))
 jest.mock('@hyperledger/indy-vdr-react-native', () => ({}))
@@ -59,9 +60,8 @@ describe('displays a proof request screen', () => {
     const testTime = '2022-02-11 20:00:18.180718'
     const testAge = '16'
 
-    const { t } = useTranslation()
-
-    const { id: credentialId } = new CredentialExchangeRecord({
+    const credExRecord = new CredentialExchangeRecord({
+      role: CredentialRole.Holder,
       threadId: '1',
       state: CredentialState.Done,
       credentialAttributes: [
@@ -83,6 +83,8 @@ describe('displays a proof request screen', () => {
       ],
       protocolVersion: 'v1',
     })
+
+    const { id: credentialId } = credExRecord
 
     const { id: presentationMessageId } = new V1RequestPresentationMessage({
       comment: 'some comment',
@@ -117,6 +119,7 @@ describe('displays a proof request screen', () => {
     })
 
     const testProofRequest = new ProofExchangeRecord({
+      role: ProofRole.Prover,
       connectionId: '',
       threadId: presentationMessageId,
       state: ProofState.RequestReceived,
@@ -126,7 +129,7 @@ describe('displays a proof request screen', () => {
     const attributeBase = {
       referent: '',
       schemaId: '',
-      credentialDefinitionId: 'AAAAAAAAAAAAAAAAAAAAAA:1:AA:1234:test',
+      credentialDefinitionId: 'AAAAAAAAAAAAAAAAAAAAAA:3:CL:1234:test',
       toJSON: jest.fn(),
     }
 
@@ -209,7 +212,7 @@ describe('displays a proof request screen', () => {
 
     beforeEach(() => {
       jest.clearAllMocks()
-
+      useCredentials.mockReturnValue({ records: [credExRecord] })
       // @ts-ignore-next-line
       useProofById.mockReturnValue(testProofRequest)
     })
@@ -290,6 +293,7 @@ describe('displays a proof request screen', () => {
       const testAge2 = '17'
 
       const { id: credentialId2 } = new CredentialExchangeRecord({
+        role: CredentialRole.Holder,
         threadId: '1',
         state: CredentialState.Done,
         credentialAttributes: [
@@ -518,7 +522,6 @@ describe('displays a proof request screen', () => {
       const emailLabel = getByText(/Email/, { exact: false })
       const emailValue = getByText(testEmail)
       const ageLabel = getByText(/Age/, { exact: false })
-      const ageValue = getByText(t('ProofRequest.PredicateLe') + ' 18')
       const ageNotSatisfied = getByText('ProofRequest.PredicateNotSatisfied', { exact: false })
       const cancelButton = getByTestId(testIdWithKey('Cancel'))
 
@@ -532,8 +535,6 @@ describe('displays a proof request screen', () => {
       expect(emailValue).toBeTruthy()
       expect(ageLabel).not.toBeNull()
       expect(ageLabel).toBeTruthy()
-      expect(ageValue).not.toBeNull()
-      expect(ageValue).toBeTruthy()
       expect(ageNotSatisfied).not.toBeNull()
       expect(ageNotSatisfied).toBeTruthy()
       expect(cancelButton).not.toBeNull()

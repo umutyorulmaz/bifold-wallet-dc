@@ -1,5 +1,4 @@
-import { useConnections } from '@aries-framework/react-hooks'
-import { useAgent } from '@aries-framework/react-hooks'
+import { useAgent, useConnections } from '@credo-ts/react-hooks'
 import { act, render } from '@testing-library/react-native'
 import React from 'react'
 
@@ -7,15 +6,9 @@ import NewQRView from '../../App/components/misc/NewQRView'
 import { ConfigurationContext } from '../../App/contexts/configuration'
 import { StoreProvider, defaultState } from '../../App/contexts/store'
 import { testIdWithKey } from '../../App/utils/testable'
-import { useNavigation } from '../../__mocks__/custom/@react-navigation/core'
+import { useNavigation } from '@react-navigation/native'
 import configurationContext from '../contexts/configuration'
 
-jest.mock('@react-navigation/core', () => {
-  return require('../../__mocks__/custom/@react-navigation/core')
-})
-jest.mock('@react-navigation/native', () => {
-  return require('../../__mocks__/custom/@react-navigation/native')
-})
 jest.mock('react-native-orientation-locker', () => {
   return require('../../__mocks__/custom/react-native-orientation-locker')
 })

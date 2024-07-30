@@ -146,7 +146,7 @@ export const createPageWith = (
   const styles = createStyles(OnboardingTheme)
   const imageDisplayOptions = createImageDisplayOptions(OnboardingTheme)
   const titleElement = (
-    <Text style={[styles.headerText, { fontSize: 18 }]} testID={testIdWithKey('HeaderText')}>
+    <Text style={[styles.headerText]} testID={testIdWithKey('HeaderText')}>
       {title}
     </Text>
   )

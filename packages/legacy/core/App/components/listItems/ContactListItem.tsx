@@ -3,9 +3,9 @@ import type {
   ConnectionRecord,
   CredentialExchangeRecord,
   ProofExchangeRecord,
-} from '@aries-framework/core'
+} from '@credo-ts/core'
 
-import { useBasicMessagesByConnectionId } from '@aries-framework/react-hooks'
+import { useBasicMessagesByConnectionId } from '@credo-ts/react-hooks'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +13,7 @@ import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native'
 
 import { useStore } from '../../contexts/store'
 import { useTheme } from '../../contexts/theme'
+//import { useChatMessagesByConnection } from '../../hooks/chat-messages'
 import { useCredentialsByConnectionId } from '../../hooks/credentials'
 import { useProofsByConnectionId } from '../../hooks/proofs'
 import { Role } from '../../types/chat'
@@ -31,6 +32,7 @@ interface CondensedMessage {
   text: string
   createdAt: Date
 }
+
 interface Props {
   contact: ConnectionRecord
   navigation: StackNavigationProp<ContactStackParams, Screens.Contacts>
@@ -194,13 +196,17 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
               <Text style={styles.contactNameText}>{contactLabel}</Text>
             </View>
             <View style={styles.timeContainer}>
-              <Text style={styles.timeText}>{formatTime(message.createdAt, { shortMonth: true, trim: true })}</Text>
+              {message && (
+                <Text style={styles.timeText}>{formatTime(message.createdAt, { shortMonth: true, trim: true })}</Text>
+              )}
             </View>
           </View>
           <View>
-            <Text style={TextTheme.normal} numberOfLines={1} ellipsizeMode={'tail'}>
-              {message.text}
-            </Text>
+            {message && (
+              <Text style={TextTheme.normal} numberOfLines={1} ellipsizeMode={'tail'}>
+                {message.text}
+              </Text>
+            )}
           </View>
         </View>
       </View>

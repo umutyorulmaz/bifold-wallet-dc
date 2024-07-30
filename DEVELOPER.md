@@ -4,7 +4,7 @@ The following document is intended to help developers get started with the DigiC
 
 # Project Overview
 
-The Aries Mobile Agent React Native (DigiCred VC Wallet) is a user-friendly mobile agent that is built with React Native and uses Credo to exchange verifiable credentials with other agents. While Credo handles the heavy lifting of verifiable credential work, DigiCred VC Wallet focuses on user experience and interactions with these credentials.
+The Aries Mobile Agent React Native (Bifold) is a user-friendly mobile agent that is built with React Native and uses Credo to exchange verifiable credentials with other agents. While Credo handles the heavy lifting of verifiable credential work, Bifold focuses on user experience and interactions with these credentials.
 
 Key points to note:
 

@@ -1,7 +1,7 @@
 import type { StackScreenProps } from '@react-navigation/stack'
 
-import { CredentialExchangeRecord } from '@aries-framework/core'
-import { useAgent } from '@aries-framework/react-hooks'
+import { CredentialExchangeRecord } from '@credo-ts/core'
+import { useAgent } from '@credo-ts/react-hooks'
 import { BrandingOverlay } from '@hyperledger/aries-oca'
 import { Attribute, BrandingOverlayType, CredentialOverlay } from '@hyperledger/aries-oca/build/legacy'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -18,7 +18,7 @@ import Record from '../components/record/Record'
 import RecordRemove from '../components/record/RecordRemove'
 import { ToastType } from '../components/toast/BaseToast'
 import { EventTypes } from '../constants'
-import { useConfiguration } from '../contexts/configuration'
+import { TOKENS, useContainer } from '../container-api'
 import { useTheme } from '../contexts/theme'
 import { BifoldError } from '../types/error'
 import { CredentialMetadata, credentialCustomMetadata } from '../types/metadata'
@@ -49,7 +49,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
   const { agent } = useAgent()
   const { t, i18n } = useTranslation()
   const { TextTheme, ColorPallet } = useTheme()
-  const { OCABundleResolver } = useConfiguration()
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
   const [isRevoked, setIsRevoked] = useState<boolean>(false)
   const [revocationDate, setRevocationDate] = useState<string>('')
   const [preciseRevocationDate, setPreciseRevocationDate] = useState<string>('')
@@ -107,16 +107,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
   })
 
   useEffect(() => {
-    if (!agent) {
-      DeviceEventEmitter.emit(
-        EventTypes.ERROR_ADDED,
-        new BifoldError(t('Error.Title1033'), t('Error.Message1033'), t('CredentialDetails.CredentialNotFound'), 1033)
-      )
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!credential) {
+    if (!agent || !credential) {
       DeviceEventEmitter.emit(
         EventTypes.ERROR_ADDED,
         new BifoldError(t('Error.Title1033'), t('Error.Message1033'), t('CredentialDetails.CredentialNotFound'), 1033)
@@ -146,7 +137,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
       language: i18n.language,
     }
 
-    OCABundleResolver.resolveAllBundles(params).then((bundle) => {
+    bundleResolver.resolveAllBundles(params).then((bundle) => {
       setOverlay({
         ...overlay,
         ...(bundle as CredentialOverlay<BrandingOverlay>),
@@ -220,10 +211,10 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
             }}
           />
         ) : (
-            <Text style={[TextTheme.title, { fontSize: 0.5 * logoHeight, color: '#000' }]}>
-              {(overlay.metaOverlay?.name ?? overlay.metaOverlay?.issuer ?? 'C')?.charAt(0).toUpperCase()}
-            </Text>
-          )}
+          <Text style={[TextTheme.title, { fontSize: 0.5 * logoHeight, color: '#000' }]}>
+            {(overlay.metaOverlay?.name ?? overlay.metaOverlay?.issuer ?? 'C')?.charAt(0).toUpperCase()}
+          </Text>
+        )}
       </View>
     )
   }
@@ -248,7 +239,6 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
                 paddingBottom: paddingVertical,
                 lineHeight: 19,
                 opacity: 0.8,
-
               },
             ]}
             numberOfLines={1}
@@ -263,7 +253,6 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
 
               {
                 lineHeight: 24,
-
               },
             ]}
           >
@@ -282,14 +271,13 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
             source={toImageSource(overlay.brandingOverlay?.backgroundImage)}
             imageStyle={{
               resizeMode: 'cover',
-
             }}
           >
             <View testID={testIdWithKey('CredentialDetailsSecondaryHeader')} style={styles.secondaryHeaderContainer} />
           </ImageBackground>
         ) : (
-            <View testID={testIdWithKey('CredentialDetailsSecondaryHeader')} style={styles.secondaryHeaderContainer} />
-          )}
+          <View testID={testIdWithKey('CredentialDetailsSecondaryHeader')} style={styles.secondaryHeaderContainer} />
+        )}
       </>
     )
   }
@@ -311,7 +299,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
   }
 
   const header = () => {
-    return OCABundleResolver.getBrandingOverlayType() === BrandingOverlayType.Branding01 ? (
+    return bundleResolver.getBrandingOverlayType() === BrandingOverlayType.Branding01 ? (
       <View>
         {isRevoked && !isRevokedMessageHidden ? (
           <View style={{ padding: paddingVertical, paddingBottom: 0 }}>
@@ -321,18 +309,18 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
         {credential && <CredentialCard credential={credential} style={{ margin: 16 }} />}
       </View>
     ) : (
-        <View style={styles.container}>
-          <CredentialDetailSecondaryHeader />
-          <CredentialCardLogo />
-          <CredentialDetailPrimaryHeader />
+      <View style={styles.container}>
+        <CredentialDetailSecondaryHeader />
+        <CredentialCardLogo />
+        <CredentialDetailPrimaryHeader />
 
-          {isRevoked && !isRevokedMessageHidden ? (
-            <View style={{ padding: paddingVertical, paddingTop: 0 }}>
-              {credential && <CredentialRevocationMessage credential={credential} />}
-            </View>
-          ) : null}
-        </View>
-      )
+        {isRevoked && !isRevokedMessageHidden ? (
+          <View style={{ padding: paddingVertical, paddingTop: 0 }}>
+            {credential && <CredentialRevocationMessage credential={credential} />}
+          </View>
+        ) : null}
+      </View>
+    )
   }
 
   const footer = () => {

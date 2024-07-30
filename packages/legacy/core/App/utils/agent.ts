@@ -1,29 +1,30 @@
 import {
+  AnonCredsCredentialFormatService,
   AnonCredsModule,
+  AnonCredsProofFormatService,
+  DataIntegrityCredentialFormatService,
   LegacyIndyCredentialFormatService,
   LegacyIndyProofFormatService,
   V1CredentialProtocol,
   V1ProofProtocol,
-  AnonCredsCredentialFormatService,
-  AnonCredsProofFormatService,
-} from '@aries-framework/anoncreds'
-import { AnonCredsRsModule } from '@aries-framework/anoncreds-rs'
-import { AskarModule } from '@aries-framework/askar'
+} from '@credo-ts/anoncreds'
+import { AskarModule } from '@credo-ts/askar'
 import {
   Agent,
   AutoAcceptCredential,
+  AutoAcceptProof,
   ConnectionsModule,
   CredentialsModule,
+  DifPresentationExchangeProofFormatService,
+  MediationRecipientModule,
   MediatorPickupStrategy,
   ProofsModule,
-  MediationRecipientModule,
   V2CredentialProtocol,
   V2ProofProtocol,
-  AutoAcceptProof,
-} from '@aries-framework/core'
-import { IndyVdrAnonCredsRegistry, IndyVdrModule, IndyVdrPoolConfig } from '@aries-framework/indy-vdr'
-import { PushNotificationsFcmModule, PushNotificationsApnsModule } from '@aries-framework/push-notifications'
-import { useAgent } from '@aries-framework/react-hooks'
+} from '@credo-ts/core'
+import { IndyVdrAnonCredsRegistry, IndyVdrModule, IndyVdrPoolConfig } from '@credo-ts/indy-vdr'
+import { PushNotificationsApnsModule, PushNotificationsFcmModule } from '@credo-ts/push-notifications'
+import { useAgent } from '@credo-ts/react-hooks'
 import { anoncreds } from '@hyperledger/anoncreds-react-native'
 import { ariesAskar } from '@hyperledger/aries-askar-react-native'
 import { indyVdr } from '@hyperledger/indy-vdr-react-native'
@@ -31,22 +32,36 @@ import { indyVdr } from '@hyperledger/indy-vdr-react-native'
 interface GetAgentModulesOptions {
   indyNetworks: IndyVdrPoolConfig[]
   mediatorInvitationUrl?: string
+  txnCache?: { capacity: number; expiryOffsetMs: number; path?: string }
 }
 
 export type BifoldAgent = Agent<ReturnType<typeof getAgentModules>>
 
-export function getAgentModules({ indyNetworks, mediatorInvitationUrl }: GetAgentModulesOptions) {
+/**
+ * Constructs the modules to be used in the agent setup
+ * @param indyNetworks
+ * @param mediatorInvitationUrl determine which mediator to use
+ * @param txnCache optional local cache config for indyvdr
+ * @returns modules to be used in agent setup
+ */
+export function getAgentModules({ indyNetworks, mediatorInvitationUrl, txnCache }: GetAgentModulesOptions) {
   const indyCredentialFormat = new LegacyIndyCredentialFormatService()
   const indyProofFormat = new LegacyIndyProofFormatService()
+
+  if (txnCache) {
+    indyVdr.setLedgerTxnCache({
+      capacity: txnCache.capacity,
+      expiry_offset_ms: txnCache.expiryOffsetMs,
+      path: txnCache.path,
+    })
+  }
 
   return {
     askar: new AskarModule({
       ariesAskar,
     }),
-    anoncredsRs: new AnonCredsRsModule({
-      anoncreds,
-    }),
     anoncreds: new AnonCredsModule({
+      anoncreds,
       registries: [new IndyVdrAnonCredsRegistry()],
     }),
     indyVdr: new IndyVdrModule({
@@ -61,7 +76,11 @@ export function getAgentModules({ indyNetworks, mediatorInvitationUrl }: GetAgen
       credentialProtocols: [
         new V1CredentialProtocol({ indyCredentialFormat }),
         new V2CredentialProtocol({
-          credentialFormats: [indyCredentialFormat, new AnonCredsCredentialFormatService()],
+          credentialFormats: [
+            indyCredentialFormat,
+            new AnonCredsCredentialFormatService(),
+            new DataIntegrityCredentialFormatService(),
+          ],
         }),
       ],
     }),
@@ -70,7 +89,11 @@ export function getAgentModules({ indyNetworks, mediatorInvitationUrl }: GetAgen
       proofProtocols: [
         new V1ProofProtocol({ indyProofFormat }),
         new V2ProofProtocol({
-          proofFormats: [indyProofFormat, new AnonCredsProofFormatService()],
+          proofFormats: [
+            indyProofFormat,
+            new AnonCredsProofFormatService(),
+            new DifPresentationExchangeProofFormatService(),
+          ],
         }),
       ],
     }),

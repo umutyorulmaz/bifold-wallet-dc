@@ -22,8 +22,7 @@ import SettingStack from './SettingStack'
 
 const TabStack: React.FC = () => {
   const { fontScale } = useWindowDimensions()
-  const { useCustomNotifications, enableReuseConnections, enableImplicitInvitations, enableUseMultUseInvitation } =
-    useConfiguration()
+  const { useCustomNotifications } = useConfiguration()
   const { total } = useCustomNotifications()
   const { t } = useTranslation()
   const Tab = createBottomTabNavigator<TabStackParams>()
@@ -53,6 +52,7 @@ const TabStack: React.FC = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: ColorPallet.brand.primary }}>
       <Tab.Navigator
+        initialRouteName={TabStacks.HomeStack}
         screenOptions={{
           unmountOnBlur: true,
           tabBarStyle: {
@@ -204,14 +204,7 @@ const TabStack: React.FC = () => {
               if (!assertConnectedNetwork()) {
                 return
               }
-              navigation.navigate(Stacks.ConnectStack, {
-                screen: Screens.Scan,
-                params: {
-                  implicitInvitations: enableImplicitInvitations,
-                  reuseConnections: enableReuseConnections,
-                  useMultUseInvitation: enableUseMultUseInvitation,
-                },
-              })
+              navigation.navigate(Stacks.ConnectStack, { screen: Screens.Scan })
             },
           })}
         >

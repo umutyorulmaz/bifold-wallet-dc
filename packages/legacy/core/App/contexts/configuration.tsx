@@ -1,27 +1,14 @@
-import { Agent } from '@aries-framework/core'
-import { IndyVdrPoolConfig } from '@aries-framework/indy-vdr'
-import { ProofRequestTemplate } from '@hyperledger/aries-bifold-verifier'
-import { OCABundleResolverType } from '@hyperledger/aries-oca/build/legacy'
+import { Agent } from '@credo-ts/core'
 import { StackNavigationOptions, StackScreenProps } from '@react-navigation/stack'
-import { createContext, ReducerAction, useContext } from 'react'
+import { createContext, useContext } from 'react'
 
 import { EmptyListProps } from '../components/misc/EmptyList'
 import { RecordProps } from '../components/record/Record'
 import { Locales } from '../localization'
 import OnboardingPages from '../screens/OnboardingPages'
-import { GetCredentialHelpEntry } from '../types/get-credential-help'
 import { ConnectStackParams } from '../types/navigators'
 import { PINSecurityParams } from '../types/security'
 import { SettingSection } from '../types/settings'
-
-interface NotificationConfiguration {
-  component: React.FC
-  onCloseAction: (dispatch?: React.Dispatch<ReducerAction<any>>) => void
-  title: string
-  description: string
-  buttonTitle: string
-  pageTitle: string
-}
 
 interface PushNotificationConfiguration {
   // function to get the current push notification permission status
@@ -43,18 +30,14 @@ export interface ConfigurationContext {
   credentialListOptions: React.FC
   credentialEmptyList: React.FC<EmptyListProps>
   developer: React.FC
-  OCABundleResolver: OCABundleResolverType
   proofTemplateBaseUrl?: string
   scan: React.FC<StackScreenProps<ConnectStackParams>>
   record: React.FC<RecordProps>
   PINSecurity: PINSecurityParams
-  indyLedgers: IndyVdrPoolConfig[]
   settings: SettingSection[]
-  customNotification: NotificationConfiguration
   supportedLanguages: Locales[]
   connectionTimerDelay?: number
   autoRedirectConnectionToHome?: boolean
-  proofRequestTemplates?: (useDevTemplates: boolean) => Array<ProofRequestTemplate>
   enableTours?: boolean
   enableImplicitInvitations?: boolean
   enableReuseConnections?: boolean
@@ -69,10 +52,8 @@ export interface ConfigurationContext {
   showScanButton?: boolean
   globalScreenOptions?: StackNavigationOptions
   showDetailsInfo?: boolean
-  getCredentialHelpDictionary?: GetCredentialHelpEntry[]
   contactHideList?: string[]
   credentialHideList?: string[]
-  enableUseMultUseInvitation?: boolean
 }
 
 export const ConfigurationContext = createContext<ConfigurationContext>(null as unknown as ConfigurationContext)
