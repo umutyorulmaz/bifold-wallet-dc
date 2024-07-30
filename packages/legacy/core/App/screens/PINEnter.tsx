@@ -1,7 +1,7 @@
 import { useNavigation, CommonActions } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Keyboard, StyleSheet, Text, Image, View, DeviceEventEmitter } from 'react-native'
+import { Keyboard, StyleSheet, Text, View, DeviceEventEmitter } from 'react-native'
 
 import Button, { ButtonType } from '../components/buttons/Button'
 import PINInput from '../components/inputs/PINInput'
@@ -296,36 +296,36 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
     }
   }
 
-  const displayHelpText = () => {
-    if (store.lockout.displayNotification) {
-      return (
-        <>
-          <Text style={style.helpText}>{t('PINEnter.LockedOut')}</Text>
-          <Text style={style.helpText}>{t('PINEnter.ReEnterPIN')}</Text>
-        </>
-      )
-    }
+  // const displayHelpText = () => {
+  //   if (store.lockout.displayNotification) {
+  //     return (
+  //       <>
+  //         <Text style={style.helpText}>{t('PINEnter.LockedOut')}</Text>
+  //         <Text style={style.helpText}>{t('PINEnter.ReEnterPIN')}</Text>
+  //       </>
+  //     )
+  //   }
 
-    if (biometricsEnrollmentChange) {
-      return (
-        <>
-          <Text style={style.helpText}>{t('PINEnter.BiometricsChanged')}</Text>
-          <Text style={style.helpText}>{t('PINEnter.BiometricsChangedEnterPIN')}</Text>
-        </>
-      )
-    }
+  //   if (biometricsEnrollmentChange) {
+  //     return (
+  //       <>
+  //         <Text style={style.helpText}>{t('PINEnter.BiometricsChanged')}</Text>
+  //         <Text style={style.helpText}>{t('PINEnter.BiometricsChangedEnterPIN')}</Text>
+  //       </>
+  //     )
+  //   }
 
-    if (biometricsErr) {
-      return (
-        <>
-          <Text style={style.helpText}>{t('PINEnter.BiometricsError')}</Text>
-          <Text style={style.helpText}>{t('PINEnter.BiometricsErrorEnterPIN')}</Text>
-        </>
-      )
-    }
+  //   if (biometricsErr) {
+  //     return (
+  //       <>
+  //         <Text style={style.helpText}>{t('PINEnter.BiometricsError')}</Text>
+  //         <Text style={style.helpText}>{t('PINEnter.BiometricsErrorEnterPIN')}</Text>
+  //       </>
+  //     )
+  //   }
 
-    return <Text style={style.helpText}>{t('PINEnter.EnterPIN')}</Text>
-  }
+  //   return <Text style={style.helpText}>{t('PINEnter.EnterPIN')}</Text>
+  // }
 
   return (
     <KeyboardView>
@@ -335,14 +335,14 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
             {/* *ACS* added the DigiCred logo at the top of the PIN Enter screen */}
             <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} />
             {/* <Image source={Assets.img.logoSecondary.src} style={style.image} /> */}
-            <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold'}]}>
+            <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center', fontWeight: 'bold' }]}>
               DigiCred
             </Text>
           </View>
 
           {biometricsEnrollmentChange ? (
             <>
-              <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center'}]}>
+              <Text style={[TextTheme.normal, { alignSelf: 'center', textAlign: 'center' }]}>
                 {t('PINEnter.BiometricsChanged')}
               </Text>
               <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16 }]}>
@@ -357,7 +357,9 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
               </Text>
             </>
           ) : (
-            <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16, marginTop: 20 }]}>{t('PINEnter.EnterPIN')}</Text>
+            <Text style={[TextTheme.normal, { alignSelf: 'center', marginBottom: 16, marginTop: 20 }]}>
+              {t('PINEnter.EnterPIN')}
+            </Text>
           )}
           <PINInput
             onPINChanged={(p: string) => {
