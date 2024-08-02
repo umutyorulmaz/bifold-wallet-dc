@@ -23,6 +23,7 @@ import { useTheme } from '../contexts/theme'
 import { BifoldError } from '../types/error'
 import { Screens, Stacks } from '../types/navigators'
 import { Onboarding as StoreOnboardingState } from '../types/state'
+import { activate } from '../utils/PushNotificationsHelper'
 import { getAgentModules, createLinkSecretIfRequired } from '../utils/agent'
 import { migrateToAskar, didMigrateToAskar } from '../utils/migration'
 
@@ -281,6 +282,9 @@ const Splash: React.FC = () => {
         })
 
         setAgent(newAgent)
+        if (store.preferences.usePushNotifications) {
+          activate(newAgent)
+        }
         navigation.dispatch(
           CommonActions.reset({
             index: 0,

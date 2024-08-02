@@ -6,8 +6,10 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { createContext, useContext } from 'react'
 import { DependencyContainer } from 'tsyringe'
 
+
 import * as bundle from './assets/oca-bundles.json'
 import Button from './components/buttons/Button'
+import NotificationModal from './components/modals/NotificationModal'
 import defaultIndyLedgers from './configs/ledgers/indy'
 import { LocalStorageKeys } from './constants'
 import { TOKENS, Container, TokenMapping } from './container-api'
@@ -24,6 +26,7 @@ import ScreenTerms, { TermsVersion } from './screens/Terms'
 import { loadLoginAttempt } from './services/keychain'
 import { ConsoleLogger } from './services/logger'
 import { AuthenticateStackParams, Screens } from './types/navigators'
+import { CustomNotification } from './types/notification'
 import {
   Migration as MigrationState,
   Preferences as PreferencesState,
@@ -31,6 +34,7 @@ import {
   Onboarding as StoreOnboardingState,
   Tours as ToursState,
 } from './types/state'
+
 export class MainContainer implements Container {
   public static readonly TOKENS = TOKENS
   private _container: DependencyContainer
@@ -63,6 +67,26 @@ export class MainContainer implements Container {
     this._container.registerInstance(TOKENS.UTIL_PROOF_TEMPLATE, useProofRequestTemplates)
     this._container.registerInstance(TOKENS.CACHE_CRED_DEFS, [])
     this._container.registerInstance(TOKENS.CACHE_SCHEMAS, [])
+    const customNotification: CustomNotification = {
+      buttonTitle: 'View',
+      title: 'New Notification',
+      // igoner The expected type comes from property 'component' which is declared here on type 'CustomNotification'
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      component: NotificationModal as any,
+      description: 'This is a new notification',
+      onCloseAction: () => {},
+      pageTitle: 'Notification',
+      additionalStackItems: [
+        {
+          component: NotificationModal as any,
+          name: 'Notification',
+          stackOptions: {
+            title: 'Notification',
+          },
+        },
+      ],
+    }
+    this._container.registerInstance(TOKENS.CUSTOM_NOTIFICATION, customNotification)
     this._container.registerInstance(
       TOKENS.FN_ONBOARDING_DONE,
       (dispatch: React.Dispatch<ReducerAction<unknown>>, navigation: StackNavigationProp<AuthenticateStackParams>) => {
