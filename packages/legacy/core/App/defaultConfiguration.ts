@@ -1,3 +1,5 @@
+import { Agent } from '@credo-ts/core'
+
 import EmptyList from './components/misc/EmptyList'
 import Record from './components/record/Record'
 import HomeFooterView from './components/views/HomeFooterView'
@@ -13,6 +15,7 @@ import Scan from './screens/Scan'
 import Splash from './screens/Splash'
 import Terms from './screens/Terms'
 import UseBiometry from './screens/UseBiometry'
+import { activate, deactivate, setup, status } from './utils/PushNotificationsHelper'
 
 export const defaultConfiguration: ConfigurationContext = {
   pages: OnboardingPages,
@@ -39,4 +42,15 @@ export const defaultConfiguration: ConfigurationContext = {
   showScanHelp: true,
   showScanButton: true,
   showDetailsInfo: true,
+  enablePushNotifications: {
+    status: status,
+    setup: setup,
+    toggle: async (state: boolean, agent: Agent) => {
+      if (state) {
+        await activate(agent)
+      } else {
+        await deactivate(agent)
+      }
+    },
+  },
 }

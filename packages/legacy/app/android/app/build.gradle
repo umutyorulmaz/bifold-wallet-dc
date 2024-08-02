@@ -98,7 +98,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 13
         versionName "1.2.1"
-
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {
@@ -138,6 +137,8 @@ dependencies {
 
     implementation 'com.google.mlkit:barcode-scanning:17.2.0'
 
+    implementation (platform("com.google.firebase:firebase-bom:33.1.0"))
+
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
@@ -147,3 +148,4 @@ dependencies {
 
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services'
