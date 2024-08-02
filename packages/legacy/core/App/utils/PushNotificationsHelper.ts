@@ -12,7 +12,7 @@ import { request, check, PERMISSIONS, RESULTS, PermissionStatus } from 'react-na
 
 const TOKEN_STORAGE_KEY = 'deviceToken'
 // eslint-disable-next-line no-console
-console.log('TOKEN_STORAGE_KEY:', TOKEN_STORAGE_KEY)
+//console.log('TOKEN_STORAGE_KEY:', TOKEN_STORAGE_KEY)
 
 const enum NotificationPermissionStatus {
   DENIED = 'denied',
@@ -212,7 +212,7 @@ const setDeviceInfo = async (agent: Agent, blankDeviceToken = false): Promise<vo
       devicePlatform: devicePlatform,
     })
     //eslint-disable-next-line no-console
-    console.log('Sent device info:', { deviceToken: token, devicePlatform: devicePlatform })
+    // console.log('Sent device info:', { deviceToken: token, devicePlatform: devicePlatform })
 
     if (blankDeviceToken) {
       AsyncStorage.setItem(TOKEN_STORAGE_KEY, 'blank')
@@ -223,7 +223,7 @@ const setDeviceInfo = async (agent: Agent, blankDeviceToken = false): Promise<vo
     const error = err as Error // Type assertion
     agent.config.logger.error('Error sending device token info to mediator agent', { message: error.message })
     //eslint-disable-next-line no-console
-    console.error('Error details:', { name: error.name, message: error.message, stack: error.stack })
+    //console.error('Error details:', { name: error.name, message: error.message, stack: error.stack })
   }
 }
 
