@@ -99,7 +99,7 @@ export function getAgentModules({ indyNetworks, mediatorInvitationUrl, txnCache 
     }),
     mediationRecipient: new MediationRecipientModule({
       mediatorInvitationUrl: mediatorInvitationUrl,
-      mediatorPickupStrategy: MediatorPickupStrategy.PickUpV1,
+      mediatorPickupStrategy: MediatorPickupStrategy.PickUpV2LiveMode,
     }),
     pushNotificationsFcm: new PushNotificationsFcmModule(),
     pushNotificationsApns: new PushNotificationsApnsModule(),
