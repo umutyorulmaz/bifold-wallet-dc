@@ -180,4 +180,14 @@ packages/legacy/app/vendor/bundle/**
 
 #data
 
+# Ignore GoogleService-Info.plist for iOS
+/packages/legacy/app/ios/GoogleService-Info.plist
+
+# Ignore google-services.json for Android
+/packages/legacy/app/android/app/google-services.json
+
+# Ignore release folder for Android
+/packages/legacy/app/android/app/release/
+
+
 
