@@ -16,14 +16,12 @@ import { useTour } from '../contexts/tour/tour-context'
 import { HomeStackParams, Screens } from '../types/navigators'
 import { TourID } from '../types/tour'
 
-import FindAndConnectOpportunities from './FindAndConnectOpportunities'
-
 type HomeProps = {
   homeProps: StackScreenProps<HomeStackParams, Screens.Home>
   navigation: StackNavigationProp<HomeStackParams>
 }
 
-const Home: React.FC<HomeProps> = ({ navigation }) => {
+const Home: React.FC<HomeProps> = () => {
   const {
     useCustomNotifications,
     enableTours: enableToursConfig,
@@ -146,7 +144,6 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
           </View>
         )}
       />
-      <FindAndConnectOpportunities navigation={navigation} />
       {showTourPopup && (
         <AppGuideModal
           title={t('Tour.GuideTitle')}
