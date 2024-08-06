@@ -2,8 +2,6 @@ import { CredentialExchangeRecord } from '@credo-ts/core'
 import { NavigatorScreenParams } from '@react-navigation/native'
 import { StackNavigationOptions } from '@react-navigation/stack'
 
-import { InstitutionCategoryType } from '../data/institutions-data'
-
 export enum Screens {
   AttemptLockout = 'Temporarily Locked',
   Splash = 'Splash',
@@ -45,11 +43,6 @@ export enum Screens {
   RenameContact = 'Rename Contact',
   ScanHelp = 'Scan Help',
   FindAndConnectOpportunities = 'Find And Connect Opportunities',
-  EducationList = 'Education List',
-  InstitutionDetail = 'Institution Detail',
-  MilitaryList = 'Military List',
-  EmployersList = 'Employers',
-  StateGovernmentList = 'State Government',
   HistoryPage = 'HistoryPage',
   HistorySettings = 'HistorySettings',
 }
@@ -145,24 +138,7 @@ export type CredentialStackParams = {
 }
 
 export type HomeStackParams = {
-  EducationList: undefined
-  MilitaryList: undefined
-  EmployersScreen: undefined
-  StateGovernmentList: undefined
-  InstitutionDetail: {
-    institutionId: string
-    categoryType: InstitutionCategoryType
-  }
   [Screens.Home]: undefined
-  [Screens.FindAndConnectOpportunities]: undefined
-  [Screens.EducationList]: undefined
-  [Screens.InstitutionDetail]: {
-    institutionId: string
-    categoryType: InstitutionCategoryType
-  }
-  [Screens.MilitaryList]: undefined
-  [Screens.EmployersList]: undefined
-  [Screens.StateGovernmentList]: undefined
 }
 
 export type ConnectStackParams = {
