@@ -6,6 +6,8 @@ export interface Setting {
   onPress?: GenericFn
   accessibilityLabel?: string
   testID?: string
+  isClickable?: boolean
+  disabled?: boolean
 }
 
 export interface SettingIcon {

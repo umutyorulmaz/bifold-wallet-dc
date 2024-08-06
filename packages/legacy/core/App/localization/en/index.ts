@@ -47,6 +47,7 @@ const translation = {
     "Updated": "Updated",
     "Close": "Close",
     "Remove": "Remove",
+    "ConnectToDigiCred":"Connect to DigiCred",
   },
   "Date": {
     "ShortFormat": "MMM D",
