@@ -29,7 +29,7 @@ const UseBiometry: React.FC = () => {
   const { enablePushNotifications } = useConfiguration()
   const { isBiometricsActive, commitPIN, disableBiometrics } = useAuth()
   const [biometryAvailable, setBiometryAvailable] = useState(false)
-  const [biometryEnabled, setBiometryEnabled] = useState(store.preferences.useBiometry)
+  const [biometryEnabled, setBiometryEnabled] = useState(true) //useState(store.preferences.useBiometry)
   const [continueEnabled, setContinueEnabled] = useState(true)
   const [canSeeCheckPIN, setCanSeeCheckPIN] = useState<boolean>(false)
   const { ColorPallet, TextTheme, Assets } = useTheme()
@@ -60,8 +60,12 @@ const UseBiometry: React.FC = () => {
 
   useEffect(() => {
     if (screenUsage === UseBiometryUsage.InitialSetup) {
+      setBiometryEnabled(true)
       return
     }
+
+    // For existing users, keep their current preference
+    setBiometryEnabled(store.preferences.useBiometry)
 
     if (biometryEnabled) {
       commitPIN(biometryEnabled).then(() => {
