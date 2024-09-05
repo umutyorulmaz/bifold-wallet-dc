@@ -428,7 +428,10 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
 
     toggleDeclineModalVisible()
 
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    navigation.getParent()?.navigate(Stacks.ContactStack, {
+      screen: Screens.Chat,
+      params: { connectionId: proof?.connectionId },
+    })
   }
 
   const handleCancelTouched = async () => {
