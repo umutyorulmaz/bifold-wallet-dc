@@ -75,6 +75,7 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
   const actionButtonTestId = updatePin ? testIdWithKey('ChangePIN') : testIdWithKey('CreatePIN')
   const container = useContainer()
   const Button = container.resolve(TOKENS.COMP_BUTTON)
+  const { enablePushNotifications } = useConfiguration()
 
   const style = StyleSheet.create({
     screenContainer: {
@@ -99,12 +100,17 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
       dispatch({
         type: DispatchAction.DID_CREATE_PIN,
       })
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: Screens.UseBiometry }],
-        })
-      )
+
+      if (enablePushNotifications) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: Screens.UsePushNotifications }],
+          })
+        )
+      } else {
+        dispatch({ type: DispatchAction.DID_COMPLETE_ONBOARDING, payload: [true] })
+      }
     } catch (err: unknown) {
       const error = new BifoldError(t('Error.Title1040'), t('Error.Message1040'), (err as Error)?.message ?? err, 1040)
       DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)

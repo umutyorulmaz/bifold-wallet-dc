@@ -45,8 +45,8 @@ const resumeOnboardingAt = (
     (state.didSeePreface || !params.showPreface) &&
     state.didCompleteTutorial &&
     state.didAgreeToTerms === termsVer &&
-    state.didCreatePIN &&
-    (state.didNameWallet || !params.enableWalletNaming) &&
+    // state.didCreatePIN &&
+    // (state.didNameWallet || !params.enableWalletNaming) &&
     !state.didConsiderBiometry
   ) {
     return Screens.UseBiometry
@@ -67,6 +67,7 @@ const resumeOnboardingAt = (
     (state.didSeePreface || !params.showPreface) &&
     state.didCompleteTutorial &&
     state.didAgreeToTerms === termsVer &&
+    state.didConsiderBiometry &&
     !state.didCreatePIN
   ) {
     return Screens.CreatePIN
