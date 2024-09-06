@@ -59,28 +59,11 @@ const UseBiometry: React.FC = () => {
 
   useEffect(() => {
     if (screenUsage === UseBiometryUsage.InitialSetup) {
-      setBiometryEnabled(true)
-      return
-    }
-
-    // For existing users, keep their current preference
-    setBiometryEnabled(store.preferences.useBiometry)
-  }, [])
-
-  const handleCheckBoxChange = async (newState: boolean) => {
-    setBiometryEnabled(newState)
-
-    if (newState) {
-      await commitPIN(newState)
+      setBiometryEnabled(biometryAvailable) // Only enable if biometrics are available
     } else {
-      await disableBiometrics()
+      setBiometryEnabled(store.preferences.useBiometry)
     }
-
-    dispatch({
-      type: DispatchAction.USE_BIOMETRY,
-      payload: [newState],
-    })
-  }
+  }, [biometryAvailable, screenUsage])
 
   const continueTouched = async () => {
     setContinueEnabled(false)
@@ -92,13 +75,37 @@ const UseBiometry: React.FC = () => {
       payload: [biometryEnabled],
     })
 
-    // Navigate to the "Create PIN" screen after biometry setup
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
         routes: [{ name: Screens.CreatePIN }],
       })
     )
+  }
+
+  const handleCheckBoxChange = async () => {
+    // If biometrics is not available, return early
+    if (!biometryAvailable) {
+      setBiometryEnabled(false)
+      return
+    }
+
+    // Toggle biometry state internally
+    const newBiometryEnabled = !biometryEnabled
+    setBiometryEnabled(newBiometryEnabled)
+
+    // Commit or disable based on the new state
+    if (newBiometryEnabled) {
+      await commitPIN(true) // Enable biometrics
+    } else {
+      await disableBiometrics() // Disable biometrics
+    }
+
+    // Dispatch the biometry preference to the global store
+    dispatch({
+      type: DispatchAction.USE_BIOMETRY,
+      payload: [newBiometryEnabled], // Pass the new biometry state
+    })
   }
 
   const onAuthenticationComplete = (status: boolean) => {
@@ -137,7 +144,7 @@ const UseBiometry: React.FC = () => {
             accessibilityLabel={t('Biometry.UseToUnlock')}
             testID={testIdWithKey('EnableBiometrics')}
             checked={biometryEnabled}
-            onPress={() => handleCheckBoxChange(!biometryEnabled)}
+            onPress={handleCheckBoxChange}
           />
         </View>
       </ScrollView>

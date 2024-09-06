@@ -46,7 +46,7 @@ interface ModalState {
 
 const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
   const updatePin = (route.params as any)?.updatePin
-  const { setPIN: setWalletPIN, checkPIN, rekeyWallet } = useAuth()
+  const { setPIN: setWalletPIN, checkPIN, rekeyWallet, commitPIN } = useAuth()
   const [PIN, setPIN] = useState('')
   const [PINTwo, setPINTwo] = useState('')
   const [PINOld, setPINOld] = useState('')
@@ -101,6 +101,11 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
         type: DispatchAction.DID_CREATE_PIN,
       })
 
+      if (store.preferences.useBiometry) {
+        await commitPIN(true) // Enable biometry if it's turned on
+      } else {
+        await commitPIN(false) // Proceed without biometry
+      }
       if (enablePushNotifications) {
         navigation.dispatch(
           CommonActions.reset({
