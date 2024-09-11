@@ -953,9 +953,9 @@ export const connectFromScanOrDeepLink = async (
   isDeepLink: boolean,
   implicitInvitations: boolean = false,
   reuseConnection: boolean = false
-) => {
+): Promise<{ connectionRecord?: ConnectionRecord; outOfBandRecord?: OutOfBandRecord }> => {
   if (!agent) {
-    return
+    return {}
   }
 
   // TODO:(jl) Do we care if the connection is a deep link?
@@ -970,6 +970,16 @@ export const connectFromScanOrDeepLink = async (
         screen: Screens.Connection,
         params: { oobRecordId: receivedInvitation.id },
       })
+    }
+
+    // Find the connection record, convert null to undefined
+    const connectionRecord = receivedInvitation?.reuseConnectionId
+      ? (await agent.connections.findById(receivedInvitation.reuseConnectionId)) ?? undefined
+      : undefined
+
+    return {
+      connectionRecord,
+      outOfBandRecord: receivedInvitation,
     }
   } catch (error: unknown) {
     logger.error('Problem during connect strategy, error:', error as Error)

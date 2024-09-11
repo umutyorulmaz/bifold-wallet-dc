@@ -1,3 +1,4 @@
+import { ConsoleLogger } from '@credo-ts/core'
 import { useAgent } from '@credo-ts/react-hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -25,6 +26,7 @@ import { Locales } from '../localization'
 import { GenericFn } from '../types/fn'
 import { Screens, SettingStackParams, Stacks } from '../types/navigators'
 import { SettingIcon, SettingSection } from '../types/settings'
+import { connectFromScanOrDeepLink } from '../utils/helpers'
 import { testIdWithKey } from '../utils/testable'
 
 type SettingsProps = StackScreenProps<SettingStackParams>
@@ -86,48 +88,92 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
       setIsDigiCredButtonDisabled(false)
     }, [])
   )
+  const logger = new ConsoleLogger() // Create an instance of the ConsoleLogger
 
   const handleConnectToDigiCred = async () => {
     if (!agent) {
-      //eslint-disable-next-line
-      console.error('Agent is not initialized')
+      logger.error('Agent is not initialized')
       Alert.alert('Error', 'Unable to connect. Please try again later.')
       return
     }
 
     setIsDigiCredButtonDisabled(true)
+
     const invitationLink =
-      'https://tractionapp.crms.services/traction-agent-http?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICJiYzUwMWIyMi1jNjM5LTRlNmEtODQ2Yi0zYjJiOGMyOTE4M2YiLCAibGFiZWwiOiAiRGlnaUNyZWQiLCAicmVjaXBpZW50S2V5cyI6IFsiR0xmTjc2aEt3eUZNU0V6eHlLeFNwQ0VSWlFFS3dMMUFCcW1LNWRHaEFKWWgiXSwgInNlcnZpY2VFbmRwb2ludCI6ICJodHRwczovL3RyYWN0aW9uYXBwLmNybXMuc2VydmljZXMvdHJhY3Rpb24tYWdlbnQtaHR0cCJ9'
+      //change this to the original link
+      'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICI0OWY5YzBlZC04ZWMwLTQxOTgtYmYwZC1kNTU5MGM2MWZlZDMiLCAibGFiZWwiOiAiTm92YW50IEhlYWx0aCIsICJyZWNpcGllbnRLZXlzIjogWyJIWHpVRDRiaG1zczRaRTFYYXJSb2hGSmc1dnd1d3BIb1M4OXphSkJlem9ENSJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAiLCAiaW1hZ2VVcmwiOiAiaHR0cHM6Ly9idWlsZGhlYWx0aGNoYWxsZW5nZS5vcmcvd3AtY29udGVudC91cGxvYWRzLzIwMTcvMDkvTm92YW50LUhlYWx0aC1sb2dvLTg4MHg2NDUtMjYzeDI2My5wbmcifQ=='
 
     try {
-      // Parse the invitation
-      const outOfBandInvitation = await agent.oob.parseInvitation(invitationLink)
+      // Step 1: Parse the invitation
+      const parsedInvitation = await agent.oob.parseInvitation(invitationLink)
+      const invitationId = parsedInvitation.id
 
-      // Receive the invitation
-      const { outOfBandRecord, connectionRecord } = await agent.oob.receiveInvitation(outOfBandInvitation, {
-        autoAcceptConnection: true,
-        reuseConnection: false,
-      })
+      // Step 2: Check if an OutOfBandRecord already exists for this invitation ID
+      const existingOutOfBandRecord = await agent.oob.findByReceivedInvitationId(invitationId)
+      if (existingOutOfBandRecord) {
+        // eslint-disable-next-line no-console
+        //console.log('Existing OutOfBandRecord found:', existingOutOfBandRecord)
+
+        // Step 3: Check if an existing connection exists for the OutOfBandRecord
+        const existingConnections = await agent.connections.findAllByQuery({
+          outOfBandId: existingOutOfBandRecord.id,
+        })
+
+        if (existingConnections && existingConnections.length > 0) {
+          const existingConnection = existingConnections[0]
+
+          // Navigate to the existing chat
+          // eslint-disable-next-line no-console
+          //console.log('Navigating to existing chat:', existingConnection.id)
+          navigation.navigate(Stacks.ContactStack as any, {
+            screen: Screens.Chat,
+            params: { connectionId: existingConnection.id },
+          })
+          return
+        } else {
+          // If no existing connection but OutOfBandRecord exists, navigate to the chat
+          // eslint-disable-next-line no-console
+          //console.log('Navigating to chat with OutOfBandRecord:', existingOutOfBandRecord.id)
+          navigation.navigate(Stacks.ContactStack as any, {
+            screen: Screens.Chat,
+            params: { outOfBandRecordId: existingOutOfBandRecord.id },
+          })
+          return
+        }
+      }
+
+      const { connectionRecord, outOfBandRecord } = await connectFromScanOrDeepLink(
+        invitationLink,
+        agent,
+        logger,
+        navigation,
+        false,
+        false,
+        true // reuseConnection is true for this case
+      )
 
       if (connectionRecord?.id) {
+        // eslint-disable-next-line no-console
+        //console.log('1-umut')
         navigation.navigate(Stacks.ContactStack as any, {
           screen: Screens.Chat,
           params: { connectionId: connectionRecord.id },
         })
       } else if (outOfBandRecord?.id) {
+        // eslint-disable-next-line no-console
+        //console.log('2-umut')
         navigation.navigate(Stacks.ContactStack as any, {
           screen: Screens.Chat,
           params: { outOfBandRecordId: outOfBandRecord.id },
         })
       } else {
-        //eslint-disable-next-line
-        console.error('Neither connectionId nor outOfBandRecordId found')
+        logger.error('Neither connectionId nor outOfBandRecordId found')
         Alert.alert('Error', 'Unable to start chat. Please try again.')
         setIsDigiCredButtonDisabled(false)
       }
     } catch (error) {
-      //eslint-disable-next-line
-      console.error('Error processing the invitation:', error)
+      // eslint-disable-next-line no-console
+      //console.error('Error processing the invitation:', error)
       Alert.alert('Error', 'An error occurred while connecting. Please try again.')
       setIsDigiCredButtonDisabled(false)
     }
