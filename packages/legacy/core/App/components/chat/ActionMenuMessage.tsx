@@ -6,7 +6,7 @@ import { useTheme } from '../../contexts/theme'
 interface ActionMenuBubbleProps {
   content: any
   workflowID: string
-  handleActionButtonPress: (action: string, workflowID: string) => void
+  handleActionButtonPress: (action: string, workflowID: string, invitationLink?: string) => void
 }
 interface FormData {
   [key: string]: string | Date | undefined
@@ -176,7 +176,7 @@ const ActionMenuBubble: React.FC<ActionMenuBubbleProps> = ({ content, workflowID
           <TouchableOpacity
             key={index}
             style={[styles.button, { backgroundColor: ColorPallet.brand.primary }]}
-            onPress={() => handleActionButtonPress(item.actionID, workflowID)}
+            onPress={() => handleActionButtonPress(item.actionID, workflowID, item.invitationLink)}
           >
             <Text style={[styles.buttonText, { color: ColorPallet.grayscale.white }]}>{item.label}</Text>
           </TouchableOpacity>
