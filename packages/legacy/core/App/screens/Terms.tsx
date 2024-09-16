@@ -34,7 +34,7 @@ const Terms: React.FC = () => {
     })
 
     if (!agreedToPreviousTerms) {
-      navigation.navigate(Screens.CreatePIN)
+      navigation.navigate(Screens.UseBiometry)
     } else if (store.onboarding.postAuthScreens.length) {
       const screens: string[] = store.onboarding.postAuthScreens
       screens.shift()
