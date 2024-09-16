@@ -6,7 +6,6 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { createContext, useContext } from 'react'
 import { DependencyContainer } from 'tsyringe'
 
-
 import * as bundle from './assets/oca-bundles.json'
 import Button from './components/buttons/Button'
 import NotificationModal from './components/modals/NotificationModal'
