@@ -46,7 +46,7 @@ interface ModalState {
 
 const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
   const updatePin = (route.params as any)?.updatePin
-  const { setPIN: setWalletPIN, checkPIN, rekeyWallet } = useAuth()
+  const { setPIN: setWalletPIN, checkPIN, rekeyWallet, commitPIN } = useAuth()
   const [PIN, setPIN] = useState('')
   const [PINTwo, setPINTwo] = useState('')
   const [PINOld, setPINOld] = useState('')
@@ -75,6 +75,7 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
   const actionButtonTestId = updatePin ? testIdWithKey('ChangePIN') : testIdWithKey('CreatePIN')
   const container = useContainer()
   const Button = container.resolve(TOKENS.COMP_BUTTON)
+  const { enablePushNotifications } = useConfiguration()
 
   const style = StyleSheet.create({
     screenContainer: {
@@ -99,12 +100,22 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated, route }) => {
       dispatch({
         type: DispatchAction.DID_CREATE_PIN,
       })
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: Screens.UseBiometry }],
-        })
-      )
+
+      if (store.preferences.useBiometry) {
+        await commitPIN(true) // Enable biometry if it's turned on
+      } else {
+        await commitPIN(false) // Proceed without biometry
+      }
+      if (enablePushNotifications) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: Screens.UsePushNotifications }],
+          })
+        )
+      } else {
+        dispatch({ type: DispatchAction.DID_COMPLETE_ONBOARDING, payload: [true] })
+      }
     } catch (err: unknown) {
       const error = new BifoldError(t('Error.Title1040'), t('Error.Message1040'), (err as Error)?.message ?? err, 1040)
       DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)

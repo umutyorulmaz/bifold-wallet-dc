@@ -267,14 +267,15 @@ const translation = {
   },
   "Biometry": {
     "Toggle": "Toggle Biometrics",
-    "EnabledText1": "Unlock the wallet with your phone's biometrics instead of your wallet PIN.",
+    "EnabledText1": "The DigiCred wallet defaults to using your biometrics (face recognition or fingerprint) to unlock the application. We use a PIN as a backup if your biometrics are not working. You can use this control to turn off biometric unlock.",
     "EnabledText2": "Using biometrics means that all fingerprints or face ID added on this phone will have access to your wallet.",
     "NotEnabledText1": "Biometrics is not currently setup on this device and therefore cannot be enabled.",
     "NotEnabledText2": "If you wish to enable this feature turn biometrics on in the device settings and then return to this screen.",
     "Warning": "Ensure only you have access to your wallet.",
-    "UseToUnlock": "Use biometrics to unlock wallet?",
+    "UseToUnlock": "Enable Biometrics",
     "UnlockPromptTitle": "Wallet Unlock",
-    "UnlockPromptDescription": "Use biometrics to unlock your wallet"
+    "UnlockPromptDescription": "Use biometrics to unlock your wallet",
+    
   },
   "ActivityHistory": {
     "Header": "Activity history",

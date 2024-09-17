@@ -73,9 +73,12 @@ const PushNotification: React.FC<StackScreenProps<ParamListBase, Screens.UsePush
 
   const activatePushNotifications = async () => {
     const state = await enablePushNotifications.setup()
+
     dispatch({ type: DispatchAction.USE_PUSH_NOTIFICATIONS, payload: [state === 'granted'] })
+
     if (store.onboarding.postAuthScreens.length) {
       const screens: string[] = store.onboarding.postAuthScreens
+
       screens.shift()
       dispatch({ type: DispatchAction.SET_POST_AUTH_SCREENS, payload: [screens] })
       if (screens.length) {
