@@ -99,7 +99,36 @@ const ActionMenuBubble: React.FC<ActionMenuBubbleProps> = ({ content, workflowID
           />
         )
       }
-
+      // case 'date': {
+      //   const dateValue = formData[field.name] instanceof Date ? formData[field.name] : new Date()
+      //   return (
+      //     <DateTimePicker
+      //       key={index}
+      //       value={dateValue}
+      //       mode="date"
+      //       display="default"
+      //       onChange={(event: any, selectedDate: Date | undefined) => {
+      //         if (selectedDate) {
+      //           setFormData({ ...formData, [field.name]: selectedDate })
+      //         }
+      //       }}
+      //     />
+      //   )
+      // }
+      // case 'dropdown': {
+      //   const dropdownValue = typeof formData[field.name] === 'string' ? formData[field.name] : ''
+      //   return (
+      //     <Picker
+      //       key={index}
+      //       selectedValue={dropdownValue}
+      //       onValueChange={(itemValue: string) => setFormData({ ...formData, [field.name]: itemValue })}
+      //     >
+      //       {field.options.map((option: string, optionIndex: number) => (
+      //         <Picker.Item key={optionIndex} label={option} value={option} />
+      //       ))}
+      //     </Picker>
+      //   )
+      // }
       case 'radio': {
         return (
           <View key={index}>
