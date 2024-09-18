@@ -70,7 +70,14 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
     navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
   }
 
-  const onDoneTouched = () => {
+  const [isVisible, setIsVisible] = useState<boolean>(visible)
+  // Update the visibility state based on the prop
+  useEffect(() => {
+    setIsVisible(visible)
+  }, [visible])
+
+  const onDoneTouched = async () => {
+    setIsVisible(false)
     navigation.getParent()?.navigate(Stacks.ContactStack, {
       screen: Screens.Chat,
       params: { connectionId: credential.connectionId },
@@ -108,7 +115,7 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
   }, [shouldShowDelayMessage])
 
   return (
-    <Modal visible={visible} transparent={true} animationType={'none'}>
+    <Modal visible={isVisible} transparent={true} animationType={'none'}>
       <SafeAreaView style={{ ...ListItems.credentialOfferBackground }}>
         <ScrollView style={[styles.container]}>
           <View style={[styles.messageContainer]}>
