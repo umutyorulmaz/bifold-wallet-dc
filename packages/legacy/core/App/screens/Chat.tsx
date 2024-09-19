@@ -105,31 +105,28 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
     }
 
     try {
-      // Parse the invitation
       const parsedInvitation = await agent.oob.parseInvitation(invitationLink)
       const invitationId = parsedInvitation.id
 
-      // Check for existing OutOfBandRecord
       const existingOutOfBandRecord = await agent.oob.findByReceivedInvitationId(invitationId)
       if (existingOutOfBandRecord) {
-        // Handle existing OutOfBandRecord
-        // For example, navigate to the existing chat or connection
         const existingConnections = await agent.connections.findAllByOutOfBandId(existingOutOfBandRecord.id)
 
         if (existingConnections && existingConnections.length > 0) {
           const existingConnection = existingConnections[0]
-          // Add a 1-second delay before navigating to the chat
-          setTimeout(() => {
-            navigation.navigate(Stacks.ContactStack as any, {
-              screen: Screens.Chat,
-              params: { connectionId: existingConnection.id },
-            })
-          }, 1000)
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: Screens.Chat,
+                params: { connectionId: existingConnection.id },
+              },
+            ],
+          })
+          return
         }
-        return
       }
 
-      // Establish a new connection
       const { connectionRecord, outOfBandRecord } = await connectFromScanOrDeepLink(
         invitationLink,
         agent,
@@ -137,23 +134,29 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
         navigation,
         false,
         false,
-        true // reuseConnection is true for this case
+        true
       )
 
       if (connectionRecord?.id) {
-        setTimeout(() => {
-          navigation.navigate(Stacks.ContactStack as any, {
-            screen: Screens.Chat,
-            params: { connectionId: connectionRecord.id },
-          })
-        }, 1000)
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: Screens.Chat,
+              params: { connectionId: connectionRecord.id },
+            },
+          ],
+        })
       } else if (outOfBandRecord?.id) {
-        setTimeout(() => {
-          navigation.navigate(Stacks.ContactStack as any, {
-            screen: Screens.Chat,
-            params: { outOfBandRecordId: outOfBandRecord.id },
-          })
-        }, 1000)
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: Screens.Chat,
+              params: { outOfBandRecordId: outOfBandRecord.id },
+            },
+          ],
+        })
       } else {
         logger.error('Neither connectionId nor outOfBandRecordId found')
         Alert.alert('Error', 'Unable to start chat. Please try again.')
