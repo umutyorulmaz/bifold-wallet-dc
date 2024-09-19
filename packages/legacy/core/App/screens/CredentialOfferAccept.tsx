@@ -10,7 +10,7 @@ import Button, { ButtonType } from '../components/buttons/Button'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useConfiguration } from '../contexts/configuration'
 import { useTheme } from '../contexts/theme'
-import { Screens, Stacks, TabStacks } from '../types/navigators'
+import { Screens, TabStacks } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
 
 enum DeliveryStatus {
@@ -70,18 +70,8 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
     navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
   }
 
-  const [isVisible, setIsVisible] = useState<boolean>(visible)
-  // Update the visibility state based on the prop
-  useEffect(() => {
-    setIsVisible(visible)
-  }, [visible])
-
-  const onDoneTouched = async () => {
-    setIsVisible(false)
-    navigation.getParent()?.navigate(Stacks.ContactStack, {
-      screen: Screens.Chat,
-      params: { connectionId: credential.connectionId },
-    })
+  const onDoneTouched = () => {
+    navigation.getParent()?.navigate(TabStacks.CredentialStack, { screen: Screens.Credentials })
   }
 
   useEffect(() => {
@@ -115,7 +105,7 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
   }, [shouldShowDelayMessage])
 
   return (
-    <Modal visible={isVisible} transparent={true} animationType={'none'}>
+    <Modal visible={visible} transparent={true} animationType={'none'}>
       <SafeAreaView style={{ ...ListItems.credentialOfferBackground }}>
         <ScrollView style={[styles.container]}>
           <View style={[styles.messageContainer]}>

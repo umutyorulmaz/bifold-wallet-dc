@@ -28,7 +28,7 @@ import { useTour } from '../contexts/tour/tour-context'
 import { useOutOfBandByConnectionId } from '../hooks/connections'
 import { HistoryCardType, HistoryRecord } from '../modules/history/types'
 import { BifoldError } from '../types/error'
-import { NotificationStackParams, Screens, Stacks, TabStacks } from '../types/navigators'
+import { NotificationStackParams, Screens, TabStacks } from '../types/navigators'
 import { ModalUsage } from '../types/remove'
 import { TourID } from '../types/tour'
 import { useAppAgent } from '../utils/agent'
@@ -218,15 +218,7 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
       }
 
       toggleDeclineModalVisible()
-
-      if (credential) {
-        navigation.getParent()?.navigate(Stacks.ContactStack, {
-          screen: Screens.Chat,
-          params: { connectionId: credential?.connectionId },
-        })
-      } else {
-        navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
-      }
+      navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
     } catch (err: unknown) {
       const error = new BifoldError(t('Error.Title1025'), t('Error.Message1025'), (err as Error)?.message ?? err, 1025)
       DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
