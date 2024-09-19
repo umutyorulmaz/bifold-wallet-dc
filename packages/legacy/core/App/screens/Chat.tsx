@@ -118,10 +118,13 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
 
         if (existingConnections && existingConnections.length > 0) {
           const existingConnection = existingConnections[0]
-          navigation.navigate(Stacks.ContactStack as any, {
-            screen: Screens.Chat,
-            params: { connectionId: existingConnection.id },
-          })
+          // Add a 1-second delay before navigating to the chat
+          setTimeout(() => {
+            navigation.navigate(Stacks.ContactStack as any, {
+              screen: Screens.Chat,
+              params: { connectionId: existingConnection.id },
+            })
+          }, 1000)
         }
         return
       }
@@ -138,15 +141,19 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
       )
 
       if (connectionRecord?.id) {
-        navigation.navigate(Stacks.ContactStack as any, {
-          screen: Screens.Chat,
-          params: { connectionId: connectionRecord.id },
-        })
+        setTimeout(() => {
+          navigation.navigate(Stacks.ContactStack as any, {
+            screen: Screens.Chat,
+            params: { connectionId: connectionRecord.id },
+          })
+        }, 1000)
       } else if (outOfBandRecord?.id) {
-        navigation.navigate(Stacks.ContactStack as any, {
-          screen: Screens.Chat,
-          params: { outOfBandRecordId: outOfBandRecord.id },
-        })
+        setTimeout(() => {
+          navigation.navigate(Stacks.ContactStack as any, {
+            screen: Screens.Chat,
+            params: { outOfBandRecordId: outOfBandRecord.id },
+          })
+        }, 1000)
       } else {
         logger.error('Neither connectionId nor outOfBandRecordId found')
         Alert.alert('Error', 'Unable to start chat. Please try again.')
