@@ -196,11 +196,17 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
               <Text style={styles.contactNameText}>{contactLabel}</Text>
             </View>
             <View style={styles.timeContainer}>
-              <Text style={styles.timeText}>{formatTime(message.createdAt, { shortMonth: true, trim: true })}</Text>
+              {message && (
+                <Text style={styles.timeText}>{formatTime(message.createdAt, { shortMonth: true, trim: true })}</Text>
+              )}
             </View>
           </View>
           <View>
-            <Text style={TextTheme.normal} numberOfLines={1} ellipsizeMode={'tail'}></Text>
+            {message && (
+              <Text style={TextTheme.normal} numberOfLines={1} ellipsizeMode={'tail'}>
+                {message.text}
+              </Text>
+            )}
           </View>
         </View>
       </View>
