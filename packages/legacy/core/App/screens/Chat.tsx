@@ -13,7 +13,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/core'
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack'
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Alert } from 'react-native'
 import { GiftedChat, IMessage } from 'react-native-gifted-chat'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -30,10 +30,12 @@ import { useTheme } from '../contexts/theme'
 //import { useChatMessagesByConnection } from '../hooks/chat-messages'
 import { useCredentialsByConnectionId } from '../hooks/credentials'
 import { useProofsByConnectionId } from '../hooks/proofs'
+import { ConsoleLogger } from '../services/logger'
 import { Role } from '../types/chat'
 import { BasicMessageMetadata, basicMessageCustomMetadata } from '../types/metadata'
 import { RootStackParams, ContactStackParams, Screens, Stacks } from '../types/navigators'
 import {
+  connectFromScanOrDeepLink,
   getConnectionName,
   getCredentialEventLabel,
   getCredentialEventRole,
@@ -67,6 +69,8 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   // const { ColorPallet } = useTheme()
   const [theirLabel, setTheirLabel] = useState(getConnectionName(connection, store.preferences.alternateContactNames))
 
+  const logger = new ConsoleLogger()
+
   useEffect(() => {
     setTheirLabel(getConnectionName(connection, store.preferences.alternateContactNames))
   }, [isFocused, connection, store.preferences.alternateContactNames])
@@ -93,13 +97,87 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
     })
   }, [basicMessages])
 
-  const handleActionButtonPress = async (action: string, workflowID: string) => {
-    const actionJSON = {
-      workflowID: `${workflowID}`,
-      actionID: `${action}`,
-      data: {},
+  const handleConnectToInvitation = async (invitationLink: string) => {
+    if (!agent) {
+      logger.error('Agent is not initialized')
+      Alert.alert('Error', 'Unable to connect. Please try again later.')
+      return
     }
-    await agent?.basicMessages.sendMessage(connectionId, `${JSON.stringify(actionJSON)}`)
+
+    try {
+      const parsedInvitation = await agent.oob.parseInvitation(invitationLink)
+      const invitationId = parsedInvitation.id
+
+      const existingOutOfBandRecord = await agent.oob.findByReceivedInvitationId(invitationId)
+      if (existingOutOfBandRecord) {
+        const existingConnections = await agent.connections.findAllByOutOfBandId(existingOutOfBandRecord.id)
+
+        if (existingConnections && existingConnections.length > 0) {
+          const existingConnection = existingConnections[0]
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: Screens.Chat,
+                params: { connectionId: existingConnection.id },
+              },
+            ],
+          })
+          return
+        }
+      }
+
+      const { connectionRecord, outOfBandRecord } = await connectFromScanOrDeepLink(
+        invitationLink,
+        agent,
+        logger,
+        navigation,
+        false,
+        false,
+        true
+      )
+
+      if (connectionRecord?.id) {
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: Screens.Chat,
+              params: { connectionId: connectionRecord.id },
+            },
+          ],
+        })
+      } else if (outOfBandRecord?.id) {
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: Screens.Chat,
+              params: { outOfBandRecordId: outOfBandRecord.id },
+            },
+          ],
+        })
+      } else {
+        logger.error('Neither connectionId nor outOfBandRecordId found')
+        Alert.alert('Error', 'Unable to start chat. Please try again.')
+      }
+    } catch (error) {
+      logger.error('Error processing the invitation:', error as object)
+      Alert.alert('Error', 'An error occurred while connecting. Please try again.')
+    }
+  }
+
+  const handleActionButtonPress = async (action: string, workflowID: string, invitationLink?: string) => {
+    if (invitationLink) {
+      await handleConnectToInvitation(invitationLink)
+    } else {
+      const actionJSON = {
+        workflowID: `${workflowID}`,
+        actionID: `${action}`,
+        data: {},
+      }
+      await agent?.basicMessages.sendMessage(connectionId, `${JSON.stringify(actionJSON)}`)
+    }
   }
 
   const styles = StyleSheet.create({
@@ -163,6 +241,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
         if (content && Array.isArray(content.displayData)) {
           msgText = (
             <ActionMenuBubble
+              key={record.id}
               content={content.displayData}
               workflowID={content.workflowID}
               handleActionButtonPress={handleActionButtonPress}

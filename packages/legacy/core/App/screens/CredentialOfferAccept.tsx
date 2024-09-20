@@ -10,7 +10,7 @@ import Button, { ButtonType } from '../components/buttons/Button'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useConfiguration } from '../contexts/configuration'
 import { useTheme } from '../contexts/theme'
-import { Screens, Stacks, TabStacks } from '../types/navigators'
+import { Screens, TabStacks } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
 
 enum DeliveryStatus {
@@ -71,10 +71,7 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
   }
 
   const onDoneTouched = () => {
-    navigation.getParent()?.navigate(Stacks.ContactStack, {
-      screen: Screens.Chat,
-      params: { connectionId: credential.connectionId },
-    })
+    navigation.getParent()?.navigate(TabStacks.CredentialStack, { screen: Screens.Credentials })
   }
 
   useEffect(() => {
