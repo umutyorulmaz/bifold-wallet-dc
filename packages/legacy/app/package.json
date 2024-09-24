@@ -1,6 +1,6 @@
 {
   "name": "digicred-wallet-mobile-app",
-  "version": "1.4.3",
+  "version": "1.5.1",
   "private": true,
   "description": "Digicred Wallet to hold Verifiable Credentials",
   "scripts": {

@@ -96,8 +96,8 @@ android {
         applicationId "com.digicred"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 18
-        versionName "1.4.3"
+        versionCode 19
+        versionName "1.5.1"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {
