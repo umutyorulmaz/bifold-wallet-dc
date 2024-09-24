@@ -101,7 +101,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
 
     const invitationLink =
       //change this to the original link
-      'http://crms.digicred.services:8030?c_i=eyJAdHlwZSI6ICJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMC9pbnZpdGF0aW9uIiwgIkBpZCI6ICI0OWY5YzBlZC04ZWMwLTQxOTgtYmYwZC1kNTU5MGM2MWZlZDMiLCAibGFiZWwiOiAiTm92YW50IEhlYWx0aCIsICJyZWNpcGllbnRLZXlzIjogWyJIWHpVRDRiaG1zczRaRTFYYXJSb2hGSmc1dnd1d3BIb1M4OXphSkJlem9ENSJdLCAic2VydmljZUVuZHBvaW50IjogImh0dHA6Ly9jcm1zLmRpZ2ljcmVkLnNlcnZpY2VzOjgwMzAiLCAiaW1hZ2VVcmwiOiAiaHR0cHM6Ly9idWlsZGhlYWx0aGNoYWxsZW5nZS5vcmcvd3AtY29udGVudC91cGxvYWRzLzIwMTcvMDkvTm92YW50LUhlYWx0aC1sb2dvLTg4MHg2NDUtMjYzeDI2My5wbmcifQ=='
+      ''
 
     try {
       // Step 1: Parse the invitation
@@ -111,9 +111,6 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
       // Step 2: Check if an OutOfBandRecord already exists for this invitation ID
       const existingOutOfBandRecord = await agent.oob.findByReceivedInvitationId(invitationId)
       if (existingOutOfBandRecord) {
-        // eslint-disable-next-line no-console
-        //console.log('Existing OutOfBandRecord found:', existingOutOfBandRecord)
-
         // Step 3: Check if an existing connection exists for the OutOfBandRecord
         const existingConnections = await agent.connections.findAllByQuery({
           outOfBandId: existingOutOfBandRecord.id,
@@ -123,8 +120,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           const existingConnection = existingConnections[0]
 
           // Navigate to the existing chat
-          // eslint-disable-next-line no-console
-          //console.log('Navigating to existing chat:', existingConnection.id)
+
           navigation.navigate(Stacks.ContactStack as any, {
             screen: Screens.Chat,
             params: { connectionId: existingConnection.id },
@@ -132,8 +128,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           return
         } else {
           // If no existing connection but OutOfBandRecord exists, navigate to the chat
-          // eslint-disable-next-line no-console
-          //console.log('Navigating to chat with OutOfBandRecord:', existingOutOfBandRecord.id)
+
           navigation.navigate(Stacks.ContactStack as any, {
             screen: Screens.Chat,
             params: { outOfBandRecordId: existingOutOfBandRecord.id },
@@ -153,15 +148,11 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
       )
 
       if (connectionRecord?.id) {
-        // eslint-disable-next-line no-console
-        //console.log('1-umut')
         navigation.navigate(Stacks.ContactStack as any, {
           screen: Screens.Chat,
           params: { connectionId: connectionRecord.id },
         })
       } else if (outOfBandRecord?.id) {
-        // eslint-disable-next-line no-console
-        //console.log('2-umut')
         navigation.navigate(Stacks.ContactStack as any, {
           screen: Screens.Chat,
           params: { outOfBandRecordId: outOfBandRecord.id },
@@ -172,8 +163,6 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
         setIsDigiCredButtonDisabled(false)
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      //console.error('Error processing the invitation:', error)
       Alert.alert('Error', 'An error occurred while connecting. Please try again.')
       setIsDigiCredButtonDisabled(false)
     }
