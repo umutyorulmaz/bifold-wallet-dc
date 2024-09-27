@@ -79,13 +79,12 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
   const onDoneTouched = useCallback(() => {
     if (isCredentialReady) {
       setModalVisible(false)
-      setTimeout(() => {
-        if (credential?.connectionId) {
-          navigation.getParent()?.navigate(Screens.Chat, { connectionId: credential.connectionId })
-        } else {
-          navigation.getParent()?.navigate(TabStacks.CredentialStack, { screen: Screens.Credentials })
-        }
-      }, 300) // Short delay to allow modal to dismiss
+
+      if (credential?.connectionId) {
+        navigation.getParent()?.navigate(Screens.Chat, { connectionId: credential.connectionId })
+      } else {
+        navigation.getParent()?.navigate(TabStacks.CredentialStack, { screen: Screens.Credentials })
+      }
     }
   }, [isCredentialReady, credential, navigation])
 
