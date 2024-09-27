@@ -4,7 +4,7 @@ import { CredentialPreviewAttribute } from '@credo-ts/core'
 import { useCredentialById } from '@credo-ts/react-hooks'
 import { BrandingOverlay } from '@hyperledger/aries-oca'
 import { Attribute, CredentialOverlay } from '@hyperledger/aries-oca/build/legacy'
-import { CommonActions, useIsFocused } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -29,7 +29,7 @@ import { useTour } from '../contexts/tour/tour-context'
 import { useOutOfBandByConnectionId } from '../hooks/connections'
 import { HistoryCardType, HistoryRecord } from '../modules/history/types'
 import { BifoldError } from '../types/error'
-import { NotificationStackParams, Screens, Stacks } from '../types/navigators'
+import { NotificationStackParams, Screens, TabStacks } from '../types/navigators'
 import { ModalUsage } from '../types/remove'
 import { TourID } from '../types/tour'
 import { useAppAgent } from '../utils/agent'
@@ -220,36 +220,13 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
 
       toggleDeclineModalVisible()
 
+      // Navigate to the chat screen
       if (credential?.connectionId) {
-        // Reset the navigation stack to the ContactStack with Contacts and Chat screens
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: Stacks.ContactStack, // 'Contacts Stack'
-                state: {
-                  index: 1, // Active screen is Chat (second in routes array)
-                  routes: [
-                    { name: Screens.Contacts }, // 'Contacts' screen
-                    {
-                      name: Screens.Chat, // 'Chat' screen
-                      params: { connectionId: credential.connectionId },
-                    },
-                  ],
-                },
-              },
-            ],
-          })
-        )
+        // Navigate directly to the Chat screen
+        navigation.getParent()?.navigate(Screens.Chat, { connectionId: credential.connectionId })
       } else {
-        // Reset the navigation stack to the Home screen
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: Screens.Home }],
-          })
-        )
+        // Fallback to home screen if connectionId is not available
+        navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
       }
     } catch (err: unknown) {
       const error = new BifoldError(t('Error.Title1025'), t('Error.Message1025'), (err as Error)?.message ?? err, 1025)

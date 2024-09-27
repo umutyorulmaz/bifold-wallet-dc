@@ -1,7 +1,7 @@
 import { CredentialState } from '@credo-ts/core'
 import { useCredentialById } from '@credo-ts/react-hooks'
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AccessibilityInfo, Modal, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -29,55 +29,74 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
   const [shouldShowDelayMessage, setShouldShowDelayMessage] = useState<boolean>(false)
   const [credentialDeliveryStatus, setCredentialDeliveryStatus] = useState<DeliveryStatus>(DeliveryStatus.Pending)
   const [timerDidFire, setTimerDidFire] = useState<boolean>(false)
-  const [timer, setTimer] = useState<NodeJS.Timeout>()
   const credential = useCredentialById(credentialId)
   const navigation = useNavigation()
   const { ListItems } = useTheme()
   const { CredentialAdded, CredentialPending } = useAnimatedComponents()
   const { connectionTimerDelay } = useConfiguration()
   const connTimerDelay = connectionTimerDelay ?? 10000 // in ms
-  const styles = StyleSheet.create({
-    container: {
-      ...ListItems.credentialOfferBackground,
-      height: '100%',
-      padding: 20,
-    },
-    image: {
-      marginTop: 20,
-    },
-    messageContainer: {
-      alignItems: 'center',
-    },
-    messageText: {
-      textAlign: 'center',
-      marginTop: 30,
-    },
-    controlsContainer: {
-      marginTop: 'auto',
-      margin: 20,
-    },
-    delayMessageText: {
-      textAlign: 'center',
-      marginTop: 20,
-    },
-  })
+  const [isCredentialReady, setIsCredentialReady] = useState(false)
+  const [modalVisible, setModalVisible] = useState(visible)
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          ...ListItems.credentialOfferBackground,
+          height: '100%',
+          padding: 20,
+        },
+        image: {
+          marginTop: 20,
+        },
+        messageContainer: {
+          alignItems: 'center',
+        },
+        messageText: {
+          textAlign: 'center',
+          marginTop: 30,
+        },
+        controlsContainer: {
+          marginTop: 'auto',
+          margin: 20,
+        },
+        delayMessageText: {
+          textAlign: 'center',
+          marginTop: 20,
+        },
+      }),
+    [ListItems]
+  )
 
   if (!credential) {
     throw new Error('Unable to fetch credential from Credo')
   }
 
-  const onBackToHomeTouched = () => {
+  const onBackToHomeTouched = useCallback(() => {
     navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
-  }
+  }, [navigation])
 
-  const onDoneTouched = () => {
-    navigation.getParent()?.navigate(TabStacks.CredentialStack, { screen: Screens.Credentials })
-  }
+  const onDoneTouched = useCallback(() => {
+    if (isCredentialReady) {
+      setModalVisible(false)
+      setTimeout(() => {
+        if (credential?.connectionId) {
+          navigation.getParent()?.navigate(Screens.Chat, { connectionId: credential.connectionId })
+        } else {
+          navigation.getParent()?.navigate(TabStacks.CredentialStack, { screen: Screens.Credentials })
+        }
+      }, 300) // Short delay to allow modal to dismiss
+    }
+  }, [isCredentialReady, credential, navigation])
+
+  useEffect(() => {
+    setModalVisible(visible)
+  }, [visible])
 
   useEffect(() => {
     if (credential.state === CredentialState.CredentialReceived || credential.state === CredentialState.Done) {
-      timer && clearTimeout(timer)
       setCredentialDeliveryStatus(DeliveryStatus.Completed)
+      setIsCredentialReady(true)
     }
   }, [credential])
 
@@ -91,21 +110,19 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
       setTimerDidFire(true)
     }, connTimerDelay)
 
-    setTimer(timer)
-
     return () => {
-      timer && clearTimeout(timer)
+      clearTimeout(timer)
     }
-  }, [visible])
+  }, [visible, timerDidFire, credentialDeliveryStatus, connTimerDelay])
 
   useEffect(() => {
     if (shouldShowDelayMessage && credentialDeliveryStatus !== DeliveryStatus.Completed) {
       AccessibilityInfo.announceForAccessibility(t('Connection.TakingTooLong'))
     }
-  }, [shouldShowDelayMessage])
+  }, [shouldShowDelayMessage, credentialDeliveryStatus, t])
 
   return (
-    <Modal visible={visible} transparent={true} animationType={'none'}>
+    <Modal visible={modalVisible} transparent={true} animationType={'none'}>
       <SafeAreaView style={{ ...ListItems.credentialOfferBackground }}>
         <ScrollView style={[styles.container]}>
           <View style={[styles.messageContainer]}>

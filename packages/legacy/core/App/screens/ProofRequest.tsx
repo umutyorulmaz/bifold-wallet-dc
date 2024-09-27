@@ -428,7 +428,13 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
 
     toggleDeclineModalVisible()
 
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    if (proof?.connectionId) {
+      // Navigate directly to the Chat screen
+      navigation.getParent()?.navigate(Screens.Chat, { connectionId: proof?.connectionId })
+    } else {
+      // Fallback to home screen if connectionId is not available
+      navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    }
   }
 
   const handleCancelTouched = async () => {
