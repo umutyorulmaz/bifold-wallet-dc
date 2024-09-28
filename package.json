@@ -65,6 +65,8 @@
   "dependencies": {
     "@react-native-firebase/messaging": "^20.3.0",
     "lodash.startcase": "^4.4.0",
+    "react-native-nfc-manager": "^3.16.0",
+    "react-native-quick-actions": "^0.3.13",
     "react-native-svg": "^15.1.0"
   }
 }

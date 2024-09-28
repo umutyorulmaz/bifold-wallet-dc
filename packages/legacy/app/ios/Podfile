@@ -2,6 +2,7 @@ source 'https://cdn.cocoapods.org'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/react-native-permissions/scripts/setup'
 
+
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
@@ -17,6 +18,7 @@ setup_permissions([
   # 'LocationAccuracy',
    'LocationAlways',
    'LocationWhenInUse',
+   'NFC',
   # 'MediaLibrary',
   # 'Microphone',
   # 'Motion',
@@ -54,6 +56,10 @@ target 'DigiCred' do
   pod 'FirebaseCoreInternal', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
 
+  #NFC related
+  pod 'react-native-nfc-manager', :path => '../node_modules/react-native-nfc-manager'
+  
+  
 
   # Flags change depending on the env values.
   flags = get_default_flags()

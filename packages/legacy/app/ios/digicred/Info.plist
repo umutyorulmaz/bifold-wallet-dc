@@ -32,6 +32,13 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>New Exception Domain</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
@@ -47,6 +54,16 @@
 	<string>We use your location to provide navigation instructions, even when the app is in the background, enhancing routing accuracy and offering real-time updates.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We include this permission because a library our app uses references it, even though we don't use it directly.</string>
+	<key>NFCReaderUsageDescription</key>
+    <string>We need to use NFC to read connection invitations</string>
+	<key>com.apple.developer.nfc.readersession.formats</key>
+	<array>
+ 	  <string>NDEF</string>
+	</array>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+  	  <string>D2760000850101</string>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>MaterialIcons.ttf</string>

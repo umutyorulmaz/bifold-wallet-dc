@@ -232,6 +232,7 @@
     ]
   },
   "dependencies": {
-    "@react-native-picker/picker": "^2.7.7"
+    "@react-native-picker/picker": "^2.7.7",
+    "react-native-nfc-manager": "^3.16.0"
   }
 }

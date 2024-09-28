@@ -463,6 +463,8 @@ PODS:
     - React-Core
   - react-native-netinfo (9.3.7):
     - React-Core
+  - react-native-nfc-manager (3.16.0):
+    - React-Core
   - react-native-orientation-locker (1.6.0):
     - React-Core
   - react-native-safe-area-context (3.4.1):
@@ -693,6 +695,7 @@ DEPENDENCIES:
   - react-native-encrypted-storage (from `../node_modules/react-native-encrypted-storage`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-nfc-manager (from `../node_modules/react-native-nfc-manager`)
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -812,6 +815,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-random-values"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-nfc-manager:
+    :path: "../node_modules/react-native-nfc-manager"
   react-native-orientation-locker:
     :path: "../node_modules/react-native-orientation-locker"
   react-native-safe-area-context:
@@ -938,6 +943,7 @@ SPEC CHECKSUMS:
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
+  react-native-nfc-manager: 1bcdf6f96c9065a8f4c8d9a0c6fb2db625205b2c
   react-native-orientation-locker: 4409c5b12b65f942e75449872b4f078b6f27af81
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
@@ -980,6 +986,6 @@ SPEC CHECKSUMS:
   VisionCamera: 58d2120e6e23c155b25f4702b7912dc2b1e5e8c2
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
 
-PODFILE CHECKSUM: bf04793fa3ee041f631e012e5e454e6836ffd4b9
+PODFILE CHECKSUM: 33efe03117ee23683b4bed44ba526fa8c4c0b55d
 
 COCOAPODS: 1.15.2

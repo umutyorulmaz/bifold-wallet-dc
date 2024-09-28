@@ -6,6 +6,8 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import <CoreNFC/CoreNFC.h>
+
 #import "Orientation.h"
 
 @implementation AppDelegate
@@ -59,6 +61,15 @@
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
   return [Orientation getOrientation];
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+  if ([userActivity.activityType isEqualToString:@"NFCTagReaderSessionDidDetectTags"]) {
+    // Handle NFC tag detection here
+    return YES;
+  }
+  return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 @end
