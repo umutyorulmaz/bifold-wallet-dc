@@ -494,6 +494,12 @@ const translation = {
     "ViewMessage": "View message",
   },
   "Scan": {
+    "NoValidInvitation": "No valid invitation found in NFC tag",
+    "ScanNFC": "Scan NFC Tag",
+    "NFCReadError": "Failed to read NFC tag. Please try again.",
+    "NFCActive": "NFC scanning active",
+    "Scanning": "Scanning...", 
+    "OrNFCTag": "or NFC tag",
     "SuccessfullyAcceptedConnection": "Successfully Accepted Connection",
     "AcceptingConnection": "Accepting Connection",
     "ConnectionRecordIdNotFound": "Connection record ID not found",

@@ -1,16 +1,15 @@
+//App.tsx
 import AgentProvider from '@credo-ts/react-hooks'
 import * as React from 'react'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 // eslint-disable-next-line import/order
 import { StatusBar } from 'react-native'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import NfcManager from 'react-native-nfc-manager'
-import SplashScreen from 'react-native-splash-screen'
 import Toast from 'react-native-toast-message'
 
 import { animatedComponents } from './animated-components'
-import NFCHandler from './components/misc/NFCHandler'
+//import NFCHandler from './components/misc/NFCHandler'
 import ErrorModal from './components/modals/ErrorModal'
 import NetInfo from './components/network/NetInfo'
 import toastConfig from './components/toast/ToastConfig'
@@ -39,52 +38,6 @@ function App(system: Container) {
       initStoredLanguage().then()
     }, [])
 
-    useEffect(() => {
-      // Initialize NFC
-      const initNfc = async () => {
-        try {
-          await NfcManager.start()
-          // eslint-disable-next-line no-console
-          console.log('NFC initialized successfully')
-        } catch (ex) {
-          // eslint-disable-next-line no-console
-          console.warn('Failed to initialize NFC', ex)
-        }
-      }
-
-      initNfc()
-
-      // Hide the native splash / loading screen so that our
-      // RN version can be displayed.
-      SplashScreen.hide()
-
-      return () => {
-        // Clean up NFC
-        NfcManager.cancelTechnologyRequest().catch(() => {
-          /* ignore */
-        })
-      }
-    }, [])
-
-    // Function to read NFC tag
-    // const readNfcTag = async () => {
-    //   try {
-    //     await NfcManager.requestTechnology(NfcTech.Ndef)
-    //     const tag = await NfcManager.getTag()
-    //     // eslint-disable-next-line no-console
-    //     console.log('NFC Tag found:', tag)
-    //     // Here you can process the tag data, e.g., extract the invitation link
-    //     // and call handleConnectToInvitation(invitationLink)
-    //   } catch (ex) {
-    //     // eslint-disable-next-line no-console
-    //     console.warn('Error reading NFC tag:', ex)
-    //   } finally {
-    //     NfcManager.cancelTechnologyRequest().catch(() => {
-    //       /* ignore */
-    //     })
-    //   }
-    // }
-
     return (
       <ContainerProvider value={system}>
         <StoreProvider>
@@ -110,7 +63,7 @@ function App(system: Container) {
                         overlayColor={'gray'}
                         overlayOpacity={0.7}
                       >
-                        <NFCHandler />
+                        {/* <NFCHandler /> */}
                         <RootStack />
                       </TourProvider>
                       <Toast topOffset={15} config={toastConfig} />

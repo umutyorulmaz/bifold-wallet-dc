@@ -1,7 +1,8 @@
+//QRScanner.tsx
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { View, Modal, Pressable, StyleSheet, Text } from 'react-native'
+import { View, Modal, Pressable, StyleSheet, Text, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { hitSlop } from '../../constants'
@@ -13,6 +14,7 @@ import { testIdWithKey } from '../../utils/testable'
 import InfoBox, { InfoBoxType } from '../misc/InfoBox'
 import DismissiblePopupModal from '../modals/DismissiblePopupModal'
 
+import { useNFC } from './NFCHandler'
 import QRScannerTorch from './QRScannerTorch'
 import ScanCamera from './ScanCamera'
 
@@ -30,8 +32,39 @@ const QRScanner: React.FC<Props> = ({ handleCodeScan, error, enableCameraOnError
   const [showErrorDetailsModal, setShowErrorDetailsModal] = useState(false)
   const { t } = useTranslation()
   const { ColorPallet, TextTheme } = useTheme()
+  const [firstTabActive, setFirstTabActive] = useState(true) // Initialize as needed
 
   const styles = StyleSheet.create({
+    nfcButton: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      paddingVertical: 10,
+      paddingHorizontal: 20, // Ensures the button has consistent width
+      borderRadius: 5,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 30, // Adjust this value if more spacing is needed
+      position: 'absolute',
+      bottom: 150, // Adjust this to move the button further up
+      alignSelf: 'center', // Center the button horizontally
+    },
+    nfcButtonText: {
+      color: 'white',
+      marginLeft: 10,
+    },
+    nfcIndicator: {
+      position: 'absolute',
+      bottom: 20,
+      left: 0,
+      right: 0,
+      alignItems: 'center',
+    },
+    nfcText: {
+      color: 'white',
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      padding: 5,
+      borderRadius: 5,
+    },
     container: {
       flex: 1,
     },
@@ -65,6 +98,22 @@ const QRScanner: React.FC<Props> = ({ handleCodeScan, error, enableCameraOnError
       textAlign: 'center',
     },
   })
+
+  const { startNfcScan } = useNFC()
+
+  //const [isNfcActive, setIsNfcActive] = useState(false)
+
+  const handleScanPress = async () => {
+    setFirstTabActive(true)
+    try {
+      await startNfcScan()
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('NFC Scan error:', error)
+      // Handle the error, possibly show an alert to the user
+      Alert.alert('NFC Scan Error', 'Failed to start NFC scanning. Please try again.')
+    }
+  }
 
   const styleForState = ({ pressed }: { pressed: boolean }) => [{ opacity: pressed ? 0.2 : 1 }]
 
@@ -128,6 +177,12 @@ const QRScanner: React.FC<Props> = ({ handleCodeScan, error, enableCameraOnError
         <View style={styles.viewFinderContainer}>
           <View style={styles.viewFinder} />
         </View>
+        {firstTabActive && (
+          <Pressable onPress={handleScanPress} style={styles.nfcButton} accessibilityLabel={t('Scan.ScanNFC')}>
+            <Icon name="nfc" size={24} color="white" />
+            <Text style={styles.nfcButtonText}>{t('Scan.ScanNFC')}</Text>
+          </Pressable>
+        )}
         {showScanButton && (
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Pressable
