@@ -8,7 +8,7 @@ import { Alert } from 'react-native'
 import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager'
 
 import { ConsoleLogger } from '../../services/logger'
-import { ContactStackParams, RootStackParams, Screens } from '../../types/navigators'
+import { RootStackParams, Screens, Stacks, TabStacks } from '../../types/navigators'
 import { connectFromScanOrDeepLink } from '../../utils/helpers'
 
 const logger = new ConsoleLogger()
@@ -21,7 +21,7 @@ export default NFCHandler
 
 export const useNFC = () => {
   const { agent } = useAgent()
-  const navigation = useNavigation<StackNavigationProp<RootStackParams | ContactStackParams>>()
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
   const [isNfcScanning, setIsNfcScanning] = useState(false)
   const [isRegistered, setIsRegistered] = useState(false) // Track if the event is registered
   const [isTechRequested, setIsTechRequested] = useState(false) // Track if technology is requested
@@ -48,6 +48,15 @@ export const useNFC = () => {
             index: 0,
             routes: [
               {
+                name: Stacks.TabStack,
+                params: {
+                  screen: TabStacks.HomeStack,
+                  params: {
+                    screen: Screens.Home,
+                  },
+                },
+              },
+              {
                 name: Screens.Chat,
                 params: { connectionId: existingConnection.id },
               },
@@ -72,6 +81,15 @@ export const useNFC = () => {
           index: 0,
           routes: [
             {
+              name: Stacks.TabStack,
+              params: {
+                screen: TabStacks.HomeStack,
+                params: {
+                  screen: Screens.Home,
+                },
+              },
+            },
+            {
               name: Screens.Chat,
               params: { connectionId: connectionRecord.id },
             },
@@ -81,6 +99,15 @@ export const useNFC = () => {
         navigation.reset({
           index: 0,
           routes: [
+            {
+              name: Stacks.TabStack,
+              params: {
+                screen: TabStacks.HomeStack,
+                params: {
+                  screen: Screens.Home,
+                },
+              },
+            },
             {
               name: Screens.Chat,
               params: { outOfBandRecordId: outOfBandRecord.id },
