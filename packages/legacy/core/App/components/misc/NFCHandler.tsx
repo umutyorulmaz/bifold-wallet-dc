@@ -20,7 +20,7 @@ export const useNFC = () => {
   const [isNfcScanning, setIsNfcScanning] = useState(false)
   const [isNfcManagerStarted, setIsNfcManagerStarted] = useState(false) // Track if NfcManager has been started
 
-  const handleConnectToInvitation = async (invitationLink: string) => {
+  const handleConnectToInvitationNFC = async (invitationLink: string) => {
     if (!agent) {
       Alert.alert('Error', 'Unable to connect. Please try again later.')
       return
@@ -71,7 +71,7 @@ export const useNFC = () => {
           const text = Ndef.text.decodePayload(payload)
           const invitationLink = text.replace(/^[a-z]{2}/, '').trim()
 
-          await handleConnectToInvitation(invitationLink)
+          await handleConnectToInvitationNFC(invitationLink)
         } else {
           Alert.alert('Error', 'No valid invitation found in the NFC tag.')
         }

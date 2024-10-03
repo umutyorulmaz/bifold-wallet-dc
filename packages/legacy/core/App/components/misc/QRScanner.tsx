@@ -101,16 +101,11 @@ const QRScanner: React.FC<Props> = ({ handleCodeScan, error, enableCameraOnError
 
   const { startNfcScan } = useNFC()
 
-  //const [isNfcActive, setIsNfcActive] = useState(false)
-
   const handleScanPress = async () => {
     setFirstTabActive(true)
     try {
       await startNfcScan()
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('NFC Scan error:', error)
-      // Handle the error, possibly show an alert to the user
       Alert.alert('NFC Scan Error', 'Failed to start NFC scanning. Please try again.')
     }
   }
