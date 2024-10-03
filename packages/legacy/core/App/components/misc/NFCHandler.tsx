@@ -6,10 +6,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager'
 
-import { ConsoleLogger } from '../../services/logger'
 import { RootStackParams, Screens } from '../../types/navigators'
-
-const logger = new ConsoleLogger()
 
 const NFCHandler: React.FC = () => {
   return null // Since this component manages NFC logic, no rendering is needed
@@ -25,7 +22,6 @@ export const useNFC = () => {
 
   const handleConnectToInvitation = async (invitationLink: string) => {
     if (!agent) {
-      logger.error('Agent is not initialized')
       Alert.alert('Error', 'Unable to connect. Please try again later.')
       return
     }
@@ -59,15 +55,12 @@ export const useNFC = () => {
         navigation.navigate(Screens.Chat, { connectionId: connection.id })
       }
     } catch (error) {
-      logger.error('Error processing the invitation:', error as object)
       Alert.alert('Error', 'An error occurred while connecting. Please try again.')
     }
   }
 
   const startNfcScan = useCallback(async () => {
     if (isNfcScanning) {
-      // eslint-disable-next-line no-console
-      console.warn('NFC scan already in progress, ignoring duplicate request.')
       return
     }
 
@@ -78,16 +71,11 @@ export const useNFC = () => {
           const text = Ndef.text.decodePayload(payload)
           const invitationLink = text.replace(/^[a-z]{2}/, '').trim()
 
-          // eslint-disable-next-line no-console
-          console.log('cleanInvitationLink', invitationLink)
-
           await handleConnectToInvitation(invitationLink)
         } else {
           Alert.alert('Error', 'No valid invitation found in the NFC tag.')
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error handling tag data:', error)
         Alert.alert('Error', 'An error occurred while processing the NFC tag.')
       }
     }
@@ -95,8 +83,6 @@ export const useNFC = () => {
     setIsNfcScanning(true)
     try {
       if (!isNfcManagerStarted) {
-        // eslint-disable-next-line no-console
-        console.log('Starting NFC Manager')
         await NfcManager.start()
         setIsNfcManagerStarted(true)
       }
@@ -126,8 +112,6 @@ export const useNFC = () => {
           Alert.alert('Error', 'No NFC tag found or could not read the tag.')
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn('Error reading NFC tag:', error)
         Alert.alert('Error', 'Failed to read NFC tag. Please try again.')
       } finally {
         // Clean up the NFC session
@@ -135,8 +119,6 @@ export const useNFC = () => {
         setIsNfcScanning(false)
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('Error starting NFC scan:', error)
       Alert.alert('Error', 'Failed to start NFC scan. Please try again.')
       setIsNfcScanning(false)
     }
@@ -149,12 +131,9 @@ export const useNFC = () => {
         if (!isNfcManagerStarted) {
           await NfcManager.start()
           setIsNfcManagerStarted(true)
-          // eslint-disable-next-line no-console
-          console.log('NFC Manager initialized')
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn('Failed to initialize NFC Manager', error)
+        /* empty */
       }
     }
 
