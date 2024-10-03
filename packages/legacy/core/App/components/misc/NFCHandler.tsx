@@ -4,8 +4,7 @@ import { useNavigation } from '@react-navigation/core'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager'
+import NfcManager, { Ndef, NfcEvents } from 'react-native-nfc-manager'
 
 import { ConsoleLogger } from '../../services/logger'
 import { RootStackParams, Screens, Stacks, TabStacks } from '../../types/navigators'
@@ -24,7 +23,6 @@ export const useNFC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
   const [isNfcScanning, setIsNfcScanning] = useState(false)
   const [isRegistered, setIsRegistered] = useState(false) // Track if the event is registered
-  const [isTechRequested, setIsTechRequested] = useState(false) // Track if technology is requested
   const [isNfcManagerStarted, setIsNfcManagerStarted] = useState(false) // Track if NfcManager has been started
 
   const handleConnectToInvitation = async (invitationLink: string) => {
@@ -134,18 +132,31 @@ export const useNFC = () => {
       // eslint-disable-next-line no-console
       console.warn('Error during NFC cleanup (unregisterTagEvent):', e)
     }
-
-    try {
-      if (isTechRequested) {
-        await NfcManager.cancelTechnologyRequest()
-        setIsTechRequested(false)
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn('Error during NFC cleanup (cancelTechnologyRequest):', e)
-    }
-
     setIsNfcScanning(false)
+  }
+
+  const handleTagDiscovered = (tag: any) => {
+    if (tag?.ndefMessage?.length > 0) {
+      const payload = tag.ndefMessage[0].payload
+      const text = Ndef.text.decodePayload(payload)
+      const invitationLink = text.replace(/^[a-z]{2}/, '').trim()
+
+      // eslint-disable-next-line no-console
+      console.log('cleanInvitationLink', invitationLink)
+
+      handleConnectToInvitation(invitationLink)
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Error handling tag data:', error)
+          Alert.alert('Error', 'An error occurred while processing the NFC tag.')
+        })
+        .finally(() => {
+          cleanUpNfcSession()
+        })
+    } else {
+      Alert.alert('Error', 'No valid invitation found in the NFC tag.')
+      cleanUpNfcSession()
+    }
   }
 
   // Initialize NFC in the useEffect
@@ -154,7 +165,7 @@ export const useNFC = () => {
       try {
         if (!isNfcManagerStarted) {
           await NfcManager.start()
-          setIsNfcManagerStarted(true) // Set the state when NfcManager is successfully started
+          setIsNfcManagerStarted(true)
           // eslint-disable-next-line no-console
           console.log('NFC Manager initialized')
         }
@@ -166,33 +177,13 @@ export const useNFC = () => {
 
     initializeNfc()
 
+    NfcManager.setEventListener(NfcEvents.DiscoverTag, handleTagDiscovered)
+
     return () => {
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, null)
       cleanUpNfcSession()
     }
-  }, [isNfcManagerStarted]) // Add isNfcManagerStarted as a dependency
-
-  const handleTagDiscovered = async (tag: any) => {
-    try {
-      if (tag?.ndefMessage?.length > 0) {
-        const invitationLink = Ndef.text
-          .decodePayload(new Uint8Array(tag.ndefMessage[0].payload))
-          .replace(/^[a-z]{2}/, '')
-          .trim()
-
-        // eslint-disable-next-line no-console
-        console.log('cleanInvitationLink', invitationLink)
-        await handleConnectToInvitation(invitationLink)
-      } else {
-        Alert.alert('Error', 'No valid invitation found in the NFC tag.')
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error handling tag data:', error)
-      Alert.alert('Error', 'An error occurred while processing the NFC tag.')
-    } finally {
-      cleanUpNfcSession()
-    }
-  }
+  }, [])
 
   const startNfcScan = useCallback(async () => {
     if (isNfcScanning) {
@@ -203,10 +194,11 @@ export const useNFC = () => {
 
     setIsNfcScanning(true)
     try {
-      // Ensure NfcManager is started before proceeding
       if (!isNfcManagerStarted) {
-        await NfcManager.start() // Start the NFC Manager
-        setIsNfcManagerStarted(true) // Update the state indicating it's started
+        // eslint-disable-next-line no-console
+        console.log('Starting NFC Manager')
+        await NfcManager.start()
+        setIsNfcManagerStarted(true)
       }
 
       const isSupported = await NfcManager.isSupported()
@@ -223,40 +215,23 @@ export const useNFC = () => {
         return
       }
 
-      // Check if already registered before registering again
       if (!isRegistered) {
         try {
           await NfcManager.registerTagEvent()
           setIsRegistered(true)
-        } catch (registerError) {
-          // eslint-disable-next-line no-console
-          console.warn('Failed to register tag event:', registerError)
-          Alert.alert('Error', 'Failed to register NFC tag event. Please try again.')
-          setIsNfcScanning(false)
-          return
+        } catch (registerError: unknown) {
+          if (registerError instanceof Error && registerError.message === 'Duplicated registration') {
+            // eslint-disable-next-line no-console
+            console.warn('NFC already registered, proceeding.')
+            setIsRegistered(true)
+          } else {
+            // eslint-disable-next-line no-console
+            console.warn('Failed to register tag event:', registerError)
+            Alert.alert('Error', 'Failed to register NFC tag event. Please try again.')
+            setIsNfcScanning(false)
+            return
+          }
         }
-      }
-
-      // Ensure we request the technology only if not already requested
-      if (!isTechRequested) {
-        try {
-          await NfcManager.requestTechnology(NfcTech.Ndef)
-          setIsTechRequested(true)
-        } catch (techRequestError) {
-          // eslint-disable-next-line no-console
-          console.warn('Failed to request NFC technology:', techRequestError)
-          Alert.alert('Error', 'Failed to request NFC technology. Please try again.')
-          cleanUpNfcSession()
-          return
-        }
-      }
-
-      const tag = await NfcManager.getTag()
-      if (tag) {
-        await handleTagDiscovered(tag)
-      } else {
-        Alert.alert('Error', 'No NFC tag found or could not read the tag.')
-        cleanUpNfcSession()
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -264,7 +239,7 @@ export const useNFC = () => {
       Alert.alert('Error', 'Failed to start NFC scan. Please try again.')
       cleanUpNfcSession()
     }
-  }, [isNfcScanning, isRegistered, isTechRequested, isNfcManagerStarted])
+  }, [isNfcScanning, isRegistered, isNfcManagerStarted])
 
   return { startNfcScan }
 }
