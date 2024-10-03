@@ -159,6 +159,12 @@ export const useNFC = () => {
     }
   }
 
+  const handleSessionClosed = () => {
+    // eslint-disable-next-line no-console
+    console.log('NFC Session closed')
+    setIsNfcScanning(false)
+  }
+
   // Initialize NFC in the useEffect
   useEffect(() => {
     const initializeNfc = async () => {
@@ -178,9 +184,11 @@ export const useNFC = () => {
     initializeNfc()
 
     NfcManager.setEventListener(NfcEvents.DiscoverTag, handleTagDiscovered)
+    NfcManager.setEventListener(NfcEvents.SessionClosed, handleSessionClosed)
 
     return () => {
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null)
+      NfcManager.setEventListener(NfcEvents.SessionClosed, null)
       cleanUpNfcSession()
     }
   }, [])
